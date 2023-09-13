@@ -65,6 +65,11 @@ const items = [
         icon: IconUser
     },
     {
+        name: 'Suppliers',
+        route: route('dashboard.suppliers.index'),
+        icon: IconUser
+    },
+    {
         header: 'System'
     },
     {
