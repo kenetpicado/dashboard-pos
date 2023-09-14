@@ -22,10 +22,10 @@ class SupplierRequest extends FormRequest
     public function rules(): array
     {
         return [
-            //
-            'name' => ['required', 'string', 'max:255'],
-            'contact' => ['required', 'string', 'max:255'],
-            'ruc' => ['required', 'string', 'max:255']
+            'name' => ['required','max:255'],
+            'contact' => ['nullable','max:255'],
+            'ruc' => ['nullable','max:255'],
+            'payment_terms' => ['nullable','array'],
         ];
     }
 }
