@@ -44,6 +44,14 @@
             <InputForm text="Name" v-model="form.name" />
             <InputForm text="Contact" v-model="form.contact" />
             <InputForm text="RUC" v-model="form.ruc" />
+             <div class="text-lg font-medium text-gray-600 mb-5 mt-6">
+                Payment Terms
+            </div>
+            <InputForm text="Deadline" v-model="form.payment_terms.deadline" />
+            <div class="grid grid-cols-2 gap-4">
+                <InputForm text="Method" v-model="form.payment_terms.method" />
+                <InputForm text="Currency" v-model="form.payment_terms.currency" />
+            </div>
         </FormModal>
     </AppLayout>
 </template>
@@ -86,6 +94,11 @@ const form = useForm({
     name: '',
     contact: '',
     ruc: '',
+    payment_terms: {
+        deadline: '',
+        method: '',
+        currency: ''
+    }
 });
 
 const openModal = ref(false);
@@ -95,6 +108,9 @@ function edit(supplier) {
     form.name = supplier.name;
     form.contact = supplier.contact;
     form.ruc = supplier.ruc;
+    form.payment_terms.deadline = supplier.payment_terms.deadline
+    form.payment_terms.method = supplier.payment_terms.method
+    form.payment_terms.currency = supplier.payment_terms.currency
     openModal.value = true;
     isNew.value = false;
 }

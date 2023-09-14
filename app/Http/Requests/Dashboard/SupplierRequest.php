@@ -25,7 +25,7 @@ class SupplierRequest extends FormRequest
             'name' => ['required','max:255'],
             'contact' => ['nullable','max:255'],
             'ruc' => ['nullable','max:255'],
-            'payment_terms' => ['nullable','array'],
+            'payment_terms' => ['nullable'],
         ];
     }
 }
