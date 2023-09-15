@@ -37,5 +37,6 @@ Route::middleware(['auth:sanctum'])
         Route::resource('categories', CategoryController::class)
             ->except(['create', 'edit', 'show']);
 
-        Route::resource('suppliers', SupplierController::class);
+        Route::resource('suppliers', SupplierController::class)
+            ->except(['create', 'edit', 'show']);
     });

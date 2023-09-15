@@ -49,8 +49,12 @@
             </div>
             <InputForm text="Deadline" v-model="form.payment_terms.deadline" />
             <div class="grid grid-cols-2 gap-4">
-                <InputForm text="Method" v-model="form.payment_terms.method" />
-                <InputForm text="Currency" v-model="form.payment_terms.currency" />
+                <SelectForm v-model="form.payment_terms.method" text="Method" name="method">
+                    <option v-for="method in methods" :value="method.value">{{ method.label }}</option>
+                </SelectForm>
+                <SelectForm v-model="form.payment_terms.currency" text="Currency" name="currency">
+                    <option v-for="currency in currencies" :value="currency.value">{{ currency.label }}</option>
+                </SelectForm>
             </div>
         </FormModal>
     </AppLayout>
@@ -68,6 +72,7 @@ import TableSection from '@/Components/TableSection.vue';
 import { IconPencil } from '@tabler/icons-vue';
 import { IconTrash } from '@tabler/icons-vue';
 import { confirmAlert } from '@/Use/helpers';
+import SelectForm from '@/Components/Form/SelectForm.vue';
 
 defineProps({
     suppliers: {
@@ -96,10 +101,13 @@ const form = useForm({
     ruc: '',
     payment_terms: {
         deadline: '',
-        method: '',
-        currency: ''
+        method: 'Transaccion',
+        currency: 'NIO'
     }
 });
+
+const methods = [{value : 'Transaccion', label: 'Transaccion'}, {value : 'Efectivo', label: 'Efectivo'}]
+const currencies = [{value: 'NIO', label: 'Cordoba(NIO)'}, {value: 'USD', label: 'Dolar(USD)'}, {value: 'EUR', label: 'Euro(EUR)'}]
 
 const openModal = ref(false);
 
@@ -147,7 +155,7 @@ function resetValues() {
 
 function destroy(id) {
     confirmAlert({
-        message: 'Are you sure you want to delete this category?',
+        message: 'Are you sure you want to delete this supplier?',
         onConfirm: () => {
             form.delete(route('dashboard.suppliers.destroy', id), {
                 preserveScroll: true,
