@@ -3,8 +3,9 @@
 use App\Http\Controllers\Dashboard\CategoryController;
 use App\Http\Controllers\Dashboard\DashboardController;
 use App\Http\Controllers\Dashboard\ProfileController;
-use App\Http\Controllers\Dashboard\UserController;
 use App\Http\Controllers\Dashboard\SupplierController;
+use App\Http\Controllers\Dashboard\TransactionController;
+use App\Http\Controllers\Dashboard\UserController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
@@ -39,4 +40,6 @@ Route::middleware(['auth:sanctum'])
 
         Route::resource('suppliers', SupplierController::class)
             ->except(['create', 'edit', 'show']);
+
+        Route::resource('transactions', TransactionController::class);
     });

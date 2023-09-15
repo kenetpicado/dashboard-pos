@@ -1,5 +1,5 @@
 <template>
-    <aside class="w-72 p-3 bg-white flex flex-col hidden lg:block min-h-screen">
+    <aside class="w-72 p-3 bg-white flex flex-col min-h-screen">
         <div class="flex flex-col items-center my-4">
             <div class="h-14 w-14">
                 <img class="h-full w-full"
@@ -67,6 +67,11 @@ const items = [
     {
         name: 'Suppliers',
         route: route('dashboard.suppliers.index'),
+        icon: IconUser
+    },
+     {
+        name: 'Transaction',
+        route: route('dashboard.transactions.create'),
         icon: IconUser
     },
     {

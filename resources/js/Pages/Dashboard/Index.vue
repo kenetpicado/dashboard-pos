@@ -1,9 +1,7 @@
 <template>
     <AppLayout title="Users" :breads="breads">
         <template #header>
-            <span class="title">
-                Overview
-            </span>
+            <span class="title"> Overview </span>
         </template>
 
         <div class="grid grid-cols-4 gap-4">
@@ -37,6 +35,5 @@ const stats = [
         title: 'Users',
         icon: IconUsers,
     },
-]
-
+];
 </script>
