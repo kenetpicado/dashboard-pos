@@ -50,10 +50,10 @@
             <InputForm text="Deadline" v-model="form.payment_terms.deadline" />
             <div class="grid grid-cols-2 gap-4">
                 <SelectForm v-model="form.payment_terms.method" text="Method" name="method">
-                    <option v-for="method in methods" :value="method">{{ method }}</option>
+                    <option v-for="method in methods" :value="method.value">{{ method.label }}</option>
                 </SelectForm>
                 <SelectForm v-model="form.payment_terms.currency" text="Currency" name="currency">
-                    <option v-for="currency in currencies" :value="currency">{{ currency }}</option>
+                    <option v-for="currency in currencies" :value="currency.value">{{ currency.label }}</option>
                 </SelectForm>
             </div>
         </FormModal>
@@ -106,8 +106,8 @@ const form = useForm({
     }
 });
 
-const methods = ['Transaccion', 'Efectivo']
-const currencies = ['NIO','USD', 'EUR']
+const methods = [{value : 'Transaccion', label: 'Transaccion'}, {value : 'Efectivo', label: 'Efectivo'}]
+const currencies = [{value: 'NIO', label: 'Cordoba(NIO)'}, {value: 'USD', label: 'Dolar(USD)'}, {value: 'EUR', label: 'Euro(EUR)'}]
 
 const openModal = ref(false);
 
