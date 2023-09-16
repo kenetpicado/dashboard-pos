@@ -106,8 +106,31 @@ const form = useForm({
     }
 });
 
-const methods = [{value : 'Transaccion', label: 'Transaccion'}, {value : 'Efectivo', label: 'Efectivo'}]
-const currencies = [{value: 'NIO', label: 'Cordoba(NIO)'}, {value: 'USD', label: 'Dolar(USD)'}, {value: 'EUR', label: 'Euro(EUR)'}]
+const methods = [
+    {
+        value: 'Transaccion',
+        label: 'Transaccion'
+    },
+    {
+        value: 'Efectivo',
+        label: 'Efectivo'
+    }
+]
+
+const currencies = [
+    {
+        value: 'NIO',
+        label: 'Cordoba(NIO)'
+    },
+    {
+        value: 'USD',
+        label: 'Dolar(USD)'
+    },
+    {
+        value: 'EUR',
+        label: 'Euro(EUR)'
+    }
+]
 
 const openModal = ref(false);
 
