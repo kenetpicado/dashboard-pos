@@ -19,4 +19,9 @@ class Supplier extends Model
     protected $casts = [
         'payment_terms' => 'array',
     ];
+
+    public function products()
+    {
+        return $this->hasMany(Product::class);
+    }
 }

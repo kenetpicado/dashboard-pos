@@ -69,6 +69,11 @@ const items = [
         route: route('dashboard.suppliers.index'),
         icon: IconUser
     },
+    {
+        name: 'Products',
+        route: route('dashboard.products.index'),
+        icon: IconUser
+    },
      {
         name: 'Transaction',
         route: route('dashboard.transactions.create'),
