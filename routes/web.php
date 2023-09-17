@@ -45,5 +45,5 @@ Route::middleware(['auth:sanctum'])
         Route::resource('transactions', TransactionController::class);
 
         Route::resource('products', ProductController::class)
-            ->except(['edit','show']);
+            ->except('show');
     });

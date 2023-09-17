@@ -23,11 +23,11 @@ class ProductRequest extends FormRequest
     {
         return [
             'name' => 'required',
-            'sku' => 'required',
+            'sku' => ['required', 'alpha_dash'],
             'description' => 'nullable',
             'supplier_id' => 'nullable',
             'status' => 'nullable',
-            'image' => 'nullable',
+            'image' => ['nullable', 'url'],
             'notes' => 'nullable',
         ];
     }

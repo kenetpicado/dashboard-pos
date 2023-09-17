@@ -14,15 +14,24 @@ class ProductController extends Controller
     {
         return inertia("Dashboard/Product/Index", [
             'products' => Product::with('supplier')->get(),
-            'suppliers' => Supplier::all(),
         ]);
     }
 
     public function create()
     {
         return inertia("Dashboard/Product/Create", [
-            'suppliers' => Supplier::all(),
+            'isNew' => true,
+            'suppliers' => Supplier::all('id', 'name'),
         ]);
+    }
+
+    public function edit($product)
+    {
+        return inertia("Dashboard/Product/Create", [
+            'isNew' => false,
+            'products' => Product::where('id', $product)->first(),
+            'suppliers' => Supplier::all('id', 'name'),
+        ]); 
     }
 
     public function store(ProductRequest $request)
