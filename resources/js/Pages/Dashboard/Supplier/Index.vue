@@ -13,7 +13,7 @@
                 <th>Nombre</th>
                 <th>Contacto</th>
                 <th>RUC</th>
-                <th>Accciones</th>
+                <th>Acciones</th>
             </template>
 
             <template #body>

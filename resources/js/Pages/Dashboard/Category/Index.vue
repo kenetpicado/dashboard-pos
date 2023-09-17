@@ -11,7 +11,7 @@
         <TableSection>
             <template #header>
                 <th>Nombre</th>
-                <th>Accciones</th>
+                <th>Acciones</th>
             </template>
 
             <template #body>

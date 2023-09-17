@@ -5,7 +5,7 @@
                 {{ props.isNew ? 'Create' : 'Edit' }}
             </span>
         </template>
-        <FormSection title="Create" @onSubmit="onSubmit" @onCancel="onCancel">
+        <FormSection title="Create" @onSubmit="onSubmit" @onCancel="onCancel" :isNew="isNew">
             <InputForm text="Name" v-model="form.name" required />
             <InputForm text="SKU" v-model="form.sku" required />
             <InputForm text="Description" v-model="form.description" />
@@ -14,7 +14,7 @@
                 <option v-for="supplier in suppliers" :value="supplier.id">{{ supplier.name }}</option>
             </SelectForm>
             <InputForm text="Status" v-model="form.status" />
-            <InputForm text="Image" v-model="form.image" />
+            <InputForm text="Image" v-model="form.image" type="url" />
             <InputForm text="Note" v-model="form.notes" />
         </FormSection>
     </AppLayout>
@@ -42,6 +42,7 @@ const props = defineProps({
         default: () => ({}),
     }
 });
+
 const breads = [
     {
         name: 'Home',

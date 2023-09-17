@@ -14,7 +14,7 @@
                 <th>SKU</th>
                 <th>Proveedor</th>
                 <th>Notas</th>
-                <th>Accciones</th>
+                <th>Acciones</th>
             </template>
 
             <template #body>
@@ -42,7 +42,7 @@
                     </td>
                 </tr>
                 <tr v-if="products.length == 0">
-                    <td colspan="4" class="text-center">No data to display</td>
+                    <td colspan="6" class="text-center">No data to display</td>
                 </tr>
             </template>
         </TableSection>

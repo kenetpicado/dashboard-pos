@@ -13,7 +13,7 @@
                 <th>ID</th>
                 <th>Nombre</th>
                 <th>Email</th>
-                <th>Accciones</th>
+                <th>Acciones</th>
             </template>
 
             <template #body>
