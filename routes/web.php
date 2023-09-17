@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Dashboard\CategoryController;
 use App\Http\Controllers\Dashboard\DashboardController;
+use App\Http\Controllers\Dashboard\ProductController;
 use App\Http\Controllers\Dashboard\ProfileController;
 use App\Http\Controllers\Dashboard\SupplierController;
 use App\Http\Controllers\Dashboard\TransactionController;
@@ -42,4 +43,7 @@ Route::middleware(['auth:sanctum'])
             ->except(['create', 'edit', 'show']);
 
         Route::resource('transactions', TransactionController::class);
+
+        Route::resource('products', ProductController::class)
+            ->except('show');
     });

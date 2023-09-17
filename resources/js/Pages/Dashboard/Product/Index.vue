@@ -1,0 +1,97 @@
+<template>
+    <AppLayout title="Products" :breads="breads">
+        <template #header>
+            <span class="title">
+                Products
+            </span>
+            <add-button :href="route('dashboard.products.create')" />
+        </template>
+
+        <TableSection>
+            <template #header>
+                <th>ID</th>
+                <th>Nombre</th>
+                <th>SKU</th>
+                <th>Proveedor</th>
+                <th>Notas</th>
+                <th>Accciones</th>
+            </template>
+
+            <template #body>
+                <tr v-for="(product, index) in products" class="hover:bg-gray-50">
+                    <td>
+                        {{ product.id }}
+                    </td>
+                    <td>
+                        {{ product.name }}
+                    </td>
+                    <td>
+                        {{ product.sku }}
+                    </td>
+                    <td>
+                        {{ product.supplier ? product.supplier.name : 'N/A' }}
+                    </td>
+                    <td>
+                        {{ product.notes }}
+                    </td>
+                    <td>
+                        <div class="flex gap-2">
+                            <IconPencil role="button" @click="edit (product.id)" />
+                            <IconTrash role="button" @click="destroy(product.id)" />
+                        </div>
+                    </td>
+                </tr>
+                <tr v-if="products.length == 0">
+                    <td colspan="4" class="text-center">No data to display</td>
+                </tr>
+            </template>
+        </TableSection>
+    </AppLayout>
+</template>
+
+<script setup>
+import AppLayout from '@/Layouts/AppLayout.vue';
+import AddButton from '@/Components/Buttons/AddButton.vue';
+import TableSection from '@/Components/TableSection.vue';
+import { IconPencil, IconTrash } from '@tabler/icons-vue';
+import { confirmAlert } from '@/Use/helpers';
+import { toast } from '@/Use/toast';
+import { router } from '@inertiajs/vue3';
+
+defineProps({
+    products: {
+        type: Object,
+        required: true,
+    }
+});
+
+const breads = [
+    {
+        name: 'Home',
+        route: route('dashboard.products.index'),
+    },
+    {
+        name: 'Products',
+        route: route('dashboard.products.index'),
+    },
+];
+
+function edit(id){
+    router.visit(route('dashboard.products.edit', id));
+}
+
+function destroy(id) {
+    confirmAlert({
+        message: 'Are you sure you want to delete this product?',
+        onConfirm: () => {
+            router.delete(route('dashboard.products.destroy', id), {
+                preserveScroll: true,
+                preserveState: true,
+                onSuccess: () => {
+                    toast.success('Product deleted successfully');
+                },
+            });
+        },
+    })
+}
+</script>
