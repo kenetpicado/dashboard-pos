@@ -34,7 +34,9 @@
 
 <script setup>
 import { Link, router } from '@inertiajs/vue3';
-import { IconHome, IconLogout, IconUser } from '@tabler/icons-vue';
+import { IconShoppingBag } from '@tabler/icons-vue';
+import { IconUserCog } from '@tabler/icons-vue';
+import { IconHome, IconLogout, IconUser, IconCategory, IconBuildingFactory, IconClipboardList } from '@tabler/icons-vue';
 
 const DEFAULT_ICON = IconUser;
 
@@ -57,27 +59,27 @@ const items = [
     {
         name: 'Categories',
         route: route('dashboard.categories.index'),
-        icon: IconUser
+        icon: IconCategory
     },
     {
         name: 'Users',
         route: route('dashboard.users.index'),
-        icon: IconUser
+        icon: IconUserCog
     },
     {
         name: 'Suppliers',
         route: route('dashboard.suppliers.index'),
-        icon: IconUser
+        icon: IconBuildingFactory
     },
     {
         name: 'Products',
         route: route('dashboard.products.index'),
-        icon: IconUser
+        icon: IconClipboardList
     },
      {
         name: 'Transaction',
         route: route('dashboard.transactions.create'),
-        icon: IconUser
+        icon: IconShoppingBag
     },
     {
         header: 'System'
