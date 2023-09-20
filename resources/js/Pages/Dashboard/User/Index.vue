@@ -1,9 +1,9 @@
 <template>
-    <AppLayout title="Users" :breads="breads">
+    <AppLayout title="Usuarios" :breads="breads">
 
         <template #header>
             <span class="title">
-                Users
+                Usuarios
             </span>
             <AddButton :href="route('dashboard.users.create')" />
         </template>
@@ -35,7 +35,7 @@
                     </td>
                 </tr>
                 <tr v-if="users.length == 0">
-                    <td colspan="4" class="text-center">No data to display</td>
+                    <td colspan="4" class="text-center">No hay datos que mostrar</td>
                 </tr>
             </template>
         </TableSection>
@@ -69,11 +69,11 @@ defineProps({
 
 const breads = [
     {
-        name: 'Home',
+        name: 'Inicio',
         route: route('dashboard.users.index'),
     },
     {
-        name: 'Users',
+        name: 'Usuarios',
         route: route('dashboard.users.index'),
     },
 ];

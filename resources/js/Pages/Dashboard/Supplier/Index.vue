@@ -1,9 +1,9 @@
 <template>
-    <AppLayout title="Suppliers" :breads="breads">
+    <AppLayout title="Proveedores" :breads="breads">
 
         <template #header>
             <span class="title">
-                Suppliers
+                Proveedores
             </span>
             <AddButton @click="openModal = true" />
         </template>
@@ -40,12 +40,12 @@
             </template>
         </TableSection>
 
-        <FormModal :show="openModal" title="Suppliers" @onCancel="resetValues()" @onSubmit="action">
+        <FormModal :show="openModal" title="Proveedor" @onCancel="resetValues()" @onSubmit="action">
             <InputForm text="Name" v-model="form.name" />
             <InputForm text="Contact" v-model="form.contact" />
             <InputForm text="RUC" v-model="form.ruc" />
              <div class="text-lg font-medium text-gray-600 mb-5 mt-6">
-                Payment Terms
+                Terminos de pago
             </div>
             <InputForm text="Deadline" v-model="form.payment_terms.deadline" />
             <div class="grid grid-cols-2 gap-4">
@@ -83,11 +83,11 @@ defineProps({
 
 const breads = [
     {
-        name: 'Home',
+        name: 'Inicio',
         route: route('dashboard.users.index'),
     },
     {
-        name: 'Suppliers',
+        name: 'Proveedores',
         route: route('dashboard.suppliers.index'),
     },
 ];
@@ -131,13 +131,7 @@ const currencies = [
 const openModal = ref(false);
 
 function edit(supplier) {
-    form.id = supplier.id;
-    form.name = supplier.name;
-    form.contact = supplier.contact;
-    form.ruc = supplier.ruc;
-    form.payment_terms.deadline = supplier.payment_terms.deadline
-    form.payment_terms.method = supplier.payment_terms.method
-    form.payment_terms.currency = supplier.payment_terms.currency
+    Object.assign(form, supplier);
     openModal.value = true;
     isNew.value = false;
 }

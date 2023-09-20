@@ -57,35 +57,35 @@ const items = [
         header: 'Administration'
     },
     {
-        name: 'Categories',
+        name: 'Categorias',
         route: route('dashboard.categories.index'),
         icon: IconCategory
     },
     {
-        name: 'Users',
+        name: 'Usuarios',
         route: route('dashboard.users.index'),
         icon: IconUserCog
     },
     {
-        name: 'Suppliers',
+        name: 'Proveedores',
         route: route('dashboard.suppliers.index'),
         icon: IconBuildingFactory
     },
     {
-        name: 'Products',
+        name: 'Productos',
         route: route('dashboard.products.index'),
         icon: IconClipboardList
     },
      {
-        name: 'Transaction',
+        name: 'Transacciones',
         route: route('dashboard.transactions.create'),
         icon: IconShoppingBag
     },
     {
-        header: 'System'
+        header: 'Sistema'
     },
     {
-        name: 'Profile',
+        name: 'Perfil',
         route: route('dashboard.profile.index'),
         icon: IconUser
     },

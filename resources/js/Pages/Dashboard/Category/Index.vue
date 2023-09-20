@@ -1,9 +1,9 @@
 <template>
-    <AppLayout title="Categories" :breads="breads">
+    <AppLayout title="Categorias" :breads="breads">
 
         <template #header>
             <span class="title">
-                Categories
+                Categorias
             </span>
             <AddButton @click="openModal = true" />
         </template>
@@ -48,7 +48,7 @@
             </template>
         </TableSection>
 
-        <FormModal :show="openModal" title="Category" @onCancel="resetValues()" @onSubmit="onSubmit()">
+        <FormModal :show="openModal" title="Categoria" @onCancel="resetValues()" @onSubmit="onSubmit()">
             <InputForm text="Name" v-model="form.name" />
             <SelectForm v-model="form.parent_id" text="Parent category" name="parent_id">
                 <option selected value="">None</option>
@@ -79,11 +79,11 @@ defineProps({
 
 const breads = [
     {
-        name: 'Home',
+        name: 'Inicio',
         route: route('dashboard.users.index'),
     },
     {
-        name: 'Categories',
+        name: 'Categorias',
         route: route('dashboard.categories.index'),
     },
 ];

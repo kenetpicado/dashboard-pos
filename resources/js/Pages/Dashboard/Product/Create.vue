@@ -1,11 +1,11 @@
 <template>
-    <AppLayout :title="props.isNew ? 'Create' : 'Edit'" :breads="breads">
+    <AppLayout title="Producto" :breads="breads">
         <template #header>
             <span class="title mt-1">
-                {{ props.isNew ? 'Create' : 'Edit' }}
+                {{ props.isNew ? 'Agregar' : 'Actualizar' }}
             </span>
         </template>
-        <FormSection title="Create" @onSubmit="onSubmit" @onCancel="onCancel" :isNew="isNew">
+        <FormSection title="Producto" @onSubmit="onSubmit" @onCancel="onCancel" :isNew="isNew">
             <InputForm text="Name" v-model="form.name" required />
             <InputForm text="SKU" v-model="form.sku" required />
             <InputForm text="Description" v-model="form.description" />
@@ -45,15 +45,15 @@ const props = defineProps({
 
 const breads = [
     {
-        name: 'Home',
+        name: 'Inicio',
         route: route('dashboard.users.index'),
     },
     {
-        name: 'Products',
+        name: 'Productos',
         route: route('dashboard.products.index'),
     },
     {
-        name: props.isNew ? 'Create' : 'Edit',
+        name: props.isNew ? 'Agregar' : 'Actualizar',
         route: props.isNew ? route('dashboard.products.create') : route('dashboard.products.edit', props.products.id),
     },
 ];

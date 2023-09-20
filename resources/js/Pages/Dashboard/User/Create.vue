@@ -1,12 +1,12 @@
 <template>
-    <AppLayout title="Create" :breads="breads">
+    <AppLayout title="Usuario" :breads="breads">
         <template #header>
             <span class="title mt-1">
-                Create
+                Agregar
             </span>
         </template>
 
-        <FormSection title="Create" @onSubmit="onSubmit" @onCancel="onCancel">
+        <FormSection title="Usuario" @onSubmit="onSubmit" @onCancel="onCancel">
             <InputForm text="Name" v-model="form.name" required />
             <InputForm text="Email" v-model="form.email" type="email" required />
             <InputForm text="Password" v-model="form.password" type="password" required />

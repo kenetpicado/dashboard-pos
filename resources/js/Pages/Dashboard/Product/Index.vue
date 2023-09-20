@@ -2,7 +2,7 @@
     <AppLayout title="Products" :breads="breads">
         <template #header>
             <span class="title">
-                Products
+                Productos
             </span>
             <add-button :href="route('dashboard.products.create')" />
         </template>
@@ -42,7 +42,7 @@
                     </td>
                 </tr>
                 <tr v-if="products.length == 0">
-                    <td colspan="6" class="text-center">No data to display</td>
+                    <td colspan="6" class="text-center">No hay datos que mostrar</td>
                 </tr>
             </template>
         </TableSection>
@@ -67,11 +67,11 @@ defineProps({
 
 const breads = [
     {
-        name: 'Home',
+        name: 'Inicio',
         route: route('dashboard.products.index'),
     },
     {
-        name: 'Products',
+        name: 'Productos',
         route: route('dashboard.products.index'),
     },
 ];
