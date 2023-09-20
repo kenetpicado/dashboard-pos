@@ -101,35 +101,31 @@ const form = useForm({
     ruc: '',
     payment_terms: {
         deadline: '',
-        method: 'Transaccion',
+        method: 'TRANSACCION',
         currency: 'NIO'
     }
 });
 
 const methods = [
     {
-        value: 'Transaccion',
-        label: 'Transaccion'
+        value: 'TRANSACCION',
+        label: 'TRANSACCION'
     },
     {
-        value: 'Efectivo',
-        label: 'Efectivo'
+        value: 'EFECTIVO',
+        label: 'EFECTIVO'
     }
 ]
 
 const currencies = [
     {
         value: 'NIO',
-        label: 'Cordoba(NIO)'
+        label: 'CORDOBA (NIO)'
     },
     {
         value: 'USD',
-        label: 'Dolar(USD)'
+        label: 'DOLAR (USD)'
     },
-    {
-        value: 'EUR',
-        label: 'Euro(EUR)'
-    }
 ]
 
 const openModal = ref(false);

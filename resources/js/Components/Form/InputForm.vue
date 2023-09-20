@@ -1,6 +1,6 @@
 <template>
     <div class="w-full mb-4">
-        <label class="block font-medium text-sm text-gray-700">
+        <label class="block font-medium text-sm text-gray-700" v-if="text">
             {{ text }}
         </label>
 
@@ -21,7 +21,7 @@ import { computed } from "vue";
 
 const props = defineProps({
     text: {
-        type: String, required: true
+        type: String, required: false
     },
     modelValue: {
         type: [String, Number], required: false
@@ -50,7 +50,7 @@ const props = defineProps({
 })
 
 const keyValue = computed(() => {
-    return props.name ?? format_key(props.text)
+    return props.name ?? format_key(props.text ?? '')
 })
 
 function format_key(string) {

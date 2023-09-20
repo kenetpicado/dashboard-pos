@@ -15,32 +15,32 @@
             </template>
 
             <template #body>
-            	<template v-for="(category, index) in categories">
-	                <tr class="hover:bg-gray-50">
-	                    <td>
-	                    	<span class="font-semibold">{{ category.name }}</span>
-	                    </td>
-	                    <td>
-	                        <div class="flex gap-4">
-	                            <IconPencil role="button" @click="edit(category)"/>
-	                            <IconTrash role="button" @click="destroy(category.id)" />
-	                        </div>
-	                    </td>
-	                </tr>
-	                <tr class="hover:bg-gray-50" v-for="(children, index) in category.childrens">
-	                    <td>
-	                    	<span class="flex items-center gap-3">
-	                    		<IconCornerDownRight/>
-	                    		<span>{{ children.name }}</span>
-	                    	</span>
-	                    </td>
-	                    <td>
-	                        <div class="flex gap-4">
-	                            <IconPencil role="button" @click="edit(children)"/>
-	                            <IconTrash role="button" @click="destroy(children.id)" />
-	                        </div>
-	                    </td>
-	                </tr>
+                <template v-for="(category, index) in categories">
+                    <tr class="hover:bg-gray-50">
+                        <td>
+                            <span class="font-semibold">{{ category.name }}</span>
+                        </td>
+                        <td>
+                            <div class="flex gap-4">
+                                <IconPencil role="button" @click="edit(category)" />
+                                <IconTrash role="button" @click="destroy(category.id)" />
+                            </div>
+                        </td>
+                    </tr>
+                    <tr class="hover:bg-gray-50" v-for="(children, index) in category.childrens">
+                        <td>
+                            <span class="flex items-center gap-3">
+                                <IconCornerDownRight />
+                                <span>{{ children.name }}</span>
+                            </span>
+                        </td>
+                        <td>
+                            <div class="flex gap-4">
+                                <IconPencil role="button" @click="edit(children)" />
+                                <IconTrash role="button" @click="destroy(children.id)" />
+                            </div>
+                        </td>
+                    </tr>
                 </template>
                 <tr v-if="categories.length == 0">
                     <td colspan="3" class="text-center">No data to display</td>
@@ -51,8 +51,8 @@
         <FormModal :show="openModal" title="Category" @onCancel="resetValues()" @onSubmit="onSubmit()">
             <InputForm text="Name" v-model="form.name" />
             <SelectForm v-model="form.parent_id" text="Parent category" name="parent_id">
-            	<option selected value="">None</option>
-            	<option v-for="category in categories" :value="category.id">{{ category.name }}</option>
+                <option selected value="">None</option>
+                <option v-for="category in categories" :value="category.id">{{ category.name }}</option>
             </SelectForm>
         </FormModal>
 
@@ -89,13 +89,11 @@ const breads = [
 ];
 
 const isNew = ref(true)
-
+const { store, update, destroy, form } = useCategory();
 const openModal = ref(false);
 
 function edit(c) {
-    form.id = c.id;
-    form.name = c.name;
-    form.parent_id = c.parent_id 
+    Object.assign(form, c)
     openModal.value = true;
     isNew.value = false
 }
@@ -108,12 +106,10 @@ function onSubmit() {
     }
 }
 
-const { store, update, destroy, form} = useCategory();
- 
 function resetValues() {
-	openModal.value = false
-	isNew.value = true
-	form.reset()
+    openModal.value = false
+    isNew.value = true
+    form.reset()
 }
 
 </script>
