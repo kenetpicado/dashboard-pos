@@ -77,7 +77,7 @@ const items = [
         icon: IconClipboardList
     },
     {
-        header: 'Operaciones'
+        header: 'Transacciones'
     },
     {
         name: 'Comprar',

@@ -29,7 +29,9 @@
 							</td>
 							<td>
 								<button class="primary-button" type="button"
-									@click="setCurrentProduct(product)">Agregar</button>
+									@click="setCurrentProduct(product)">
+									<IconShoppingCartFilled size="20" />
+								</button>
 							</td>
 						</tr>
 					</tbody>
@@ -84,10 +86,10 @@
 				{{ currentProduct.name }}
 			</div>
 			<div class="grid grid-cols-2 gap-4">
-				<InputForm text="Measure" v-model="currentProduct.measure" />
-				<InputForm text="Quantity" v-model="currentProduct.quantity" type="number" />
-				<InputForm text="Cost" v-model="currentProduct.cost" type="number" />
-				<InputForm text="Price" v-model="currentProduct.price" type="number" />
+				<InputForm text="Medida" v-model="currentProduct.measure" />
+				<InputForm text="Cantidad" v-model="currentProduct.quantity" type="number" />
+				<InputForm text="Costo (Unidad)" v-model="currentProduct.cost" type="number" />
+				<InputForm text="Precio (Unidad)" v-model="currentProduct.price" type="number" />
 			</div>
 		</FormModal>
 	</AppLayout>
@@ -97,9 +99,10 @@
 import InputForm from '@/Components/Form/InputForm.vue';
 import AppLayout from '@/Layouts/AppLayout.vue';
 import { ref, reactive, computed } from 'vue';
-import { IconTrash, IconCheck } from '@tabler/icons-vue';
+import { IconTrash, IconCheck, IconShoppingCartShare } from '@tabler/icons-vue';
 import FormModal from '@/Components/Modal/FormModal.vue';
 import { toast } from '@/Use/toast';
+import { IconShoppingCartFilled } from '@tabler/icons-vue';
 
 defineProps({
 	products: {
