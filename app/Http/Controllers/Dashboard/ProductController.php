@@ -13,7 +13,7 @@ class ProductController extends Controller
     public function index()
     {
         return inertia("Dashboard/Product/Index", [
-            'products' => Product::with('supplier')->get(),
+            'products' => Product::with('supplier')->get(['id', 'name', 'sku', 'supplier_id']),
         ]);
     }
 
@@ -31,7 +31,7 @@ class ProductController extends Controller
             'isNew' => false,
             'products' => Product::where('id', $product)->first(),
             'suppliers' => Supplier::all('id', 'name'),
-        ]); 
+        ]);
     }
 
     public function store(ProductRequest $request)

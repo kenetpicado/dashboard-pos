@@ -37,7 +37,7 @@
 				</table>
 			</div>
 			<div>
-				<div v-if="selectedProducts.length == 0" class="text-center text-gray-400">
+				<div v-if="selectedProducts.length == 0" class="h-full text-center text-gray-400 flex items-center justify-center">
 					No hay productos seleccionados
 				</div>
 				<div v-for="(product, index) in selectedProducts" class="w-full rounded-lg p-4 bg-white mb-2">

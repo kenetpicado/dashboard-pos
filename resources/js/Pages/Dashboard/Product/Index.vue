@@ -13,7 +13,6 @@
                 <th>Nombre</th>
                 <th>SKU</th>
                 <th>Proveedor</th>
-                <th>Notas</th>
                 <th>Acciones</th>
             </template>
 
@@ -22,7 +21,7 @@
                     <td>
                         {{ product.id }}
                     </td>
-                    <td>
+                    <td class="font-semibold">
                         {{ product.name }}
                     </td>
                     <td>
@@ -30,9 +29,6 @@
                     </td>
                     <td>
                         {{ product.supplier ? product.supplier.name : 'N/A' }}
-                    </td>
-                    <td>
-                        {{ product.notes }}
                     </td>
                     <td>
                         <div class="flex gap-2">
