@@ -98,7 +98,7 @@
 import InputForm from '@/Components/Form/InputForm.vue';
 import AppLayout from '@/Layouts/AppLayout.vue';
 import { ref, reactive, computed } from 'vue';
-import { IconTrash, IconCheck, IconShoppingCartShare } from '@tabler/icons-vue';
+import { IconTrash, IconCheck } from '@tabler/icons-vue';
 import FormModal from '@/Components/Modal/FormModal.vue';
 import { toast } from '@/Use/toast';
 import { IconShoppingCartFilled } from '@tabler/icons-vue';
