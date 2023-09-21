@@ -24,12 +24,11 @@
 								</div>
 								<div class="text-gray-400 flex items-center gap-1">
 									{{ product.sku }}
-									<IconCheck v-if="isAdded(product.id)" size="20" color="#16a34a"/>
+									<IconCheck v-if="isAdded(product.id)" size="20" color="#16a34a" />
 								</div>
 							</td>
 							<td>
-								<button class="primary-button" type="button"
-									@click="setCurrentProduct(product)">
+								<button class="primary-button" type="button" @click="setCurrentProduct(product)">
 									<IconShoppingCartFilled size="20" />
 								</button>
 							</td>
@@ -48,7 +47,7 @@
 						</div>
 						<div class="w-full flex flex-col justify-between">
 							<div>
-								<div class="text-lg font-semibold mb-2">
+								<div class="text-lg font-semibold mb-2" @click="editProduct(index)" role="button">
 									{{ product.name }} - {{ product.measure }} ({{ product.quantity }})
 								</div>
 								<div class="text-gray-400">
@@ -128,6 +127,7 @@ const breads = [
 
 const selectedProducts = ref([]);
 const openModal = ref(false);
+const isEditing = ref(false);
 
 const originalObject = {
 	id: null,
@@ -158,6 +158,11 @@ const total = computed(() => {
 });
 
 function addProduct() {
+	if (!currentProduct.measure) {
+		toast.error("La medida es requerida");
+		return;
+	}
+
 	if (currentProduct.quantity <= 0) {
 		toast.error("La cantidad debe ser mayor a 0");
 		return;
@@ -173,19 +178,24 @@ function addProduct() {
 		return;
 	}
 
-	if (!currentProduct.measure) {
-		toast.error("La medida es requerida");
-		return;
+	if (isEditing.value) {
+		const index = selectedProducts.value.findIndex((product) => product.id === currentProduct.id);
+		selectedProducts.value[index] = {
+			...currentProduct,
+		};
+		toast.success("Producto actualizado");
+	} else {
+		selectedProducts.value.push({
+			...currentProduct,
+		});
+		toast.success("Producto agregado");
 	}
-
-	selectedProducts.value.push({
-		...currentProduct,
-	});
 	resetValues();
 }
 
 function resetValues() {
 	Object.assign(currentProduct, originalObject);
+	isEditing.value = false;
 	openModal.value = false;
 }
 
@@ -193,8 +203,15 @@ function isAdded(id) {
 	return selectedProducts.value.some((product) => product.id === id);
 }
 
+function editProduct(index) {
+	Object.assign(currentProduct, selectedProducts.value[index]);
+	isEditing.value = true
+	openModal.value = true;
+}
+
 function removeProduct(index) {
 	selectedProducts.value.splice(index, 1);
+	toast.success("Producto eliminado");
 }
 
 function getImage(value) {
