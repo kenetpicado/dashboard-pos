@@ -76,8 +76,11 @@ const items = [
         route: route('dashboard.products.index'),
         icon: IconClipboardList
     },
-     {
-        name: 'Transacciones',
+    {
+        header: 'Operaciones'
+    },
+    {
+        name: 'Comprar',
         route: route('dashboard.transactions.create'),
         icon: IconShoppingBag
     },

@@ -11,7 +11,7 @@ class TransactionController extends Controller
     public function create()
     {
         return inertia('Dashboard/Transaction/Create', [
-            'products' => Product::all()
+            'products' => Product::all(['id', 'name', 'sku', 'image'])
         ]);
     }
 }
