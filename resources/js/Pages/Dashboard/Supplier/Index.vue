@@ -143,7 +143,7 @@ function store() {
         preserveScroll: true,
         preserveState: true,
         onSuccess: () => {
-            toast.success('Saved successfully');
+            toast.success('Proveedor agregado');
             resetValues()
         },
     });
@@ -154,7 +154,7 @@ function update() {
         preserveScroll: true,
         preserveState: true,
         onSuccess: () => {
-            toast.success('Updated successfully');
+            toast.success('Proveedor actualizado');
             resetValues()
         },
     });
@@ -168,13 +168,12 @@ function resetValues() {
 
 function destroy(id) {
     confirmAlert({
-        message: 'Are you sure you want to delete this supplier?',
         onConfirm: () => {
             form.delete(route('dashboard.suppliers.destroy', id), {
                 preserveScroll: true,
                 preserveState: true,
                 onSuccess: () => {
-                    toast.success('Deleted successfully');
+                    toast.success('Proveedor eliminado');
                 },
             });
         },

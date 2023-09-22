@@ -74,7 +74,7 @@ function onSubmit() {
             preserveScroll: true,
             preserveState: true,
             onSuccess: () => {
-                toast.success('Product created successfully');
+                toast.success('Producto agregado');
                 router.visit(route('dashboard.products.index'))
             },
         });
@@ -83,7 +83,7 @@ function onSubmit() {
             preserveScroll: true,
             preserveState: true,
             onSuccess: () => {
-                toast.success('Product updated successfully');
+                toast.success('Producto actualizado');
                 router.visit(route('dashboard.products.index'))
             },
         });

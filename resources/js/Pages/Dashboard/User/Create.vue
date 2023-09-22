@@ -49,7 +49,7 @@ function onSubmit() {
         preserveScroll: true,
         preserveState: true,
         onSuccess: () => {
-            toast.success('User created successfully');
+            toast.success('Usuario agregado');
         },
     });
 }

@@ -78,13 +78,12 @@ function edit(id){
 
 function destroy(id) {
     confirmAlert({
-        message: 'Are you sure you want to delete this product?',
         onConfirm: () => {
             router.delete(route('dashboard.products.destroy', id), {
                 preserveScroll: true,
                 preserveState: true,
                 onSuccess: () => {
-                    toast.success('Product deleted successfully');
+                    toast.success('Producto eliminado');
                 },
             });
         },
