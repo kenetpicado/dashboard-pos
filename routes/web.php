@@ -42,7 +42,10 @@ Route::middleware(['auth:sanctum'])
         Route::resource('suppliers', SupplierController::class)
             ->except(['create', 'edit', 'show']);
 
-        Route::resource('transactions', TransactionController::class);
+        // Route::resource('transactions', TransactionController::class);
+
+        Route::get('transactions/{type}', [TransactionController::class, 'create'])
+            ->name('transactions.create');
 
         Route::resource('products', ProductController::class)
             ->except('show');

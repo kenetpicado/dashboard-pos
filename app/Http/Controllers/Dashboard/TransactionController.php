@@ -8,10 +8,19 @@ use Illuminate\Http\Request;
 
 class TransactionController extends Controller
 {
-    public function create()
+    public function create(Request $request, $type)
     {
+        $products = [];
+
+        if ($request->search) {
+            $products = Product::query()
+                ->where('name', 'like', "%{$request->search}%")
+                ->get(['id', 'name', 'sku', 'image']);
+        }
+
         return inertia('Dashboard/Transaction/Create', [
-            'products' => Product::all(['id', 'name', 'sku', 'image'])
+            'products' => $products,
+            'type' => $type
         ]);
     }
 }

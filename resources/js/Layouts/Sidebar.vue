@@ -81,7 +81,7 @@ const items = [
     },
     {
         name: 'Comprar',
-        route: route('dashboard.transactions.create'),
+        route: route('dashboard.transactions.create', 'buy'),
         icon: IconShoppingBag
     },
     {

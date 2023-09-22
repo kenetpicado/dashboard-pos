@@ -6,7 +6,7 @@
 
 		<div class="grid grid-cols-2 gap-4">
 			<div>
-				<InputForm placeholder="Buscar"></InputForm>
+				<InputForm placeholder="Buscar" v-model="queryParams.search"></InputForm>
 				<table class="w-full border-collapse bg-white text-left text-sm text-gray-600 rounded-lg">
 					<thead class="bg-gray-50">
 						<tr>
@@ -32,6 +32,9 @@
 									<IconShoppingCartFilled size="20" />
 								</button>
 							</td>
+						</tr>
+						<tr v-if="products.length == 0" class="text-center">
+							<td colspan="3">No se han encontrado productos</td>
 						</tr>
 					</tbody>
 				</table>
@@ -97,17 +100,22 @@
 <script setup>
 import InputForm from '@/Components/Form/InputForm.vue';
 import AppLayout from '@/Layouts/AppLayout.vue';
-import { ref, reactive, computed } from 'vue';
+import { ref, reactive, computed, watch } from 'vue';
 import { IconTrash, IconCheck } from '@tabler/icons-vue';
 import FormModal from '@/Components/Modal/FormModal.vue';
 import { toast } from '@/Use/toast';
 import { IconShoppingCartFilled } from '@tabler/icons-vue';
+import { router } from '@inertiajs/vue3'
 
-defineProps({
+const props = defineProps({
 	products: {
 		type: Object,
 		required: true,
 	},
+	type: {
+		type: String,
+		required: true
+	}
 });
 
 const breads = [
@@ -115,19 +123,23 @@ const breads = [
 		name: 'Home',
 		route: route('dashboard.users.index'),
 	},
-	{
-		name: 'Transaccions',
-		route: route('dashboard.transactions.index'),
-	},
+	// {
+	// 	name: 'Transaccions',
+	// 	route: route('dashboard.transactions.index'),
+	// },
 	{
 		name: 'Create',
-		route: route('dashboard.transactions.create'),
+		route: route('dashboard.transactions.create', props.type),
 	},
 ];
 
 const selectedProducts = ref([]);
 const openModal = ref(false);
 const isEditing = ref(false);
+
+const queryParams = reactive({
+	search: ''
+})
 
 const originalObject = {
 	id: null,
@@ -221,5 +233,17 @@ function getImage(value) {
 
 	return 'https://d1fufvy4xao6k9.cloudfront.net/images/landing/hockerty/shoes_special/custom_dress_shoes.jpg';
 }
+
+watch(() => queryParams.search, (value) => {
+	if (!value) {
+		delete queryParams.search
+	}
+
+	router.get(route('dashboard.transactions.create', 'buy'), queryParams, {
+		preserveState: true,
+		preserveScroll: true,
+		only: ["products"]
+	})
+})
 
 </script>
