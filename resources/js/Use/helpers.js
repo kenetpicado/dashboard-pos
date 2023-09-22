@@ -4,7 +4,7 @@ export function getAvatarUrl(name) {
     return `https://ui-avatars.com/api/?name=${encodeURIComponent(name)}&rounded=true&size=256&background=eef2ff&color=4f46e5`;
 }
 
-export function confirmAlert({ message, onConfirm, title = "Confirmar" }) {
+export function confirmAlert({ message, onConfirm, title = "Cuidado" }) {
     Swal.fire({
         icon: "info",
         iconColor: "#4f46e5",
