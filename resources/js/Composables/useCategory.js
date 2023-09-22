@@ -14,7 +14,7 @@ export function useCategory() {
             preserveScroll: true,
             preserveState: true,
             onSuccess: () => {
-                toast.success("Saved successfully");
+                toast.success("Categoria agregada");
                 if (onDone) onDone();
             },
         });
@@ -25,7 +25,7 @@ export function useCategory() {
             preserveScroll: true,
             preserveState: true,
             onSuccess: () => {
-                toast.success('Saved successfully');
+                toast.success('Categoria actualizada');
                 if (onDone) onDone();
             },
         });
@@ -33,13 +33,12 @@ export function useCategory() {
 
     function destroy(id) {
         confirmAlert({
-            message: 'Are you sure you want to delete this category?',
             onConfirm: () => {
                 form.delete(route('dashboard.categories.destroy', id), {
                     preserveScroll: true,
                     preserveState: true,
                     onSuccess: () => {
-                        toast.success('Deleted successfully');
+                        toast.success('Categoria eliminada');
                     },
                 });
             },

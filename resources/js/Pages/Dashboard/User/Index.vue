@@ -98,7 +98,7 @@ function onSubmit() {
         preserveScroll: true,
         preserveState: true,
         onSuccess: () => {
-            toast.success('User updated successfully');
+            toast.success('Usuario actualizado');
             openModal.value = false;
         },
     });
@@ -106,13 +106,12 @@ function onSubmit() {
 
 function destroy(id) {
     confirmAlert({
-        message: 'Are you sure you want to delete this user?',
         onConfirm: () => {
             form.delete(route('dashboard.users.destroy', id), {
                 preserveScroll: true,
                 preserveState: true,
                 onSuccess: () => {
-                    toast.success('User deleted successfully');
+                    toast.success('Usuario eliminado');
                 },
             });
         },

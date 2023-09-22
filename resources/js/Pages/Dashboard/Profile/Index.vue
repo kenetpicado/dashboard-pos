@@ -61,7 +61,7 @@ function onSubmit() {
         preserveScroll: true,
         preserveState: true,
         onSuccess: () => {
-            toast.success('Profile updated successfully');
+            toast.success('Perfil actualizado');
         },
     });
 }
