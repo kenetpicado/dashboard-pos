@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Dashboard\CategoryController;
 use App\Http\Controllers\Dashboard\DashboardController;
+use App\Http\Controllers\Dashboard\InventoryController;
 use App\Http\Controllers\Dashboard\ProductController;
 use App\Http\Controllers\Dashboard\ProfileController;
 use App\Http\Controllers\Dashboard\SupplierController;
@@ -42,11 +43,18 @@ Route::middleware(['auth:sanctum'])
         Route::resource('suppliers', SupplierController::class)
             ->except(['create', 'edit', 'show']);
 
-        // Route::resource('transactions', TransactionController::class);
+        Route::get('transactions', [TransactionController::class, 'index'])
+            ->name('transactions.index');
 
         Route::get('transactions/{type}', [TransactionController::class, 'create'])
             ->name('transactions.create');
 
+        Route::post('transactions/{type}', [TransactionController::class, 'store'])
+            ->name('transactions.store');
+
         Route::resource('products', ProductController::class)
             ->except('show');
+
+        Route::get('inventory', [InventoryController::class, 'index'])
+            ->name('inventory.index');
     });

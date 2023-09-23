@@ -4,7 +4,7 @@ namespace App\Http\Requests\Dashboard;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class ProductRequest extends FormRequest
+class TransactionRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -22,13 +22,9 @@ class ProductRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'name' => 'required',
-            'sku' => ['required', 'alpha_dash', "unique"],
-            'description' => 'nullable',
-            'supplier_id' => 'nullable',
-            'status' => 'nullable',
-            'image' => ['nullable', 'url'],
-            'notes' => 'nullable',
+            "note" => "nullable",
+            "total" => "required|numeric",
+            "products" => "required|array|min:1"
         ];
     }
 }

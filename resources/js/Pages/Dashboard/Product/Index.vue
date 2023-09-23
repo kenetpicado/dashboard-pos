@@ -9,9 +9,8 @@
 
         <TableSection>
             <template #header>
-                <th>ID</th>
-                <th>Nombre</th>
                 <th>SKU</th>
+                <th>Nombre</th>
                 <th>Proveedor</th>
                 <th>Acciones</th>
             </template>
@@ -19,13 +18,10 @@
             <template #body>
                 <tr v-for="(product, index) in products" class="hover:bg-gray-50">
                     <td>
-                        {{ product.id }}
-                    </td>
-                    <td class="font-semibold">
-                        {{ product.name }}
+                        {{ product.sku }}
                     </td>
                     <td>
-                        {{ product.sku }}
+                        {{ product.name }}
                     </td>
                     <td>
                         {{ product.supplier ? product.supplier.name : 'N/A' }}

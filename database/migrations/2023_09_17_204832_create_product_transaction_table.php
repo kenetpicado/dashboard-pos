@@ -13,6 +13,11 @@ return new class extends Migration
     {
         Schema::create('product_transaction', function (Blueprint $table) {
             $table->id();
+            $table->foreignId("product_id")->constrained();
+            $table->foreignId("transaction_id")->constrained();
+            $table->integer('quantity');
+            $table->double("value");
+            $table->string('measure')->nullable();
             $table->timestamps();
         });
     }

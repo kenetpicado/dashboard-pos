@@ -1,7 +1,7 @@
 <template>
 	<AppLayout title="Create" :breads="breads">
 		<template #header>
-			<span class="title mt-1"> Create </span>
+			<span class="title mt-1">Comprar</span>
 		</template>
 
 		<div class="grid grid-cols-2 gap-4">
@@ -43,7 +43,7 @@
 				<div v-if="selectedProducts.length == 0" class="h-full text-center text-gray-400 flex items-center justify-center">
 					No hay productos seleccionados
 				</div>
-				<div v-for="(product, index) in selectedProducts" class="w-full rounded-lg p-4 bg-white mb-2">
+				<div v-for="(product, index) in selectedProducts" class="w-full rounded-lg p-4 bg-white mb-2 border-2">
 					<div class="flex gap-2">
 						<div class="h-36 w-36 flex items-center justify-center">
 							<img :src="getImage(product.image)" alt="Imagen" class="max-h-full max-w-full rounded-lg">
@@ -69,7 +69,8 @@
 						</div>
 					</div>
 				</div>
-				<div v-if="total > 0">
+				<div v-if="total > 0" class="mt-4">
+					<InputForm placeholder="Notas" v-model="form.note"></InputForm>
 					<div class="flex justify-end my-8">
 						<div class="text-xl font-bold">
 							Total: C${{ total.toLocaleString('en-US') }}
@@ -77,7 +78,9 @@
 					</div>
 					<div class="flex items-center justify-end gap-4">
 						<button class="secondary-button">Cancelar</button>
-						<button class="primary-button" type="button">Guardar</button>
+						<button class="primary-button" type="button" @click="storeTransaction">
+							Guardar
+						</button>
 					</div>
 				</div>
 			</div>
@@ -92,6 +95,11 @@
 				<InputForm text="Cantidad" v-model="currentProduct.quantity" type="number" />
 				<InputForm text="Costo (Unidad)" v-model="currentProduct.cost" type="number" />
 				<InputForm text="Precio (Unidad)" v-model="currentProduct.price" type="number" />
+				<div class="flex justify-end col-span-2">
+					<div class="text-xl font-bold">
+						Total: {{ (currentProduct.quantity * currentProduct.cost).toLocaleString() }}
+					</div>
+				</div>
 			</div>
 		</FormModal>
 	</AppLayout>
@@ -105,7 +113,7 @@ import { IconTrash, IconCheck } from '@tabler/icons-vue';
 import FormModal from '@/Components/Modal/FormModal.vue';
 import { toast } from '@/Use/toast';
 import { IconShoppingCartFilled } from '@tabler/icons-vue';
-import { router } from '@inertiajs/vue3'
+import { router, useForm } from '@inertiajs/vue3'
 
 const props = defineProps({
 	products: {
@@ -118,27 +126,40 @@ const props = defineProps({
 	}
 });
 
+const transactionTypes = {
+	buy: "Comprar",
+	sell: "Vender"
+}
+
 const breads = [
 	{
-		name: 'Home',
+		name: 'Inicio',
 		route: route('dashboard.users.index'),
 	},
-	// {
-	// 	name: 'Transaccions',
-	// 	route: route('dashboard.transactions.index'),
-	// },
 	{
-		name: 'Create',
+		name: transactionTypes[props.type],
 		route: route('dashboard.transactions.create', props.type),
 	},
 ];
+
+const queryParams = reactive({
+	search: ''
+})
+
+const searchParams = new URLSearchParams(window.location.search);
+
+if (searchParams.get("search")) {
+	queryParams.search = searchParams.get("search")
+}
 
 const selectedProducts = ref([]);
 const openModal = ref(false);
 const isEditing = ref(false);
 
-const queryParams = reactive({
-	search: ''
+const form = useForm({
+	note: "",
+	total: 0,
+	products: null
 })
 
 const originalObject = {
@@ -146,9 +167,9 @@ const originalObject = {
 	name: null,
 	image: null,
 	quantity: 1,
-	cost: 0,
-	price: 0,
-	measure: null,
+	cost: 10,
+	price: 10,
+	measure: "M",
 };
 
 const currentProduct = reactive({ ...originalObject });
@@ -245,5 +266,27 @@ watch(() => queryParams.search, (value) => {
 		only: ["products"]
 	})
 })
+
+function storeTransaction() {
+	form.products = selectedProducts.value.map(function(product) {
+		return {
+			product_id: product.id,
+			quantity: product.quantity,
+			measure: product.measure,
+			value: product.cost,
+			price: product.price
+		}
+	})
+
+	form.total = total.value
+
+	form.post(route("dashboard.transactions.store", props.type), {
+        preserveScroll: true,
+        preserveState: true,
+        onSuccess: () => {
+            toast.success("Transaccion relizada correctamente");
+        },
+    });
+}
 
 </script>

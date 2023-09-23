@@ -36,7 +36,7 @@
 import { Link, router } from '@inertiajs/vue3';
 import { IconShoppingBag } from '@tabler/icons-vue';
 import { IconUserCog } from '@tabler/icons-vue';
-import { IconHome, IconLogout, IconUser, IconCategory, IconBuildingFactory, IconClipboardList } from '@tabler/icons-vue';
+import { IconHome, IconLogout, IconUser, IconCategory, IconBuildingFactory, IconClipboardList, IconEyeCheck, IconShirt } from '@tabler/icons-vue';
 
 const DEFAULT_ICON = IconUser;
 
@@ -74,10 +74,20 @@ const items = [
     {
         name: 'Productos',
         route: route('dashboard.products.index'),
+        icon: IconShirt
+    },
+    {
+        name: 'Inventario',
+        route: route('dashboard.inventory.index'),
         icon: IconClipboardList
     },
     {
         header: 'Transacciones'
+    },
+    {
+        name: 'Ver',
+        route: route('dashboard.transactions.index'),
+        icon: IconEyeCheck
     },
     {
         name: 'Comprar',
@@ -96,7 +106,7 @@ const items = [
 
 function getClass(fullRoute) {
     return window.location.href == fullRoute
-        ? 'bg-gray-100 font-bold'
+        ? 'bg-gray-200 font-bold'
         : 'hover:bg-gray-100';
 }
 

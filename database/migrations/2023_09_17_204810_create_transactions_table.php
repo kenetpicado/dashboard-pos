@@ -15,11 +15,11 @@ return new class extends Migration
             $table->id();
             $table->foreignId('user_id')->constrained();
             $table->string('type');
-            $table->string('client');
-            $table->double('discount');
-            $table->string('currency');
+            $table->string('client')->nullable();
+            $table->double('discount')->default(0);
+            $table->string('currency')->nullable();
             $table->double('total');
-            $table->string('note');
+            $table->string('note')->nullable();
             $table->timestamps();
         });
     }
