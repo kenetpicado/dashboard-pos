@@ -1,7 +1,7 @@
 <template>
 	<AppLayout title="Create" :breads="breads">
 		<template #header>
-			<span class="title mt-1">Comprar</span>
+			<span class="title mt-1">{{transactionTypes[type]}}</span>
 		</template>
 
 		<div class="grid grid-cols-2 gap-4">
