@@ -5,40 +5,7 @@
 		</template>
 
 		<div class="grid grid-cols-2 gap-4">
-			<div>
-				<InputForm placeholder="Buscar" v-model="queryParams.search"></InputForm>
-				<table class="w-full border-collapse bg-white text-left text-sm text-gray-600 rounded-lg">
-					<thead class="bg-gray-50">
-						<tr>
-							<th>#</th>
-							<th>Producto</th>
-							<th>Agregar</th>
-						</tr>
-					</thead>
-					<tbody class="divide-y divide-gray-100 border-t border-gray-100">
-						<tr v-for="(product, index) in products">
-							<td>{{ index + 1 }}</td>
-							<td>
-								<div>
-									{{ product.name }}
-								</div>
-								<div class="text-gray-400 flex items-center gap-1">
-									{{ product.sku }}
-									<IconCheck v-if="isAdded(product.id)" size="20" color="#16a34a" />
-								</div>
-							</td>
-							<td>
-								<button class="primary-button" type="button" @click="setCurrentProduct(product)">
-									<IconShoppingCartFilled size="20" />
-								</button>
-							</td>
-						</tr>
-						<tr v-if="products.length == 0" class="text-center">
-							<td colspan="3">No se han encontrado productos</td>
-						</tr>
-					</tbody>
-				</table>
-			</div>
+			<SearchProducts :products="products" @setProduct="setCurrentProduct"/>
 			<div>
 				<div v-if="selectedProducts.length == 0" class="h-full text-center text-gray-400 flex items-center justify-center">
 					No hay productos seleccionados
@@ -112,8 +79,8 @@ import { ref, reactive, computed, watch } from 'vue';
 import { IconTrash, IconCheck } from '@tabler/icons-vue';
 import FormModal from '@/Components/Modal/FormModal.vue';
 import { toast } from '@/Use/toast';
-import { IconShoppingCartFilled } from '@tabler/icons-vue';
 import { router, useForm } from '@inertiajs/vue3'
+import SearchProducts from "./Partials/SearchProducts.vue"
 
 const props = defineProps({
 	products: {
@@ -141,16 +108,6 @@ const breads = [
 		route: route('dashboard.transactions.create', props.type),
 	},
 ];
-
-const queryParams = reactive({
-	search: ''
-})
-
-const searchParams = new URLSearchParams(window.location.search);
-
-if (searchParams.get("search")) {
-	queryParams.search = searchParams.get("search")
-}
 
 const selectedProducts = ref([]);
 const openModal = ref(false);
@@ -254,18 +211,6 @@ function getImage(value) {
 
 	return 'https://d1fufvy4xao6k9.cloudfront.net/images/landing/hockerty/shoes_special/custom_dress_shoes.jpg';
 }
-
-watch(() => queryParams.search, (value) => {
-	if (!value) {
-		delete queryParams.search
-	}
-
-	router.get(route('dashboard.transactions.create', 'buy'), queryParams, {
-		preserveState: true,
-		preserveScroll: true,
-		only: ["products"]
-	})
-})
 
 function storeTransaction() {
 	form.products = selectedProducts.value.map(function(product) {
