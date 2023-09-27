@@ -95,6 +95,11 @@ const items = [
         icon: IconShoppingBag
     },
     {
+        name: 'Vender',
+        route: route('dashboard.transactions.create', 'sell'),
+        icon: IconShoppingBag
+    },
+    {
         header: 'Sistema'
     },
     {

@@ -3,6 +3,7 @@
 namespace App\Http\Requests\Dashboard;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
 class ProductRequest extends FormRequest
 {
@@ -23,7 +24,7 @@ class ProductRequest extends FormRequest
     {
         return [
             'name' => 'required',
-            'sku' => ['required', 'alpha_dash', "unique"],
+            'sku' => ['required', 'alpha_dash', Rule::unique('products')->ignore($this->id)],
             'description' => 'nullable',
             'supplier_id' => 'nullable',
             'status' => 'nullable',

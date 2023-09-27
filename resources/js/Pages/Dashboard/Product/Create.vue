@@ -59,6 +59,7 @@ const breads = [
 ];
 
 const form = useForm({
+    id: props.products?.id ?? null,
     name: props.products?.name ?? '',
     sku: props.products?.sku ?? '',
     description: props.products?.description ?? '',

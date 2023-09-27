@@ -9,7 +9,7 @@
 
         <TableSection>
             <template #header>
-                <th>ID</th>
+                <th>Fecha</th>
                 <th>Tipo</th>
                 <th>Responsable</th>
                 <td>Productos</td>
@@ -21,7 +21,7 @@
             <template #body>
                 <tr v-for="(transaction, index) in transactions.data" class="hover:bg-gray-50">
                     <td>
-                        {{ transaction.id }}
+                        <DateColumn :date="transaction.created_at"/>
                     </td>
                     <td>
                     	{{ transactionTypes[transaction.type] }}                    	
@@ -36,11 +36,13 @@
                         C${{ transaction.discount }}
                     </td>
                     <td>
-                        C${{ transaction.total }}
+                        <span :class=" transactionClass[transaction.type]">
+                            C${{ transaction.total }}
+                        </span>
                     </td>
                     <td>
                         <div class="flex gap-2">
-                            Actions
+                            
                         </div>
                     </td>
                 </tr>
@@ -59,6 +61,7 @@
 import AppLayout from '@/Layouts/AppLayout.vue';
 import TableSection from '@/Components/TableSection.vue';
 import ThePaginator from "@/Components/ThePaginator.vue"
+import DateColumn from "@/Components/DateColumn.vue"
 
 defineProps({
     transactions: {
@@ -82,5 +85,10 @@ const breads = [
         route: route('dashboard.transactions.index'),
     },
 ];
+
+const transactionClass = {
+    buy: "badge-red",
+    sell: "bagde-indigo"
+}
 
 </script>

@@ -12,7 +12,6 @@
                 <th>SKU</th>
                 <th>Producto</th>
                 <th>Costo (ud.)</th>
-                <th>Precio (ud.)</th>
                 <th>Cantidad</th>
                 <th>Acciones</th>
             </template>
@@ -27,9 +26,6 @@
                     </td>
                     <td>
                     	C${{ i.unit_cost }}                	
-                    </td>
-                    <td>
-                    	C${{ i.unit_price }}                	
                     </td>
                     <td>
                     	{{ i.quantity }} 
