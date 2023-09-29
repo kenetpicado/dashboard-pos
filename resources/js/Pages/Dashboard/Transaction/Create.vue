@@ -30,14 +30,13 @@
 
 <script setup>
 import InputForm from '@/Components/Form/InputForm.vue';
-import AppLayout from '@/Layouts/AppLayout.vue';
-import { ref, reactive, computed, watch } from 'vue';
-import { IconTrash, IconCheck } from '@tabler/icons-vue';
 import FormModal from '@/Components/Modal/FormModal.vue';
+import AppLayout from '@/Layouts/AppLayout.vue';
 import { toast } from '@/Use/toast';
-import { router, useForm } from '@inertiajs/vue3'
-import SearchProducts from "./Partials/SearchProducts.vue"
-import ListProducts from "./Partials/ListProducts.vue"
+import { useForm } from '@inertiajs/vue3';
+import { reactive, ref } from 'vue';
+import ListProducts from "./Partials/ListProducts.vue";
+import SearchProducts from "./Partials/SearchProducts.vue";
 
 const props = defineProps({
 	products: {
