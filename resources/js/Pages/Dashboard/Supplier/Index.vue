@@ -1,0 +1,182 @@
+<template>
+    <AppLayout title="Proveedores" :breads="breads">
+
+        <template #header>
+            <span class="title">
+                Proveedores
+            </span>
+            <AddButton @click="openModal = true" />
+        </template>
+
+        <TableSection>
+            <template #header>
+                <th>Nombre</th>
+                <th>Contacto</th>
+                <th>RUC</th>
+                <th>Acciones</th>
+            </template>
+
+            <template #body>
+                <tr class="hover:bg-gray-50" v-for="supplier in suppliers">
+                    <td>
+                        <span class="font-semibold">{{ supplier.name }}</span>
+                    </td>
+                    <td>
+                        {{ supplier.contact }}
+                    </td>
+                    <td>
+                        {{ supplier.ruc }}
+                    </td>
+                    <td>
+                        <div class="flex gap-4">
+                            <IconPencil role="button" @click="edit(supplier)"/>
+	                        <IconTrash role="button" @click="destroy(supplier.id)" />
+                        </div>
+                    </td>
+                </tr>
+                <tr v-if="suppliers.length == 0">
+                    <td colspan="4" class="text-center">No data to display</td>
+                </tr>
+            </template>
+        </TableSection>
+
+        <FormModal :show="openModal" title="Proveedor" @onCancel="resetValues()" @onSubmit="action">
+            <InputForm text="Name" v-model="form.name" />
+            <InputForm text="Contact" v-model="form.contact" />
+            <InputForm text="RUC" v-model="form.ruc" />
+             <div class="text-lg font-medium text-gray-600 mb-5 mt-6">
+                Terminos de pago
+            </div>
+            <InputForm text="Deadline" v-model="form.payment_terms.deadline" />
+            <div class="grid grid-cols-2 gap-4">
+                <SelectForm v-model="form.payment_terms.method" text="Method" name="method">
+                    <option v-for="method in methods" :value="method.value">{{ method.label }}</option>
+                </SelectForm>
+                <SelectForm v-model="form.payment_terms.currency" text="Currency" name="currency">
+                    <option v-for="currency in currencies" :value="currency.value">{{ currency.label }}</option>
+                </SelectForm>
+            </div>
+        </FormModal>
+    </AppLayout>
+</template>
+
+<script setup>
+import AddButton from '@/Components/Buttons/AddButton.vue';
+import AppLayout from '@/Layouts/AppLayout.vue';
+import FormModal from '@/Components/Modal/FormModal.vue';
+import InputForm from '@/Components/Form/InputForm.vue';
+import { ref } from 'vue';
+import { useForm } from '@inertiajs/vue3';
+import { toast } from '@/Use/toast';
+import TableSection from '@/Components/TableSection.vue';
+import { IconPencil } from '@tabler/icons-vue';
+import { IconTrash } from '@tabler/icons-vue';
+import { confirmAlert } from '@/Use/helpers';
+import SelectForm from '@/Components/Form/SelectForm.vue';
+
+defineProps({
+    suppliers: {
+        type: Object,
+        required: true,
+    }
+});
+
+const breads = [
+    {
+        name: 'Inicio',
+        route: route('dashboard.users.index'),
+    },
+    {
+        name: 'Proveedores',
+        route: route('dashboard.suppliers.index'),
+    },
+];
+
+const isNew = ref(true);
+
+const form = useForm({
+    id: '',
+    name: '',
+    contact: '',
+    ruc: '',
+    payment_terms: {
+        deadline: '',
+        method: 'TRANSACCION',
+        currency: 'NIO'
+    }
+});
+
+const methods = [
+    {
+        value: 'TRANSACCION',
+        label: 'TRANSACCION'
+    },
+    {
+        value: 'EFECTIVO',
+        label: 'EFECTIVO'
+    }
+]
+
+const currencies = [
+    {
+        value: 'NIO',
+        label: 'CORDOBA (NIO)'
+    },
+    {
+        value: 'USD',
+        label: 'DOLAR (USD)'
+    },
+]
+
+const openModal = ref(false);
+
+function edit(supplier) {
+    Object.assign(form, supplier);
+    openModal.value = true;
+    isNew.value = false;
+}
+
+const action = () => isNew.value ? store() : update();
+
+function store() {
+    form.post(route('dashboard.suppliers.store'), {
+        preserveScroll: true,
+        preserveState: true,
+        onSuccess: () => {
+            toast.success('Proveedor agregado');
+            resetValues()
+        },
+    });
+}
+
+function update() {
+    form.put(route('dashboard.suppliers.update', form.id), {
+        preserveScroll: true,
+        preserveState: true,
+        onSuccess: () => {
+            toast.success('Proveedor actualizado');
+            resetValues()
+        },
+    });
+}
+
+function resetValues() {
+    openModal.value = false;
+    isNew.value = true
+    form.reset();
+}
+
+function destroy(id) {
+    confirmAlert({
+        onConfirm: () => {
+            form.delete(route('dashboard.suppliers.destroy', id), {
+                preserveScroll: true,
+                preserveState: true,
+                onSuccess: () => {
+                    toast.success('Proveedor eliminado');
+                },
+            });
+        },
+    })
+}
+</script>

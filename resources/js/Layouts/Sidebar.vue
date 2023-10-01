@@ -1,5 +1,5 @@
 <template>
-    <aside class="w-72 p-3 bg-white flex flex-col hidden lg:block min-h-screen">
+    <aside class="w-72 p-3 bg-white flex flex-col min-h-screen">
         <div class="flex flex-col items-center my-4">
             <div class="h-14 w-14">
                 <img class="h-full w-full"
@@ -34,7 +34,9 @@
 
 <script setup>
 import { Link, router } from '@inertiajs/vue3';
-import { IconHome, IconLogout, IconUser } from '@tabler/icons-vue';
+import { IconShoppingBag } from '@tabler/icons-vue';
+import { IconUserCog } from '@tabler/icons-vue';
+import { IconHome, IconLogout, IconUser, IconCategory, IconBuildingFactory, IconClipboardList, IconEyeCheck, IconShirt } from '@tabler/icons-vue';
 
 const DEFAULT_ICON = IconUser;
 
@@ -55,20 +57,53 @@ const items = [
         header: 'Administration'
     },
     {
-        name: 'Categories',
+        name: 'Categorias',
         route: route('dashboard.categories.index'),
-        icon: IconUser
+        icon: IconCategory
     },
     {
-        name: 'Users',
+        name: 'Usuarios',
         route: route('dashboard.users.index'),
-        icon: IconUser
+        icon: IconUserCog
     },
     {
-        header: 'System'
+        name: 'Proveedores',
+        route: route('dashboard.suppliers.index'),
+        icon: IconBuildingFactory
     },
     {
-        name: 'Profile',
+        name: 'Productos',
+        route: route('dashboard.products.index'),
+        icon: IconShirt
+    },
+    {
+        name: 'Inventario',
+        route: route('dashboard.inventory.index'),
+        icon: IconClipboardList
+    },
+    {
+        header: 'Transacciones'
+    },
+    {
+        name: 'Ver',
+        route: route('dashboard.transactions.index'),
+        icon: IconEyeCheck
+    },
+    {
+        name: 'Comprar',
+        route: route('dashboard.transactions.create', 'buy'),
+        icon: IconShoppingBag
+    },
+    {
+        name: 'Vender',
+        route: route('dashboard.transactions.create', 'sell'),
+        icon: IconShoppingBag
+    },
+    {
+        header: 'Sistema'
+    },
+    {
+        name: 'Perfil',
         route: route('dashboard.profile.index'),
         icon: IconUser
     },
@@ -76,7 +111,7 @@ const items = [
 
 function getClass(fullRoute) {
     return window.location.href == fullRoute
-        ? 'bg-gray-100 font-bold'
+        ? 'bg-gray-200 font-bold'
         : 'hover:bg-gray-100';
 }
 

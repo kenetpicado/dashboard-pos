@@ -27,11 +27,11 @@ import { toast } from '@/Use/toast';
 
 const breads = [
     {
-        name: 'Home',
+        name: 'Inicio',
         route: route('dashboard.users.index'),
     },
     {
-        name: 'Profile',
+        name: 'Perfil',
         route: route('dashboard.profile.index'),
     },
 ];
@@ -61,7 +61,7 @@ function onSubmit() {
         preserveScroll: true,
         preserveState: true,
         onSuccess: () => {
-            toast.success('Profile updated successfully');
+            toast.success('Perfil actualizado');
         },
     });
 }

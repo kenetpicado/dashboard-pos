@@ -8,10 +8,10 @@
 
             <div class="flex items-center justify-end px-4 py-3 bg-gray-50 text-right rounded-b-lg gap-4">
                 <button class="secondary-button" type="button" @click="$emit('onCancel')">
-                    Cancel
+                    Cancelar
                 </button>
                 <button type="submit" class="primary-button">
-                    {{ isNew ? 'Create' : 'Update' }}
+                    {{ isNew ? 'Guardar' : 'Actualizar' }}
                 </button>
             </div>
         </form>

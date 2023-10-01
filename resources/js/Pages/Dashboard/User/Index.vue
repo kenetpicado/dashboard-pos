@@ -1,9 +1,9 @@
 <template>
-    <AppLayout title="Users" :breads="breads">
+    <AppLayout title="Usuarios" :breads="breads">
 
         <template #header>
             <span class="title">
-                Users
+                Usuarios
             </span>
             <AddButton :href="route('dashboard.users.create')" />
         </template>
@@ -13,7 +13,7 @@
                 <th>ID</th>
                 <th>Nombre</th>
                 <th>Email</th>
-                <th>Accciones</th>
+                <th>Acciones</th>
             </template>
 
             <template #body>
@@ -35,7 +35,7 @@
                     </td>
                 </tr>
                 <tr v-if="users.length == 0">
-                    <td colspan="4" class="text-center">No data to display</td>
+                    <td colspan="4" class="text-center">No hay datos que mostrar</td>
                 </tr>
             </template>
         </TableSection>
@@ -69,11 +69,11 @@ defineProps({
 
 const breads = [
     {
-        name: 'Home',
+        name: 'Inicio',
         route: route('dashboard.users.index'),
     },
     {
-        name: 'Users',
+        name: 'Usuarios',
         route: route('dashboard.users.index'),
     },
 ];
@@ -98,7 +98,7 @@ function onSubmit() {
         preserveScroll: true,
         preserveState: true,
         onSuccess: () => {
-            toast.success('User updated successfully');
+            toast.success('Usuario actualizado');
             openModal.value = false;
         },
     });
@@ -106,13 +106,12 @@ function onSubmit() {
 
 function destroy(id) {
     confirmAlert({
-        message: 'Are you sure you want to delete this user?',
         onConfirm: () => {
             form.delete(route('dashboard.users.destroy', id), {
                 preserveScroll: true,
                 preserveState: true,
                 onSuccess: () => {
-                    toast.success('User deleted successfully');
+                    toast.success('Usuario eliminado');
                 },
             });
         },
