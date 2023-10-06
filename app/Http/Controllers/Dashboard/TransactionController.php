@@ -32,7 +32,9 @@ class TransactionController extends Controller
         if ($request->search) {
             $products = Product::query()
                 ->where('name', 'like', "%{$request->search}%")
-                ->get(['id', 'name', 'sku', 'image']);
+                ->select('id', 'name', 'sku', 'image')
+                ->limit(5)
+                ->get();
         }
 
         return inertia('Dashboard/Transaction/Create', [

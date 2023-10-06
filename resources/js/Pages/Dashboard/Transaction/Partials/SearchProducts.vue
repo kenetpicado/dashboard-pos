@@ -1,6 +1,6 @@
 <template>
 	<div>
-		<InputForm placeholder="Buscar" v-model="queryParams.search"></InputForm>
+		<InputForm placeholder="Buscar" v-model="queryParams.search" type="search"></InputForm>
 		<table class="w-full border-collapse bg-white text-left text-sm text-gray-600 rounded-lg">
 			<thead class="bg-gray-50">
 				<tr>
@@ -21,7 +21,7 @@
 						</div>
 					</td>
 					<td>
-						<button class="primary-button" type="button" 
+						<button class="primary-button" type="button"
 							@click="$emit('setProduct', product)">
 							<IconShoppingCartFilled size="20" />
 						</button>
