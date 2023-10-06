@@ -5,7 +5,6 @@ use App\Http\Controllers\Dashboard\DashboardController;
 use App\Http\Controllers\Dashboard\InventoryController;
 use App\Http\Controllers\Dashboard\ProductController;
 use App\Http\Controllers\Dashboard\ProfileController;
-use App\Http\Controllers\Dashboard\SupplierController;
 use App\Http\Controllers\Dashboard\TransactionController;
 use App\Http\Controllers\Dashboard\UserController;
 use Illuminate\Foundation\Application;
@@ -38,9 +37,6 @@ Route::middleware(['auth:sanctum'])
             ->except(['show', 'edit']);
 
         Route::resource('categories', CategoryController::class)
-            ->except(['create', 'edit', 'show']);
-
-        Route::resource('suppliers', SupplierController::class)
             ->except(['create', 'edit', 'show']);
 
         Route::get('transactions', [TransactionController::class, 'index'])

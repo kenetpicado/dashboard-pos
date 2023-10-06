@@ -38,8 +38,8 @@ const submit = () => {
                 <h2 class="mt-4 text-center text-2xl font-extrabold text-gray-900">
                     {{ app_name }}
                 </h2>
-                <p class="mt-2 text-center text-sm text-gray-600">
-                    Log in to your account
+                <p class="mt-2 mb-4 text-center text-sm text-gray-600">
+                    Inicia sesión
                 </p>
             </div>
             <div v-if="status" class="mb-4 font-medium text-sm text-green-600">
@@ -47,11 +47,11 @@ const submit = () => {
             </div>
 
             <form @submit.prevent="submit">
-                <InputForm text="Email" v-model="form.email" type="email" required autofocus />
+                <InputForm text="Correo" v-model="form.email" type="email" name="email" required autofocus />
 
-                <InputForm text="Password" v-model="form.password" type="password" required />
+                <InputForm text="Contraseña" v-model="form.password" type="password" name="password" required />
 
-                <Checkbox v-model:checked="form.remember" text="Remember me" />
+                <Checkbox v-model:checked="form.remember" text="Recuerdame" />
 
                 <div class="flex items-center justify-end mt-4">
                     <button type="submit" :class="['primary-button', form.processing ? 'opacity-25' : '']"

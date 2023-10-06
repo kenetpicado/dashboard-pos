@@ -17,18 +17,18 @@
             </template>
 
             <template #body>
-                <tr v-for="(i, index) in inventory" class="hover:bg-gray-50">
+                <tr v-for="(i, index) in inventory.data" class="hover:bg-gray-50">
                     <td>
                         {{ i.product.sku }}
                     </td>
                     <td>
-                    	{{ i.product.name }}                	
+                    	{{ i.product.name }}
                     </td>
                     <td>
-                    	C${{ i.unit_cost }}                	
+                    	C${{ i.unit_cost }}
                     </td>
                     <td>
-                    	{{ i.quantity }} 
+                    	{{ i.quantity }}
                     </td>
                     <td>
                         <div class="flex gap-2">
@@ -36,13 +36,13 @@
                         </div>
                     </td>
                 </tr>
-                <tr v-if="inventory.length == 0">
-                    <td colspan="4" class="text-center">No hay datos que mostrar</td>
+                <tr v-if="inventory.data.length == 0">
+                    <td colspan="5" class="text-center">No hay datos que mostrar</td>
                 </tr>
             </template>
-            <!-- <template #paginator>
-            	<ThePaginator :links="transactions.links"/>
-            </template> -->
+            <template #paginator>
+            	<ThePaginator :links="inventory.links"/>
+            </template>
         </TableSection>
     </AppLayout>
 </template>

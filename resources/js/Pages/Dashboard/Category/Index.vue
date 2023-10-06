@@ -36,8 +36,8 @@
                         </td>
                         <td>
                             <div class="flex gap-4">
-                                <IconPencil role="button" @click="edit(children)" />
-                                <IconTrash role="button" @click="destroy(children.id)" />
+                                <IconPencil size="22" role="button" @click="edit(children)" />
+                                <IconTrash size="22" role="button" @click="destroy(children.id)" />
                             </div>
                         </td>
                     </tr>

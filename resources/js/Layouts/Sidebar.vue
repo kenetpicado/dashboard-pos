@@ -3,7 +3,7 @@
         <div class="flex flex-col items-center my-4">
             <div class="h-14 w-14">
                 <img class="h-full w-full"
-                    src="https://static.vecteezy.com/system/resources/previews/015/394/284/non_2x/medical-pharmacy-logo-design-vector.jpg"
+                    src="/shop.png"
                     alt="" />
             </div>
             <h2 class="text-2xl font-extrabold text-gray-600">
@@ -54,34 +54,6 @@ const items = [
         icon: IconHome
     },
     {
-        header: 'Administration'
-    },
-    {
-        name: 'Categorias',
-        route: route('dashboard.categories.index'),
-        icon: IconCategory
-    },
-    {
-        name: 'Usuarios',
-        route: route('dashboard.users.index'),
-        icon: IconUserCog
-    },
-    {
-        name: 'Proveedores',
-        route: route('dashboard.suppliers.index'),
-        icon: IconBuildingFactory
-    },
-    {
-        name: 'Productos',
-        route: route('dashboard.products.index'),
-        icon: IconShirt
-    },
-    {
-        name: 'Inventario',
-        route: route('dashboard.inventory.index'),
-        icon: IconClipboardList
-    },
-    {
         header: 'Transacciones'
     },
     {
@@ -100,7 +72,30 @@ const items = [
         icon: IconShoppingBag
     },
     {
+        header: 'Administration'
+    },
+    {
+        name: 'Productos',
+        route: route('dashboard.products.index'),
+        icon: IconShirt
+    },
+    {
+        name: 'Inventario',
+        route: route('dashboard.inventory.index'),
+        icon: IconClipboardList
+    },
+    {
+        name: 'Categorias',
+        route: route('dashboard.categories.index'),
+        icon: IconCategory
+    },
+    {
         header: 'Sistema'
+    },
+    {
+        name: 'Usuarios',
+        route: route('dashboard.users.index'),
+        icon: IconUserCog
     },
     {
         name: 'Perfil',

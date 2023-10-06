@@ -12,8 +12,8 @@ class InventoryController extends Controller
     {
         return inertia("Dashboard/Inventory/Index", [
             "inventory" => Inventory::query()
-                ->with("product")
-                ->get()
+                ->with("product:id,sku,name")
+                ->paginate()
         ]);
     }
 }
