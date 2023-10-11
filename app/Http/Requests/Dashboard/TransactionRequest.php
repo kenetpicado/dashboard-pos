@@ -23,6 +23,7 @@ class TransactionRequest extends FormRequest
     {
         return [
             "note" => "nullable",
+            "client" => "nullable",
             "total" => "required|numeric",
             "products" => "required|array|min:1"
         ];

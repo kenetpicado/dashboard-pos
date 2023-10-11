@@ -8,7 +8,6 @@ use App\Models\Inventory;
 use App\Models\Product;
 use App\Models\Transaction;
 use Illuminate\Http\Request;
-use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\DB;
 
 class TransactionController extends Controller
@@ -17,8 +16,14 @@ class TransactionController extends Controller
 
     public function index()
     {
+        $transactions = Transaction::query()
+            ->with("user")
+            ->withCount("products")
+            ->latest()
+            ->paginate();
+
         return inertia("Dashboard/Transaction/Index", [
-            "transactions" => Transaction::with("user")->withCount("products")->latest()->paginate()
+            "transactions" => $transactions
         ]);
     }
 
@@ -32,6 +37,7 @@ class TransactionController extends Controller
         if ($request->search) {
             $products = Product::query()
                 ->where('name', 'like', "%{$request->search}%")
+                ->orWhere('sku', 'like', "%{$request->search}%")
                 ->select('id', 'name', 'sku', 'image')
                 ->limit(5)
                 ->get();
@@ -52,27 +58,41 @@ class TransactionController extends Controller
             "user_id" => auth()->id(),
             "type" => $type,
             "total" => $request->total,
-            "note" => $request->note
+            "note" => $request->note,
+            "client" => $request->client,
+            'currency' => 'NIO'
         ]);
 
         $product_transaction = [];
 
         foreach ($request->products as $product) {
-            Inventory::create([
-                "product_id" => $product["product_id"],
-                "quantity" => $product["quantity"],
-                "unit_cost" => $product["value"],
-                "unit_price" => $product["price"],
-                "measure" => $product["measure"],
-            ]);
+
+            $alreadyExists = Inventory::query()
+                ->where('product_id', $product["product_id"])
+                ->where('measure', $product["measure"])
+                ->where('unit_cost', $product["cost"])
+                ->where('unit_price', $product["price"])
+                ->first();
+
+            if ($alreadyExists != null) {
+                $alreadyExists->increment('quantity', $product["quantity"]);
+            } else {
+                Inventory::create([
+                    "product_id" => $product["product_id"],
+                    "quantity" => $product["quantity"],
+                    "unit_cost" => $product["cost"],
+                    "unit_price" => $product["price"],
+                    "measure" => $product["measure"],
+                ]);
+            }
 
             $product_transaction[] = [
-                "transaction_id" => $transaction->id,
                 "created_at" => now(),
+                "transaction_id" => $transaction->id,
                 "product_id" => $product["product_id"],
                 "quantity" => $product["quantity"],
                 "measure" => $product["measure"],
-                "value" => $product["value"],
+                "value" => $product["cost"],
             ];
         }
 

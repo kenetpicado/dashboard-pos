@@ -24,7 +24,7 @@
                         <DateColumn :date="transaction.created_at"/>
                     </td>
                     <td>
-                    	{{ transactionTypes[transaction.type] }}                    	
+                    	{{ transactionTypes[transaction.type] }}
                     </td>
                     <td>
                         {{ transaction.user.name }}
@@ -42,12 +42,12 @@
                     </td>
                     <td>
                         <div class="flex gap-2">
-                            
+
                         </div>
                     </td>
                 </tr>
                 <tr v-if="transactions.data.length == 0">
-                    <td colspan="4" class="text-center">No hay datos que mostrar</td>
+                    <td colspan="7" class="text-center">No hay datos que mostrar</td>
                 </tr>
             </template>
             <template #paginator>
