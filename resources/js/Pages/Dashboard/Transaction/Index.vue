@@ -42,7 +42,9 @@
                     </td>
                     <td>
                         <div class="flex gap-2">
-
+                            <Link :href="route('dashboard.transactions.show', transaction.id)" tooltip="Detalles">
+                                <IconEye size="22" role="button" />
+                            </Link>
                         </div>
                     </td>
                 </tr>
@@ -62,6 +64,8 @@ import AppLayout from '@/Layouts/AppLayout.vue';
 import TableSection from '@/Components/TableSection.vue';
 import ThePaginator from "@/Components/ThePaginator.vue"
 import DateColumn from "@/Components/DateColumn.vue"
+import { Link } from '@inertiajs/vue3';
+import { IconEye } from '@tabler/icons-vue';
 
 defineProps({
     transactions: {

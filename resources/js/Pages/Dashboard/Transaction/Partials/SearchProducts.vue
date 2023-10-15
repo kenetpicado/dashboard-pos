@@ -21,8 +21,7 @@
 						</div>
 					</td>
 					<td>
-						<button class="primary-button" type="button"
-							@click="$emit('setProduct', product)">
+						<button class="primary-button" type="button" @click="$emit('setProduct', product)">
 							<IconShoppingCartFilled size="20" />
 						</button>
 					</td>
@@ -49,7 +48,8 @@ const props = defineProps({
 });
 
 const queryParams = reactive({
-	search: ''
+	search: '',
+	type: null
 })
 
 const searchParams = new URLSearchParams(window.location.search);
@@ -58,12 +58,16 @@ if (searchParams.get("search")) {
 	queryParams.search = searchParams.get("search")
 }
 
+if (searchParams.get("type")) {
+	queryParams.type = searchParams.get("type")
+}
+
 watch(() => queryParams.search, (value) => {
 	if (!value) {
 		delete queryParams.search
 	}
 
-	router.get(route('dashboard.transactions.create', 'buy'), queryParams, {
+	router.get(route('dashboard.transactions.create'), queryParams, {
 		preserveState: true,
 		preserveScroll: true,
 		only: ["products"]

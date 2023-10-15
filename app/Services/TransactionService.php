@@ -1,53 +1,13 @@
 <?php
 
-namespace App\Http\Controllers\Dashboard;
+namespace App\Services;
 
-use App\Http\Controllers\Controller;
-use App\Http\Requests\Dashboard\TransactionRequest;
-use App\Http\Requests\Dashboard\TransactionTypeRequest;
 use App\Models\Inventory;
-use App\Models\Product;
 use App\Models\Transaction;
-use App\Repositories\ProductRepository;
-use App\Repositories\TransactionRepository;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
 
-class TransactionController extends Controller
+class TransactionService
 {
-    public $transactionTypes = ['buy', 'sell'];
-
-    public function __construct(
-        private readonly TransactionRepository $transactionRepository,
-        private readonly ProductRepository $productRepository
-    ) {
-    }
-
-    public function index()
-    {
-        return inertia('Dashboard/Transaction/Index', [
-            'transactions' => $this->transactionRepository->getAll(),
-        ]);
-    }
-
-    public function create(TransactionTypeRequest $request)
-    {
-        return inertia('Dashboard/Transaction/Create', [
-            'products' => $this->productRepository->search($request->search, $request->type == 'sell'),
-            'type' => $request->type,
-        ]);
-    }
-
-    public function show(Transaction $transaction)
-    {
-        $transaction->load('user:id,name', 'products:id,name,sku');
-
-        return inertia('Dashboard/Transaction/Show', [
-            'transaction' => $transaction,
-        ]);
-    }
-
-    public function store(TransactionRequest $request, $type)
+    public function store()
     {
         $transaction = Transaction::create([
             'user_id' => auth()->id(),
@@ -92,7 +52,5 @@ class TransactionController extends Controller
         }
 
         DB::table('product_transaction')->insert($product_transaction);
-
-        return redirect()->route('dashboard.transactions.index');
     }
 }

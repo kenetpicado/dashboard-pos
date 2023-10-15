@@ -38,14 +38,19 @@ Route::middleware(['auth:sanctum'])
         Route::resource('categories', CategoryController::class)
             ->except(['create', 'edit', 'show']);
 
-        Route::get('transactions', [TransactionController::class, 'index'])
-            ->name('transactions.index');
+        // Route::get('transactions', [TransactionController::class, 'index'])
+        //     ->name('transactions.index');
 
-        Route::get('transactions/{type}', [TransactionController::class, 'create'])
-            ->name('transactions.create');
+        // Route::get('transactions', [TransactionController::class, 'create'])
+        //     ->name('transactions.create');
 
-        Route::post('transactions/{type}', [TransactionController::class, 'store'])
-            ->name('transactions.store');
+        // Route::get('transactions/{transaction}/details', [TransactionController::class, 'show'])
+        //     ->name('transactions.show');
+
+        // Route::post('transactions/{type}', [TransactionController::class, 'store'])
+        //     ->name('transactions.store');
+
+        Route::resource('transactions', TransactionController::class);
 
         Route::resource('products', ProductController::class);
 

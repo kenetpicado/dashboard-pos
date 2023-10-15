@@ -55,22 +55,22 @@ const items = [
         icon: IconHome
     },
     {
-        header: 'Transacciones'
-    },
-    {
-        name: 'Ver',
-        route: route('dashboard.transactions.index'),
-        icon: IconEyeCheck
-    },
-    {
-        name: 'Comprar',
-        route: route('dashboard.transactions.create', 'buy'),
-        icon: IconShoppingBag
+        header: 'Operaciones'
     },
     {
         name: 'Vender',
-        route: route('dashboard.transactions.create', 'sell'),
+        route: route('dashboard.transactions.create', { type: 'sell' }),
         icon: IconShoppingCart
+    },
+    {
+        name: 'Comprar',
+        route: route('dashboard.transactions.create', { type: 'buy' }),
+        icon: IconShoppingBag
+    },
+    {
+        name: 'Transacciones',
+        route: route('dashboard.transactions.index'),
+        icon: IconEyeCheck
     },
     {
         header: 'Administration'

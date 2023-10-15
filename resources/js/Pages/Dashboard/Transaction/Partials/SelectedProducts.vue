@@ -14,7 +14,7 @@
 							{{ product.name }} - {{ product.measure }} ({{ product.quantity }})
 						</div>
 						<div class="text-gray-400">
-							Costo: C${{ product.cost }}, Precio: C${{ product.price }}
+							<span v-if="type == 'buy'">Costo: C${{ product.cost }}, </span>Precio: C${{ product.price }}
 						</div>
 					</div>
 
@@ -30,8 +30,11 @@
 			</div>
 		</div>
 		<div v-if="total > 0" class="mt-4">
-			<InputForm text="Notas (Opcional)" v-model="form.note"></InputForm>
-			<InputForm text="Cliente (Opcional)" v-model="form.client"></InputForm>
+			<div class="grid grid-cols-2 gap-4">
+				<InputForm text="Notas (Opcional)" v-model="form.note"></InputForm>
+				<InputForm v-if="type == 'sell'" text="Cliente (Opcional)" v-model="form.client"></InputForm>
+			</div>
+
 			<div class="flex justify-end my-8">
 				<div class="text-xl font-bold">
 					Total: C${{ total.toLocaleString('en-US') }}
@@ -66,6 +69,7 @@ const props = defineProps({
 });
 
 const form = useForm({
+	type: props.type,
 	note: "",
 	client: "",
 	total: 0,
@@ -97,7 +101,7 @@ function storeTransaction() {
 
 	form.total = total.value;
 
-	form.post(route("dashboard.transactions.store", props.type), {
+	form.post(route("dashboard.transactions.store"), {
 		preserveScroll: true,
 		preserveState: true,
 		onSuccess: () => {
