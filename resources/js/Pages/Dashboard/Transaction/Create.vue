@@ -1,5 +1,5 @@
 <template>
-	<AppLayout title="Create" :breads="breads">
+	<AppLayout :title="transactionTypes[type]" :breads="breads">
 		<template #header>
 			<span class="title mt-1">{{ transactionTypes[type] }}</span>
 		</template>

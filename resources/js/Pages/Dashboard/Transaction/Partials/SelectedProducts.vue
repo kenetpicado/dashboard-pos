@@ -37,7 +37,7 @@
 				<InputForm text="Notas (Opcional)" v-model="form.note"></InputForm>
 				<template v-if="type == 'sell'">
 					<InputForm text="Cliente (Opcional)" v-model="form.client" />
-					<InputForm v-if="type == 'sell'" text="Descuento" v-model="form.discount" />
+					<InputForm v-if="type == 'sell'" text="Descuento C$" v-model="form.discount" />
 				</template>
 			</div>
 
@@ -93,10 +93,10 @@ function getImage(value) {
 
 const total = computed(() => {
 	if (props.type == 'buy') {
-		return props.products.reduce((acc, product) => acc + (product.quantity * product.cost), 0);
+		return props.products.reduce((acc, product) => acc + (product.quantity * product.cost), 0) - (form.discount ?? 0);
 	}
 
-	return props.products.reduce((acc, product) => acc + (product.quantity * product.price), 0);
+	return props.products.reduce((acc, product) => acc + (product.quantity * product.price), 0) - (form.discount ?? 0);
 });
 
 function storeTransaction() {
@@ -106,7 +106,8 @@ function storeTransaction() {
 			quantity: product.quantity,
 			measure: product.measure,
 			cost: product.cost,
-			price: product.price
+			price: product.price,
+			inventory_id: product.inventory_id,
 		}
 	})
 

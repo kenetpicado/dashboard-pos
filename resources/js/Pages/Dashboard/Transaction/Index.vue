@@ -92,7 +92,8 @@ const breads = [
 
 const transactionClass = {
     buy: "badge-red",
-    sell: "bagde-indigo"
+    sell: "badge-indigo"
 }
+
 
 </script>
