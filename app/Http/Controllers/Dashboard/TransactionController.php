@@ -4,78 +4,55 @@ namespace App\Http\Controllers\Dashboard;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Dashboard\TransactionRequest;
+use App\Http\Requests\Dashboard\TransactionTypeRequest;
 use App\Models\Inventory;
 use App\Models\Product;
 use App\Models\Transaction;
+use App\Repositories\ProductRepository;
+use App\Repositories\TransactionRepository;
+use App\Services\TransactionService;
 use Illuminate\Http\Request;
-use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\DB;
 
 class TransactionController extends Controller
 {
     public $transactionTypes = ['buy', 'sell'];
 
+    public function __construct(
+        private readonly TransactionRepository $transactionRepository,
+        private readonly ProductRepository $productRepository,
+        private readonly TransactionService $transactionService
+    ) {
+    }
+
     public function index()
     {
-        return inertia("Dashboard/Transaction/Index", [
-            "transactions" => Transaction::with("user")->withCount("products")->latest()->paginate()
+        return inertia('Dashboard/Transaction/Index', [
+            'transactions' => $this->transactionRepository->getAll(),
         ]);
     }
 
-    public function create(Request $request, $type)
+    public function create(TransactionTypeRequest $request)
     {
-        if (!in_array($type, $this->transactionTypes))
-            return back();
-
-        $products = [];
-
-        if ($request->search) {
-            $products = Product::query()
-                ->where('name', 'like', "%{$request->search}%")
-                ->get(['id', 'name', 'sku', 'image']);
-        }
-
         return inertia('Dashboard/Transaction/Create', [
-            'products' => $products,
-            'type' => $type
+            'products' => $this->productRepository->search($request->search, $request->type == 'sell'),
+            'type' => $request->type,
         ]);
     }
 
-    public function store(TransactionRequest $request, $type)
+    public function show(Transaction $transaction)
     {
-        if (!in_array($type, $this->transactionTypes))
-            return back();
+        $transaction->load('user:id,name', 'products:id,name,sku');
 
-        $transaction = Transaction::create([
-            "user_id" => auth()->id(),
-            "type" => $type,
-            "total" => $request->total,
-            "note" => $request->note
+        return inertia('Dashboard/Transaction/Show', [
+            'transaction' => $transaction,
         ]);
+    }
 
-        $product_transaction = [];
+    public function store(TransactionRequest $request)
+    {
+        $this->transactionService->store($request->validated());
 
-        foreach ($request->products as $product) {
-            Inventory::create([
-                "product_id" => $product["product_id"],
-                "quantity" => $product["quantity"],
-                "unit_cost" => $product["value"],
-                "unit_price" => $product["price"],
-                "measure" => $product["measure"],
-            ]);
-
-            $product_transaction[] = [
-                "transaction_id" => $transaction->id,
-                "created_at" => now(),
-                "product_id" => $product["product_id"],
-                "quantity" => $product["quantity"],
-                "measure" => $product["measure"],
-                "value" => $product["value"],
-            ];
-        }
-
-        DB::table("product_transaction")->insert($product_transaction);
-
-        return redirect()->route("dashboard.transactions.index");
+        return redirect()->route('dashboard.transactions.index');
     }
 }

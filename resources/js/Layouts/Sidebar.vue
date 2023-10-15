@@ -3,7 +3,7 @@
         <div class="flex flex-col items-center my-4">
             <div class="h-14 w-14">
                 <img class="h-full w-full"
-                    src="https://static.vecteezy.com/system/resources/previews/015/394/284/non_2x/medical-pharmacy-logo-design-vector.jpg"
+                    src="/shop.png"
                     alt="" />
             </div>
             <h2 class="text-2xl font-extrabold text-gray-600">
@@ -34,6 +34,7 @@
 
 <script setup>
 import { Link, router } from '@inertiajs/vue3';
+import { IconShoppingCart } from '@tabler/icons-vue';
 import { IconShoppingBag } from '@tabler/icons-vue';
 import { IconUserCog } from '@tabler/icons-vue';
 import { IconHome, IconLogout, IconUser, IconCategory, IconBuildingFactory, IconClipboardList, IconEyeCheck, IconShirt } from '@tabler/icons-vue';
@@ -54,22 +55,25 @@ const items = [
         icon: IconHome
     },
     {
+        header: 'Operaciones'
+    },
+    {
+        name: 'Vender',
+        route: route('dashboard.transactions.create', { type: 'sell' }),
+        icon: IconShoppingCart
+    },
+    {
+        name: 'Comprar',
+        route: route('dashboard.transactions.create', { type: 'buy' }),
+        icon: IconShoppingBag
+    },
+    {
+        name: 'Transacciones',
+        route: route('dashboard.transactions.index'),
+        icon: IconEyeCheck
+    },
+    {
         header: 'Administration'
-    },
-    {
-        name: 'Categorias',
-        route: route('dashboard.categories.index'),
-        icon: IconCategory
-    },
-    {
-        name: 'Usuarios',
-        route: route('dashboard.users.index'),
-        icon: IconUserCog
-    },
-    {
-        name: 'Proveedores',
-        route: route('dashboard.suppliers.index'),
-        icon: IconBuildingFactory
     },
     {
         name: 'Productos',
@@ -82,25 +86,16 @@ const items = [
         icon: IconClipboardList
     },
     {
-        header: 'Transacciones'
-    },
-    {
-        name: 'Ver',
-        route: route('dashboard.transactions.index'),
-        icon: IconEyeCheck
-    },
-    {
-        name: 'Comprar',
-        route: route('dashboard.transactions.create', 'buy'),
-        icon: IconShoppingBag
-    },
-    {
-        name: 'Vender',
-        route: route('dashboard.transactions.create', 'sell'),
-        icon: IconShoppingBag
-    },
-    {
         header: 'Sistema'
+    },
+    {
+        name: 'Usuarios',
+        route: route('dashboard.users.index'),
+        icon: IconUserCog
+    },    {
+        name: 'Categorias',
+        route: route('dashboard.categories.index'),
+        icon: IconCategory
     },
     {
         name: 'Perfil',

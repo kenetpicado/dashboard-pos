@@ -23,11 +23,11 @@ class UserRequest extends FormRequest
     public function rules(): array
     {
         return [
-            "name" => ["required", "string", "max:255"],
-            "email" => ["required", "string", "email", "max:255", Rule::unique("users")->ignore($this->user)],
+            'name' => ['required', 'string', 'max:255'],
+            'email' => ['required', 'string', 'email', 'max:255', Rule::unique('users')->ignore($this->user)],
             // "password" => ["required", "string", "min:8", "confirmed"],
             //password required if method is post
-            "password" => ["required_if:method,post", "string", "min:8", "confirmed"],
+            'password' => ['required_if:method,post', 'string', 'min:8', 'confirmed'],
         ];
     }
 }

@@ -10,12 +10,12 @@ class Transaction extends Model
     use HasFactory;
 
     protected $fillable = [
-        "user_id", "type", "client", "discount", "currency", "total", "note"
+        'user_id', 'type', 'client', 'discount', 'currency', 'total', 'note',
     ];
 
     public function products()
     {
-        return $this->belongsToMany(Product::class);
+        return $this->belongsToMany(Product::class)->withTimestamps()->withPivot('quantity', 'value', 'measure');
     }
 
     public function user()

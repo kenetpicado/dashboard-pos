@@ -4,7 +4,7 @@
             {{ text }}
         </label>
 
-        <input :type="type" :placeholder="placeholder" :disabled="disabled" :autofocus="autofocus" :required="required"
+        <input :type="type" :placeholder="placeholder" :disabled="disabled" :autofocus="autofocus" :required="required" :min="min"
             :autocomplete="autocomple"
             class="border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-lg shadow-sm mt-1 block w-full transition duration-300 ease-in-out"
             :class="[disabled ? 'bg-gray-100' : '']" :value="modelValue"
@@ -46,7 +46,10 @@ const props = defineProps({
     },
     autocomple: {
         type: String, default: 'off'
-    }
+    },
+    min: {
+        type: Number, required: false
+    },
 })
 
 const keyValue = computed(() => {

@@ -5,12 +5,10 @@ use App\Http\Controllers\Dashboard\DashboardController;
 use App\Http\Controllers\Dashboard\InventoryController;
 use App\Http\Controllers\Dashboard\ProductController;
 use App\Http\Controllers\Dashboard\ProfileController;
-use App\Http\Controllers\Dashboard\SupplierController;
 use App\Http\Controllers\Dashboard\TransactionController;
 use App\Http\Controllers\Dashboard\UserController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
-use Inertia\Inertia;
 
 /*
 |--------------------------------------------------------------------------
@@ -40,20 +38,21 @@ Route::middleware(['auth:sanctum'])
         Route::resource('categories', CategoryController::class)
             ->except(['create', 'edit', 'show']);
 
-        Route::resource('suppliers', SupplierController::class)
-            ->except(['create', 'edit', 'show']);
+        // Route::get('transactions', [TransactionController::class, 'index'])
+        //     ->name('transactions.index');
 
-        Route::get('transactions', [TransactionController::class, 'index'])
-            ->name('transactions.index');
+        // Route::get('transactions', [TransactionController::class, 'create'])
+        //     ->name('transactions.create');
 
-        Route::get('transactions/{type}', [TransactionController::class, 'create'])
-            ->name('transactions.create');
+        // Route::get('transactions/{transaction}/details', [TransactionController::class, 'show'])
+        //     ->name('transactions.show');
 
-        Route::post('transactions/{type}', [TransactionController::class, 'store'])
-            ->name('transactions.store');
+        // Route::post('transactions/{type}', [TransactionController::class, 'store'])
+        //     ->name('transactions.store');
 
-        Route::resource('products', ProductController::class)
-            ->except('show');
+        Route::resource('transactions', TransactionController::class);
+
+        Route::resource('products', ProductController::class);
 
         Route::get('inventory', [InventoryController::class, 'index'])
             ->name('inventory.index');

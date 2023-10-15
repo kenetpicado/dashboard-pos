@@ -22,9 +22,12 @@ class TransactionRequest extends FormRequest
     public function rules(): array
     {
         return [
-            "note" => "nullable",
-            "total" => "required|numeric",
-            "products" => "required|array|min:1"
+            'note' => 'nullable',
+            'client' => 'nullable',
+            'discount' => 'nullable',
+            'total' => 'required|numeric',
+            'products' => 'required|array|min:1',
+            'type' => 'required|in:buy,sell',
         ];
     }
 }

@@ -1,28 +1,52 @@
 <template>
-	<AppLayout title="Create" :breads="breads">
+	<AppLayout :title="transactionTypes[type]" :breads="breads">
 		<template #header>
-			<span class="title mt-1">{{transactionTypes[type]}}</span>
+			<span class="title mt-1">{{ transactionTypes[type] }}</span>
 		</template>
 
 		<div class="grid grid-cols-2 gap-4">
-			<SearchProducts :products="products" @setProduct="setCurrentProduct"/>
-			<ListProducts :products="selectedProducts" :type="type"/>
+			<SearchProducts :products="products" @setProduct="setCurrentProduct" />
+
+			<SelectedProducts
+				:products="selectedProducts"
+				:type="type"
+				@edit="editProduct"
+				@remove="removeProduct" />
 		</div>
 
-		<FormModal :show="openModal" title="Producto" @onCancel="resetValues()" @onSubmit="addProduct()">
-			<div class="mb-6">
-				{{ currentProduct.name }}
-			</div>
+		<FormModal :show="openModal" :title="currentProduct.name" @onCancel="resetValues()" @onSubmit="addProduct()">
 			<div class="grid grid-cols-2 gap-4">
-				<InputForm text="Medida" v-model="currentProduct.measure" />
-				<InputForm text="Cantidad" v-model="currentProduct.quantity" type="number" />
-				<InputForm text="Costo (Unidad)" v-model="currentProduct.cost" type="number" />
-				<InputForm text="Precio (Unidad)" v-model="currentProduct.price" type="number" />
-				<div class="flex justify-end col-span-2">
-					<div class="text-xl font-bold">
-						Total: {{ (currentProduct.quantity * currentProduct.cost).toLocaleString() }}
+				<template v-if="type == 'buy'">
+					<InputForm text="Medida" v-model="currentProduct.measure" required />
+					<InputForm text="Cantidad" v-model="currentProduct.quantity" type="number" required :min="1" />
+					<InputForm text="Costo (Unidad)" v-model="currentProduct.cost" type="number" required :min="1" />
+					<InputForm text="Precio (Unidad)" v-model="currentProduct.price" type="number" required :min="1" />
+					<div class="flex justify-end col-span-2">
+						<div class="text-xl font-bold">
+							Total: {{ (currentProduct.quantity * currentProduct.cost).toLocaleString() }}
+						</div>
 					</div>
-				</div>
+				</template>
+
+				<template v-if="type == 'sell'">
+					<SelectForm text="Medida" v-model="selectedMeasure" required>
+						<option selected disabled value="">Seleccionar medida</option>
+						<option v-for="item in inventory" :value="item.id">{{ item.measure }} - C${{ item.unit_price }}</option>
+					</SelectForm>
+
+					<SelectForm text="Cantidad" v-model="currentProduct.quantity" required>
+						<option selected disabled value="">Seleccionar cantidad</option>
+						<option v-for="item in availableQuantity" :value="item">{{ item }}</option>
+					</SelectForm>
+
+					<InputForm text="Precio (Unidad)" v-model="currentProduct.price" type="number" required />
+					<div class="flex justify-end col-span-2">
+						<div class="text-xl font-bold">
+							Total: C${{ (currentProduct.quantity * currentProduct.price).toLocaleString() }}
+						</div>
+					</div>
+				</template>
+
 			</div>
 		</FormModal>
 	</AppLayout>
@@ -30,13 +54,13 @@
 
 <script setup>
 import InputForm from '@/Components/Form/InputForm.vue';
+import SelectForm from '@/Components/Form/SelectForm.vue';
 import FormModal from '@/Components/Modal/FormModal.vue';
 import AppLayout from '@/Layouts/AppLayout.vue';
 import { toast } from '@/Use/toast';
-import { useForm } from '@inertiajs/vue3';
-import { reactive, ref } from 'vue';
-import ListProducts from "./Partials/ListProducts.vue";
+import { computed, reactive, ref, watch } from 'vue';
 import SearchProducts from "./Partials/SearchProducts.vue";
+import SelectedProducts from "./Partials/SelectedProducts.vue";
 
 const props = defineProps({
 	products: {
@@ -68,85 +92,79 @@ const breads = [
 const selectedProducts = ref([]);
 const openModal = ref(false);
 const isEditing = ref(false);
-
-const form = useForm({
-	note: "",
-	total: 0,
-	products: null
-})
+const inventory = ref([]);
+const selectedMeasure = ref(null);
 
 const originalObject = {
 	id: null,
 	name: null,
 	image: null,
 	quantity: 1,
-	cost: 10,
-	price: 10,
-	measure: "M",
+	cost: null,
+	price: null,
+	measure: null,
+	inventory_id: null,
 };
 
 const currentProduct = reactive({ ...originalObject });
 
 function setCurrentProduct(product) {
-	const alreadyExists = selectedProducts.value.find((p) => p.id === product.id);
-
-	if (alreadyExists) {
+	if (selectedProducts.value.find((p) => p.id === product.id)) {
 		toast.error("Este producto ya ha sido agregado");
 		return;
 	}
 
-	Object.assign(currentProduct, product);
+	currentProduct.id = product.id;
+	currentProduct.name = product.name;
+	currentProduct.image = product.image;
+	currentProduct.quantity = 1;
+
+	if (props.type == 'sell') {
+		inventory.value = product.inventory;
+		selectedMeasure.value = inventory.value[0].id;
+		currentProduct.inventory_id = inventory.value[0].id;
+	}
+
 	openModal.value = true;
 }
 
 function addProduct() {
-	if (!currentProduct.measure) {
-		toast.error("La medida es requerida");
-		return;
-	}
-
-	if (currentProduct.quantity <= 0) {
-		toast.error("La cantidad debe ser mayor a 0");
-		return;
-	}
-
-	if (currentProduct.cost <= 0) {
-		toast.error("El costo debe ser mayor a 0");
-		return;
-	}
-
-	if (currentProduct.price <= 0) {
-		toast.error("El precio debe ser mayor a 0");
-		return;
-	}
-
 	if (isEditing.value) {
 		const index = selectedProducts.value.findIndex((product) => product.id === currentProduct.id);
-		selectedProducts.value[index] = {
-			...currentProduct,
-		};
+		selectedProducts.value[index] = { ...currentProduct };
 		toast.success("Producto actualizado");
 	} else {
-		selectedProducts.value.push({
-			...currentProduct,
-		});
+		selectedProducts.value.push({ ...currentProduct });
 		toast.success("Producto agregado");
 	}
+
 	resetValues();
 }
 
 function resetValues() {
 	Object.assign(currentProduct, originalObject);
 	isEditing.value = false;
+	inventory.value = [];
+	selectedMeasure.value = null;
 	openModal.value = false;
 }
 
-function isAdded(id) {
-	return selectedProducts.value.some((product) => product.id === id);
-}
-
 function editProduct(index) {
-	Object.assign(currentProduct, selectedProducts.value[index]);
+	currentProduct.id = selectedProducts.value[index].id;
+	currentProduct.name = selectedProducts.value[index].name;
+	currentProduct.image = selectedProducts.value[index].image;
+	currentProduct.quantity = selectedProducts.value[index].quantity;
+	currentProduct.price = selectedProducts.value[index].price;
+
+	if (props.type == 'sell') {
+		inventory.value = props.products.find((item) => item.id == currentProduct.id).inventory;
+		currentProduct.inventory_id = selectedProducts.value[index].inventory_id;
+		selectedMeasure.value = selectedProducts.value[index].inventory_id;
+	} else {
+		currentProduct.cost = selectedProducts.value[index].cost;
+		currentProduct.measure = selectedProducts.value[index].measure;
+	}
+
 	isEditing.value = true
 	openModal.value = true;
 }
@@ -156,26 +174,26 @@ function removeProduct(index) {
 	toast.success("Producto eliminado");
 }
 
-function storeTransaction() {
-	form.products = selectedProducts.value.map(function(product) {
-		return {
-			product_id: product.id,
-			quantity: product.quantity,
-			measure: product.measure,
-			value: product.cost,
-			price: product.price
-		}
-	})
+watch(() => selectedMeasure.value, (value) => {
+	if (!value) {
+		return;
+	}
 
-	//form.total = total.value
+	const item = inventory.value.find((item) => item.id == value);
 
-	form.post(route("dashboard.transactions.store", props.type), {
-        preserveScroll: true,
-        preserveState: true,
-        onSuccess: () => {
-            toast.success("Transaccion relizada correctamente");
-        },
-    });
-}
+	currentProduct.measure = item.measure;
+	currentProduct.price = item.unit_price;
+	currentProduct.inventory_id = item.id;
+});
+
+const availableQuantity = computed(() => {
+	if (inventory.value.length == 0 || !selectedMeasure.value) {
+		return [1];
+	}
+
+	const q = inventory.value.find((item) => item.id == selectedMeasure.value).quantity;
+
+	return Array.from({ length: q }, (_, i) => i + 1);
+});
 
 </script>

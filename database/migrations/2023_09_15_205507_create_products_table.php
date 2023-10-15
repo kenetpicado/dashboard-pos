@@ -15,8 +15,6 @@ return new class extends Migration
             $table->id();
             $table->string('name');
             $table->string('sku');
-            $table->string('description')->nullable();
-            $table->foreignId('supplier_id')->nullable()->constrained('suppliers')->onDelete('cascade');
             $table->string('status')->nullable();
             $table->string('image')->nullable();
             $table->string('notes')->nullable();

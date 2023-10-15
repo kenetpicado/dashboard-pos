@@ -10,27 +10,37 @@
 				</div>
 				<div class="w-full flex flex-col justify-between">
 					<div>
-						<div class="text-lg font-semibold mb-2" @click="editProduct(index)" role="button">
+						<div class="text-lg font-semibold mb-2" @click="$emit('edit', index)" role="button">
 							{{ product.name }} - {{ product.measure }} ({{ product.quantity }})
 						</div>
 						<div class="text-gray-400">
-							Costo: C${{ product.cost }}, Precio: C${{ product.price }}
+							<span v-if="type == 'buy'">Costo: C${{ product.cost }}, </span>Precio: C${{ product.price }}
 						</div>
 					</div>
 
 					<div class="flex items-center justify-between">
 						<div>
-							<IconTrash role="button" @click="removeProduct(index)" />
+							<IconTrash role="button" @click="$emit('remove', index)" />
 						</div>
-						<div class="flex flex-col text-end text-xl font-bold">
+						<div v-if="type == 'buy'" class="flex flex-col text-end text-xl font-bold">
 							C${{ (product.quantity * product.cost).toLocaleString('en-US') }}
+						</div>
+						<div v-if="type == 'sell'" class="flex flex-col text-end text-xl font-bold">
+							C${{ (product.quantity * product.price).toLocaleString('en-US') }}
 						</div>
 					</div>
 				</div>
 			</div>
 		</div>
 		<div v-if="total > 0" class="mt-4">
-			<!-- <InputForm placeholder="Notas" v-model="form.note"></InputForm> -->
+			<div class="grid grid-cols-2 gap-4">
+				<InputForm text="Notas (Opcional)" v-model="form.note"></InputForm>
+				<template v-if="type == 'sell'">
+					<InputForm text="Cliente (Opcional)" v-model="form.client" />
+					<InputForm v-if="type == 'sell'" text="Descuento C$" v-model="form.discount" />
+				</template>
+			</div>
+
 			<div class="flex justify-end my-8">
 				<div class="text-xl font-bold">
 					Total: C${{ total.toLocaleString('en-US') }}
@@ -50,6 +60,8 @@
 import { computed } from 'vue';
 import InputForm from '@/Components/Form/InputForm.vue';
 import { IconTrash } from '@tabler/icons-vue';
+import { useForm } from '@inertiajs/vue3';
+import { toast } from '@/Use/toast';
 
 const props = defineProps({
 	products: {
@@ -62,6 +74,15 @@ const props = defineProps({
 	}
 });
 
+const form = useForm({
+	type: props.type,
+	discount: 0,
+	note: "",
+	client: "",
+	total: 0,
+	products: null
+})
+
 function getImage(value) {
 	if (value) {
 		return value;
@@ -71,7 +92,34 @@ function getImage(value) {
 }
 
 const total = computed(() => {
-	return props.products.reduce((acc, product) => acc + (product.quantity * product.cost), 0);
+	if (props.type == 'buy') {
+		return props.products.reduce((acc, product) => acc + (product.quantity * product.cost), 0) - (form.discount ?? 0);
+	}
+
+	return props.products.reduce((acc, product) => acc + (product.quantity * product.price), 0) - (form.discount ?? 0);
 });
-	
+
+function storeTransaction() {
+	form.products = props.products.map(function (product) {
+		return {
+			product_id: product.id,
+			quantity: product.quantity,
+			measure: product.measure,
+			cost: product.cost,
+			price: product.price,
+			inventory_id: product.inventory_id,
+		}
+	})
+
+	form.total = total.value;
+
+	form.post(route("dashboard.transactions.store"), {
+		preserveScroll: true,
+		preserveState: true,
+		onSuccess: () => {
+			toast.success("Transaccion relizada correctamente");
+		},
+	});
+}
+
 </script>

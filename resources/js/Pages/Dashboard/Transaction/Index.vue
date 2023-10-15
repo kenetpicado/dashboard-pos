@@ -9,22 +9,21 @@
 
         <TableSection>
             <template #header>
-                <th>Fecha</th>
                 <th>Tipo</th>
                 <th>Responsable</th>
                 <td>Productos</td>
                 <th>Descuento</th>
                 <th>Total</th>
+                <th>Fecha</th>
                 <th>Acciones</th>
             </template>
 
             <template #body>
                 <tr v-for="(transaction, index) in transactions.data" class="hover:bg-gray-50">
                     <td>
-                        <DateColumn :date="transaction.created_at"/>
-                    </td>
-                    <td>
-                    	{{ transactionTypes[transaction.type] }}                    	
+                        <span :class="transactionClass[transaction.type]">
+                            {{ transactionTypes[transaction.type] }}
+                        </span>
                     </td>
                     <td>
                         {{ transaction.user.name }}
@@ -33,21 +32,24 @@
                     	{{ transaction.products_count }}
                     </td>
                     <td>
-                        C${{ transaction.discount }}
+                        <span v-if="transaction.discount > 0">C${{ transaction.discount }}</span>
                     </td>
                     <td>
-                        <span :class=" transactionClass[transaction.type]">
-                            C${{ transaction.total }}
-                        </span>
+                        C${{ transaction.total.toLocaleString() }}
+                    </td>
+                    <td>
+                        <DateColumn :date="transaction.created_at"/>
                     </td>
                     <td>
                         <div class="flex gap-2">
-                            
+                            <Link :href="route('dashboard.transactions.show', transaction.id)" tooltip="Detalles">
+                                <IconEye size="22" role="button" />
+                            </Link>
                         </div>
                     </td>
                 </tr>
                 <tr v-if="transactions.data.length == 0">
-                    <td colspan="4" class="text-center">No hay datos que mostrar</td>
+                    <td colspan="7" class="text-center">No hay datos que mostrar</td>
                 </tr>
             </template>
             <template #paginator>
@@ -62,6 +64,8 @@ import AppLayout from '@/Layouts/AppLayout.vue';
 import TableSection from '@/Components/TableSection.vue';
 import ThePaginator from "@/Components/ThePaginator.vue"
 import DateColumn from "@/Components/DateColumn.vue"
+import { Link } from '@inertiajs/vue3';
+import { IconEye } from '@tabler/icons-vue';
 
 defineProps({
     transactions: {
@@ -88,7 +92,8 @@ const breads = [
 
 const transactionClass = {
     buy: "badge-red",
-    sell: "bagde-indigo"
+    sell: "badge-indigo"
 }
+
 
 </script>

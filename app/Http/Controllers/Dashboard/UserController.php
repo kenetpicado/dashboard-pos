@@ -5,7 +5,6 @@ namespace App\Http\Controllers\Dashboard;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Dashboard\UserRequest;
 use App\Models\User;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 
 class UserController extends Controller
@@ -13,7 +12,7 @@ class UserController extends Controller
     public function index()
     {
         return inertia('Dashboard/User/Index', [
-            'users' => User::all()
+            'users' => User::all(),
         ]);
     }
 
@@ -27,7 +26,7 @@ class UserController extends Controller
         User::create([
             'name' => $request->name,
             'email' => $request->email,
-            'password' => Hash::make($request->password)
+            'password' => Hash::make($request->password),
         ]);
 
         return redirect()->route('dashboard.users.index');
