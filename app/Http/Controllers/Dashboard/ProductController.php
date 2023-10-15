@@ -5,13 +5,12 @@ namespace App\Http\Controllers\Dashboard;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Dashboard\ProductRequest;
 use App\Models\Product;
-use Illuminate\Http\Request;
 
 class ProductController extends Controller
 {
     public function index()
     {
-        return inertia("Dashboard/Product/Index", [
+        return inertia('Dashboard/Product/Index', [
             'products' => Product::select('id', 'name', 'sku', 'image', 'notes')->paginate(),
         ]);
     }

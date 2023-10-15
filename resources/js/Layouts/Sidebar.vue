@@ -85,17 +85,16 @@ const items = [
         icon: IconClipboardList
     },
     {
-        name: 'Categorias',
-        route: route('dashboard.categories.index'),
-        icon: IconCategory
-    },
-    {
         header: 'Sistema'
     },
     {
         name: 'Usuarios',
         route: route('dashboard.users.index'),
         icon: IconUserCog
+    },    {
+        name: 'Categorias',
+        route: route('dashboard.categories.index'),
+        icon: IconCategory
     },
     {
         name: 'Perfil',

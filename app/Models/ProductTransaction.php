@@ -10,5 +10,4 @@ class ProductTransaction extends Model
     use HasFactory;
 
     protected $table = 'product_transaction';
-
 }

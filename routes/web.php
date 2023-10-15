@@ -9,7 +9,6 @@ use App\Http\Controllers\Dashboard\TransactionController;
 use App\Http\Controllers\Dashboard\UserController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
-use Inertia\Inertia;
 
 /*
 |--------------------------------------------------------------------------
