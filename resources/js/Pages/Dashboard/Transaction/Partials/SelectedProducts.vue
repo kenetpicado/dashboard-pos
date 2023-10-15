@@ -22,8 +22,11 @@
 						<div>
 							<IconTrash role="button" @click="$emit('remove', index)" />
 						</div>
-						<div class="flex flex-col text-end text-xl font-bold">
+						<div v-if="type == 'buy'" class="flex flex-col text-end text-xl font-bold">
 							C${{ (product.quantity * product.cost).toLocaleString('en-US') }}
+						</div>
+						<div v-if="type == 'sell'" class="flex flex-col text-end text-xl font-bold">
+							C${{ (product.quantity * product.price).toLocaleString('en-US') }}
 						</div>
 					</div>
 				</div>
@@ -32,7 +35,10 @@
 		<div v-if="total > 0" class="mt-4">
 			<div class="grid grid-cols-2 gap-4">
 				<InputForm text="Notas (Opcional)" v-model="form.note"></InputForm>
-				<InputForm v-if="type == 'sell'" text="Cliente (Opcional)" v-model="form.client"></InputForm>
+				<template v-if="type == 'sell'">
+					<InputForm text="Cliente (Opcional)" v-model="form.client" />
+					<InputForm v-if="type == 'sell'" text="Descuento" v-model="form.discount" />
+				</template>
 			</div>
 
 			<div class="flex justify-end my-8">
@@ -70,6 +76,7 @@ const props = defineProps({
 
 const form = useForm({
 	type: props.type,
+	discount: 0,
 	note: "",
 	client: "",
 	total: 0,
@@ -85,7 +92,11 @@ function getImage(value) {
 }
 
 const total = computed(() => {
-	return props.products.reduce((acc, product) => acc + (product.quantity * product.cost), 0);
+	if (props.type == 'buy') {
+		return props.products.reduce((acc, product) => acc + (product.quantity * product.cost), 0);
+	}
+
+	return props.products.reduce((acc, product) => acc + (product.quantity * product.price), 0);
 });
 
 function storeTransaction() {
