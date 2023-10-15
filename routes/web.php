@@ -47,8 +47,7 @@ Route::middleware(['auth:sanctum'])
         Route::post('transactions/{type}', [TransactionController::class, 'store'])
             ->name('transactions.store');
 
-        Route::resource('products', ProductController::class)
-            ->except('show');
+        Route::resource('products', ProductController::class);
 
         Route::get('inventory', [InventoryController::class, 'index'])
             ->name('inventory.index');

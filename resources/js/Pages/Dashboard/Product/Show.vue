@@ -9,33 +9,29 @@
 
         <TableSection>
             <template #header>
-                <th>SKU</th>
-                <th>Producto</th>
                 <th>Medida</th>
                 <th>Cantidad</th>
                 <th>Costo (ud.)</th>
-                <th>Todal</th>
+                <th>Precio (ud.)</th>
+                <th>Acciones</th>
             </template>
 
             <template #body>
                 <tr v-for="(i, index) in inventory.data" class="hover:bg-gray-50">
                     <td>
-                        {{ i.product.sku }}
-                    </td>
-                    <td>
-                    	{{ i.product.name }}
-                    </td>
-                    <td>
                         {{ i.measure }}
                     </td>
                     <td>
-                    	{{ i.quantity }}
+                        {{ i.quantity }}
                     </td>
                     <td>
-                    	C${{ i.unit_cost }}
+                        C${{ i.unit_cost }}
                     </td>
                     <td>
-                        C${{( i.quantity * i.unit_cost).toLocaleString() }}
+                        C${{ i.unit_price }}
+                    </td>
+                    <td>
+
                     </td>
                 </tr>
                 <tr v-if="inventory.data.length == 0">
@@ -43,7 +39,7 @@
                 </tr>
             </template>
             <template #paginator>
-            	<ThePaginator :links="inventory.links"/>
+                <ThePaginator :links="inventory.links" />
             </template>
         </TableSection>
     </AppLayout>
@@ -54,11 +50,15 @@ import AppLayout from '@/Layouts/AppLayout.vue';
 import TableSection from '@/Components/TableSection.vue';
 import ThePaginator from "@/Components/ThePaginator.vue"
 
-defineProps({
+const props = defineProps({
+    product: {
+        type: Object,
+        required: true,
+    },
     inventory: {
         type: Object,
         required: true,
-    }
+    },
 });
 
 const breads = [
@@ -67,8 +67,12 @@ const breads = [
         route: route('dashboard.users.index'),
     },
     {
+        name: 'Productos',
+        route: route('dashboard.products.index'),
+    },
+    {
         name: 'Inventario',
-        route: route('dashboard.inventory.index'),
+        route: route('dashboard.products.show', props.product.id),
     },
 ];
 

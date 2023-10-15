@@ -22,6 +22,14 @@ class ProductController extends Controller
         return back();
     }
 
+    public function show(Product $product)
+    {
+        return inertia('Dashboard/Product/Show', [
+            'product' => $product,
+            'inventory' => $product->inventory()->latest()->paginate(),
+        ]);
+    }
+
     public function update(ProductRequest $request, $product)
     {
         Product::where('id', $product)->update($request->validated());

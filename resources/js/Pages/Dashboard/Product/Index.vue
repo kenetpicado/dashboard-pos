@@ -24,8 +24,15 @@
                     </td>
                     <td>
                         <div class="flex gap-2">
-                            <IconPencil size="22" role="button" @click="edit(product)" />
-                            <IconTrash size="22" role="button" @click="destroy(product.id)" />
+                            <Link :href="route('dashboard.products.show', product.id)" tooltip="Detalles">
+                                <IconEye size="22" role="button" />
+                            </Link>
+                            <label tooltip="Editar">
+                                <IconPencil size="22" role="button" @click="edit(product)" />
+                            </label>
+                            <label tooltip="Eliminar">
+                                <IconTrash size="22" role="button" @click="destroy(product.id)" />
+                            </label>
                         </div>
                     </td>
                 </tr>
@@ -57,7 +64,7 @@
 import AppLayout from '@/Layouts/AppLayout.vue';
 import AddButton from '@/Components/Buttons/AddButton.vue';
 import TableSection from '@/Components/TableSection.vue';
-import { IconPencil, IconTrash } from '@tabler/icons-vue';
+import { IconPencil, IconTrash, IconEye } from '@tabler/icons-vue';
 import { confirmAlert } from '@/Use/helpers';
 import { toast } from '@/Use/toast';
 import { router, useForm } from '@inertiajs/vue3';
@@ -66,6 +73,7 @@ import FormModal from '@/Components/Modal/FormModal.vue';
 import InputForm from '@/Components/Form/InputForm.vue';
 import SelectForm from '@/Components/Form/SelectForm.vue';
 import { ref } from 'vue';
+import { Link } from '@inertiajs/vue3';
 
 defineProps({
     products: {

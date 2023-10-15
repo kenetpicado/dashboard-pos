@@ -17,7 +17,7 @@ class TransactionController extends Controller
     public function index()
     {
         $transactions = Transaction::query()
-            ->with('user')
+            ->with('user:id,name')
             ->withCount('products')
             ->latest()
             ->paginate();
