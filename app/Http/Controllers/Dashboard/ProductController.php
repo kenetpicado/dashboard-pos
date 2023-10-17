@@ -11,7 +11,7 @@ class ProductController extends Controller
     public function index()
     {
         return inertia('Dashboard/Product/Index', [
-            'products' => Product::select('id', 'name', 'sku', 'image', 'notes')->paginate(),
+            'products' => Product::select('id', 'name', 'sku', 'image')->paginate(),
         ]);
     }
 

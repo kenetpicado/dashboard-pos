@@ -27,7 +27,14 @@
 					</td>
 				</tr>
 				<tr v-if="products.length == 0" class="text-center">
-					<td colspan="3">No se han encontrado productos</td>
+					<td colspan="3">
+						<span v-if="!queryParams.search && products.length == 0">
+							Escriba el nombreo SKU del producto que desea buscar
+						</span>
+						<span v-else>
+							No se han encontrado productos
+						</span>
+					</td>
 				</tr>
 			</tbody>
 		</table>

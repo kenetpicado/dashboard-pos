@@ -35,6 +35,7 @@
 <script setup>
 import { Link, router } from '@inertiajs/vue3';
 import { IconShoppingCart } from '@tabler/icons-vue';
+import { IconTag } from '@tabler/icons-vue';
 import { IconShoppingBag } from '@tabler/icons-vue';
 import { IconUserCog } from '@tabler/icons-vue';
 import { IconHome, IconLogout, IconUser, IconCategory, IconBuildingFactory, IconClipboardList, IconEyeCheck, IconShirt } from '@tabler/icons-vue';
@@ -78,7 +79,7 @@ const items = [
     {
         name: 'Productos',
         route: route('dashboard.products.index'),
-        icon: IconShirt
+        icon: IconTag
     },
     {
         name: 'Inventario',

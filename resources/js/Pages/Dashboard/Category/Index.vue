@@ -29,9 +29,8 @@
                     </tr>
                     <tr class="hover:bg-gray-50" v-for="(children, index) in category.childrens">
                         <td>
-                            <span class="flex items-center gap-3">
-                                <IconCornerDownRight />
-                                <span>{{ children.name }}</span>
+                            <span class="text-xs ml-4">
+                                {{ children.name }}
                             </span>
                         </td>
                         <td>

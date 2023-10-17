@@ -25,9 +25,13 @@ class UserRequest extends FormRequest
         return [
             'name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'email', 'max:255', Rule::unique('users')->ignore($this->user)],
-            // "password" => ["required", "string", "min:8", "confirmed"],
-            //password required if method is post
-            'password' => ['required_if:method,post', 'string', 'min:8', 'confirmed'],
+        ] + ($this->isMethod('post') ? $this->store() : []);
+    }
+
+    public function store()
+    {
+        return [
+            'password' => ['required', 'string', 'min:8', 'confirmed'],
         ];
     }
 }

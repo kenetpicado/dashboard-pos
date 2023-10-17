@@ -5,14 +5,10 @@ namespace App\Http\Controllers\Dashboard;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Dashboard\TransactionRequest;
 use App\Http\Requests\Dashboard\TransactionTypeRequest;
-use App\Models\Inventory;
-use App\Models\Product;
 use App\Models\Transaction;
 use App\Repositories\ProductRepository;
 use App\Repositories\TransactionRepository;
 use App\Services\TransactionService;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
 
 class TransactionController extends Controller
 {
@@ -29,6 +25,8 @@ class TransactionController extends Controller
     {
         return inertia('Dashboard/Transaction/Index', [
             'transactions' => $this->transactionRepository->getAll(),
+            'sell_month' => $this->transactionRepository->getMonthlyTotal(),
+            'buy_month' => $this->transactionRepository->getMonthlyTotal('buy'),
         ]);
     }
 

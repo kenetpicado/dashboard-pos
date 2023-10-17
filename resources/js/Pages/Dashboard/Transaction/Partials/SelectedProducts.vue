@@ -5,11 +5,11 @@
 		</div>
 		<div v-for="(product, index) in products" class="w-full rounded-lg p-4 bg-white mb-2 border-2">
 			<div class="flex gap-2">
-				<div class="h-36 w-36 flex items-center justify-center">
-					<img :src="getImage(product.image)" alt="Imagen" class="max-h-full max-w-full rounded-lg">
+				<div v-if="product.image" class="h-36 w-36 flex items-center justify-center">
+					<img :src="product.image" onerror="this.src='/not-found.jpg'" alt="Imagen" class="max-h-full max-w-full rounded-lg">
 				</div>
 				<div class="w-full flex flex-col justify-between">
-					<div>
+					<div class="mb-3">
 						<div class="text-lg font-semibold mb-2" @click="$emit('edit', index)" role="button">
 							{{ product.name }} - {{ product.measure }} ({{ product.quantity }})
 						</div>
@@ -20,7 +20,7 @@
 
 					<div class="flex items-center justify-between">
 						<div>
-							<IconTrash role="button" @click="$emit('remove', index)" />
+							<IconTrash role="button" @click="$emit('remove', index)" class="text-red-300" />
 						</div>
 						<div v-if="type == 'buy'" class="flex flex-col text-end text-xl font-bold">
 							C${{ (product.quantity * product.cost).toLocaleString('en-US') }}
@@ -82,14 +82,6 @@ const form = useForm({
 	total: 0,
 	products: null
 })
-
-function getImage(value) {
-	if (value) {
-		return value;
-	}
-
-	return 'https://d1fufvy4xao6k9.cloudfront.net/images/landing/hockerty/shoes_special/custom_dress_shoes.jpg';
-}
 
 const total = computed(() => {
 	if (props.type == 'buy') {

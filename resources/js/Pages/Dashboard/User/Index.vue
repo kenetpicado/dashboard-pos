@@ -5,7 +5,7 @@
             <span class="title">
                 Usuarios
             </span>
-            <AddButton :href="route('dashboard.users.create')" />
+            <AddButton @click="openModal = true" />
         </template>
 
         <TableSection>
@@ -29,7 +29,7 @@
                     </td>
                     <td>
                         <div class="flex gap-2">
-                            <IconPencil role="button" @click="edit(user)"/>
+                            <IconPencil role="button" @click="edit(user)" />
                             <IconTrash role="button" @click="destroy(user.id)" />
                         </div>
                     </td>
@@ -40,9 +40,13 @@
             </template>
         </TableSection>
 
-        <FormModal :show="openModal" title="Edit" @onCancel="openModal = false" @onSubmit="onSubmit">
-            <InputForm text="Name" v-model="form.name" />
-            <InputForm text="Email" v-model="form.email" type="email" />
+        <FormModal :show="openModal" title="Usuario" @onCancel="resetValues()" @onSubmit="onSubmit">
+            <InputForm text="Name" v-model="form.name" required />
+            <InputForm text="Email" v-model="form.email" type="email" required />
+            <template v-if="isNew">
+                <InputForm text="Password" v-model="form.password" type="password" required />
+                <InputForm text="Password confirmation" v-model="form.password_confirmation" type="password" required />
+            </template>
         </FormModal>
 
     </AppLayout>
@@ -79,29 +83,44 @@ const breads = [
 ];
 
 const form = useForm({
-    id: '',
+    id: null,
     name: '',
     email: '',
+    password: '',
+    password_confirmation: '',
 });
 
 const openModal = ref(false);
+const isNew = ref(true);
 
 function edit(user) {
     form.id = user.id;
     form.name = user.name;
     form.email = user.email;
     openModal.value = true;
+    isNew.value = false;
 }
 
 function onSubmit() {
-    form.put(route('dashboard.users.update', form.id), {
-        preserveScroll: true,
-        preserveState: true,
-        onSuccess: () => {
-            toast.success('Usuario actualizado');
-            openModal.value = false;
-        },
-    });
+    if (isNew.value) {
+        form.post(route('dashboard.users.store'), {
+            preserveScroll: true,
+            preserveState: true,
+            onSuccess: () => {
+                toast.success('Usuario agregado');
+                resetValues();
+            },
+        });
+    } else {
+        form.put(route('dashboard.users.update', form.id), {
+            preserveScroll: true,
+            preserveState: true,
+            onSuccess: () => {
+                toast.success('Usuario actualizado');
+                resetValues();
+            },
+        });
+    }
 }
 
 function destroy(id) {
@@ -116,6 +135,12 @@ function destroy(id) {
             });
         },
     })
+}
+
+const resetValues = () => {
+    openModal.value = false;
+    isNew.value = true;
+    form.reset();
 }
 
 </script>

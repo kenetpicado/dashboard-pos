@@ -7,6 +7,12 @@
             </span>
         </template>
 
+        <div class="mb-4">
+            <div class="grid grid-cols-5 gap-4">
+                <StatCard v-for="stat in stats" :stat="stat" :key="stat.title" />
+            </div>
+        </div>
+
         <TableSection>
             <template #header>
                 <th>SKU</th>
@@ -22,20 +28,20 @@
                     <td>
                         {{ i.product.sku }}
                     </td>
-                    <td>
-                    	{{ i.product.name }}
+                    <td class="uppercase">
+                        {{ i.product.name }}
                     </td>
                     <td>
                         {{ i.measure }}
                     </td>
                     <td>
-                    	{{ i.quantity }}
+                        {{ i.quantity }}
                     </td>
                     <td>
-                    	C${{ i.unit_cost }}
+                        C${{ i.unit_cost }}
                     </td>
                     <td>
-                        C${{( i.quantity * i.unit_cost).toLocaleString() }}
+                        <span class="font-bold">C${{ (i.quantity * i.unit_cost).toLocaleString() }}</span>
                     </td>
                 </tr>
                 <tr v-if="inventory.data.length == 0">
@@ -43,7 +49,7 @@
                 </tr>
             </template>
             <template #paginator>
-            	<ThePaginator :links="inventory.links"/>
+                <ThePaginator :links="inventory.links" />
             </template>
         </TableSection>
     </AppLayout>
@@ -53,12 +59,23 @@
 import AppLayout from '@/Layouts/AppLayout.vue';
 import TableSection from '@/Components/TableSection.vue';
 import ThePaginator from "@/Components/ThePaginator.vue"
+import StatCard from '@/Components/StatCard.vue';
+import { IconCurrencyDollar } from '@tabler/icons-vue';
+import { IconShirt, IconTag } from '@tabler/icons-vue';
 
-defineProps({
+const props = defineProps({
     inventory: {
         type: Object,
         required: true,
-    }
+    },
+    total: {
+        type: Number,
+        required: true,
+    },
+    total_quantity: {
+        type: Number,
+        required: true,
+    },
 });
 
 const breads = [
@@ -71,5 +88,18 @@ const breads = [
         route: route('dashboard.inventory.index'),
     },
 ];
+
+const stats = [
+    {
+        title: "Total en inventario",
+        value: "C$" + props.total.toLocaleString(),
+        icon: IconCurrencyDollar
+    },
+    {
+        title: "Total de productos",
+        value: props.total_quantity,
+        icon: IconTag
+    },
+]
 
 </script>

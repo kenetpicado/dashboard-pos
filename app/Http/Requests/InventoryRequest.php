@@ -1,11 +1,10 @@
 <?php
 
-namespace App\Http\Requests\Dashboard;
+namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
-use Illuminate\Validation\Rule;
 
-class ProductRequest extends FormRequest
+class InventoryRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -23,10 +22,10 @@ class ProductRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'name' => 'required',
-            'sku' => ['required', 'alpha_dash', Rule::unique('products')->ignore($this->id)],
-            'description' => 'nullable',
-            'image' => ['nullable', 'url'],
+            'measure' => ['required', 'string'],
+            'quantity' => ['required', 'numeric'],
+            'unit_cost' => ['required', 'numeric'],
+            'unit_price' => ['required', 'numeric'],
         ];
     }
 }

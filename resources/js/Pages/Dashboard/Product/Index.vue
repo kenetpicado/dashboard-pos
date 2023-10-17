@@ -19,7 +19,7 @@
                     <td>
                         {{ product.sku }}
                     </td>
-                    <td>
+                    <td class="uppercase">
                         {{ product.name }}
                     </td>
                     <td>
@@ -49,12 +49,7 @@
         <FormModal :show="openModal" title="Product" @onCancel="resetValues" @onSubmit="onSubmit">
             <InputForm text="SKU" v-model="form.sku" required />
             <InputForm text="Name" v-model="form.name" required />
-            <SelectForm v-model="form.status" text="Status">
-                <option value="DISPONIBLE">DISPONIBLE</option>
-                <option value="NO_DISPONIBLE">NO DISPONIBLE</option>
-            </SelectForm>
             <InputForm text="Image" v-model="form.image" type="url" />
-            <InputForm text="Note" v-model="form.notes" />
         </FormModal>
 
     </AppLayout>
@@ -71,7 +66,6 @@ import { router, useForm } from '@inertiajs/vue3';
 import ThePaginator from '@/Components/ThePaginator.vue';
 import FormModal from '@/Components/Modal/FormModal.vue';
 import InputForm from '@/Components/Form/InputForm.vue';
-import SelectForm from '@/Components/Form/SelectForm.vue';
 import { ref } from 'vue';
 import { Link } from '@inertiajs/vue3';
 
@@ -100,9 +94,7 @@ const form = useForm({
     id: null,
     name: null,
     sku: null,
-    status: 'DISPONIBLE',
     image: null,
-    notes: null,
 });
 
 function edit(product) {
