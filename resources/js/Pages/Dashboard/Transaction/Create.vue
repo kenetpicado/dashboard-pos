@@ -123,6 +123,16 @@ function setCurrentProduct(product) {
 }
 
 function addProduct() {
+	if (props.type == 'sell' && selectedProducts.value.find((item) => item.id == currentProduct.id && item.inventory_id == currentProduct.inventory_id)) {
+		toast.error("Este producto con esta medida ya ha sido agregado");
+		return;
+	}
+
+	if (props.type == 'buy' && selectedProducts.value.find((item) => item.id == currentProduct.id && item.measure == currentProduct.measure)) {
+		toast.error("Este producto con esta medida ya ha sido agregado");
+		return;
+	}
+
 	if (props.type == 'sell' && currentProduct.quantity > availableQuantity.value) {
 		toast.error("La cantidad no puede ser mayor a la disponible");
 		return;
