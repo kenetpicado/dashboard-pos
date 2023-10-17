@@ -7,7 +7,7 @@
             </span>
         </template>
 
-        <div class="mb-4">
+        <div class="mb-3">
             <div class="grid grid-cols-5 gap-4">
                 <SelectForm text="Responsable" v-model="queryParams.user_id">
                     <option selected value="">Todos</option>
