@@ -9,6 +9,15 @@
 
         <div class="mb-4">
             <div class="grid grid-cols-5 gap-4">
+                <SelectForm text="Responsable" v-model="queryParams.user_id">
+                    <option selected value="">Todos</option>
+                    <option v-for="item in users" :value="item.id">{{ item.name }}</option>
+                </SelectForm>
+            </div>
+        </div>
+
+        <div class="mb-4">
+            <div class="grid grid-cols-5 gap-4">
                 <StatCard v-for="stat in stats" :stat="stat" :key="stat.title" />
             </div>
         </div>
@@ -27,7 +36,7 @@
             <template #body>
                 <tr v-for="(transaction, index) in transactions.data" class="hover:bg-gray-50">
                     <td>
-                        <DateColumn :date="transaction.created_at"/>
+                        <DateColumn :date="transaction.created_at" />
                     </td>
                     <td>
                         <span :class="transactionClass[transaction.type]">
@@ -38,7 +47,7 @@
                         {{ transaction.user.name }}
                     </td>
                     <td>
-                    	{{ transaction.products_count }}
+                        {{ transaction.products_count }}
                     </td>
                     <td>
                         <span v-if="transaction.discount > 0">C${{ transaction.discount }}</span>
@@ -49,7 +58,7 @@
                     <td>
                         <div class="flex gap-2">
                             <Link :href="route('dashboard.transactions.show', transaction.id)" tooltip="Detalles">
-                                <IconEye size="22" role="button" />
+                            <IconEye size="22" role="button" />
                             </Link>
                         </div>
                     </td>
@@ -59,7 +68,7 @@
                 </tr>
             </template>
             <template #paginator>
-            	<ThePaginator :links="transactions.links"/>
+                <ThePaginator :links="transactions.links" />
             </template>
         </TableSection>
     </AppLayout>
@@ -71,8 +80,10 @@ import StatCard from '@/Components/StatCard.vue';
 import TableSection from '@/Components/TableSection.vue';
 import ThePaginator from "@/Components/ThePaginator.vue";
 import AppLayout from '@/Layouts/AppLayout.vue';
-import { Link } from '@inertiajs/vue3';
+import { Link, router } from '@inertiajs/vue3';
 import { IconCurrencyDollar, IconCurrencyDollarOff, IconEye } from '@tabler/icons-vue';
+import SelectForm from "@/Components/Form/SelectForm.vue";
+import { watch, reactive, computed } from "vue";
 
 const props = defineProps({
     transactions: {
@@ -87,11 +98,15 @@ const props = defineProps({
         type: Number,
         required: true,
     },
+    users: {
+        type: Object,
+        required: true,
+    },
 });
 
 const transactionTypes = {
-	buy: "COMPRA",
-	sell: "VENTA"
+    buy: "COMPRA",
+    sell: "VENTA"
 }
 
 const breads = [
@@ -110,18 +125,41 @@ const transactionClass = {
     sell: "badge-indigo"
 }
 
-const stats = [
-    {
-        title: "Compras del mes",
-        value: "C$" + props.buy_month.toLocaleString(),
-        icon: IconCurrencyDollarOff
-    },
-    {
-        title: "Ventas del mes",
-        value: "C$" + props.sell_month.toLocaleString(),
-        icon: IconCurrencyDollar
-    },
-]
+const queryParams = reactive({
+    user_id: null,
+})
 
+const stats = computed(() => {
+    return [
+        {
+            title: "Compras del mes",
+            value: "C$" + props.buy_month.toLocaleString(),
+            icon: IconCurrencyDollarOff
+        },
+        {
+            title: "Ventas del mes",
+            value: "C$" + props.sell_month.toLocaleString(),
+            icon: IconCurrencyDollar
+        },
+    ]
+})
+
+const searchParams = new URLSearchParams(window.location.search);
+
+if (searchParams.get("user_id")) {
+	queryParams.user_id = searchParams.get("user_id")
+}
+
+watch(() => queryParams.user_id, (value) => {
+	if (!value) {
+		delete queryParams.user_id
+	}
+
+	router.get(route('dashboard.transactions.index'), queryParams, {
+		preserveState: true,
+		preserveScroll: true,
+		only: ["transactions", 'buy_month', 'sell_month']
+	})
+})
 
 </script>

@@ -32,7 +32,7 @@ class ProductController extends Controller
     {
         return inertia('Dashboard/Product/Show', [
             'product' => $product,
-            'inventory' => $product->inventory()->latest()->paginate(),
+            'inventory' => $this->productRepository->getInventory($product),
         ]);
     }
 

@@ -42,4 +42,9 @@ class ProductRepository
             ->limit(5)
             ->get();
     }
+
+    public function getInventory($product)
+    {
+        return $product->inventory()->where('quantity', '>', 0)->latest()->paginate();
+    }
 }
