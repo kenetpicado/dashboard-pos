@@ -34,15 +34,13 @@
 						<option v-for="item in inventory" :value="item.id">{{ item.measure }} - C${{ item.unit_price }}</option>
 					</SelectForm>
 
-					<SelectForm text="Cantidad" v-model="currentProduct.quantity" required>
-						<option selected disabled value="">Seleccionar cantidad</option>
-						<option v-for="item in availableQuantity" :value="item">{{ item }}</option>
-					</SelectForm>
+					<InputForm text="Cantidad" v-model="currentProduct.quantity" type="number" required :min="1"
+						:description="`Disponible: ${availableQuantity}`" />
 
-					<InputForm text="Precio (Unidad)" v-model="currentProduct.price" type="number" required />
 					<div class="flex justify-end col-span-2">
-						<div class="text-xl font-bold">
-							Total: C${{ (currentProduct.quantity * currentProduct.price).toLocaleString() }}
+						<div class="text-xl font-bold text-end">
+							<div class="mb-2">Precio: C${{ currentProduct.price.toLocaleString() }}</div>
+							<div>Total: C${{ (currentProduct.quantity * currentProduct.price).toLocaleString() }}</div>
 						</div>
 					</div>
 				</template>
@@ -94,6 +92,7 @@ const openModal = ref(false);
 const isEditing = ref(false);
 const inventory = ref([]);
 const selectedMeasure = ref(null);
+const currentIndex = ref(null);
 
 const originalObject = {
 	id: null,
@@ -109,11 +108,6 @@ const originalObject = {
 const currentProduct = reactive({ ...originalObject });
 
 function setCurrentProduct(product) {
-	if (selectedProducts.value.find((p) => p.id === product.id)) {
-		toast.error("Este producto ya ha sido agregado");
-		return;
-	}
-
 	currentProduct.id = product.id;
 	currentProduct.name = product.name;
 	currentProduct.image = product.image;
@@ -129,9 +123,13 @@ function setCurrentProduct(product) {
 }
 
 function addProduct() {
+	if (props.type == 'sell' && currentProduct.quantity > availableQuantity.value) {
+		toast.error("La cantidad no puede ser mayor a la disponible");
+		return;
+	}
+
 	if (isEditing.value) {
-		const index = selectedProducts.value.findIndex((product) => product.id === currentProduct.id);
-		selectedProducts.value[index] = { ...currentProduct };
+		selectedProducts.value[currentIndex.value] = { ...currentProduct };
 		toast.success("Producto actualizado");
 	} else {
 		selectedProducts.value.push({ ...currentProduct });
@@ -146,6 +144,7 @@ function resetValues() {
 	isEditing.value = false;
 	inventory.value = [];
 	selectedMeasure.value = null;
+	currentIndex.value = null;
 	openModal.value = false;
 }
 
@@ -166,6 +165,7 @@ function editProduct(index) {
 	}
 
 	isEditing.value = true
+	currentIndex.value = index;
 	openModal.value = true;
 }
 
@@ -188,12 +188,10 @@ watch(() => selectedMeasure.value, (value) => {
 
 const availableQuantity = computed(() => {
 	if (inventory.value.length == 0 || !selectedMeasure.value) {
-		return [1];
+		return 0;
 	}
 
-	const q = inventory.value.find((item) => item.id == selectedMeasure.value).quantity;
-
-	return Array.from({ length: q }, (_, i) => i + 1);
+	return inventory.value.find((item) => item.id == selectedMeasure.value).quantity;
 });
 
 </script>

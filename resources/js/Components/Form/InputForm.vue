@@ -13,6 +13,10 @@
         <p class="text-sm text-red-600 mt-1" v-if="$page.props.errors[keyValue]">
             {{ $page.props.errors[keyValue] }}
         </p>
+
+        <p class="text-sm text-indigo-600 mt-2" v-if="description">
+            {{description }}
+        </p>
     </div>
 </template>
 
@@ -50,6 +54,9 @@ const props = defineProps({
     min: {
         type: Number, required: false
     },
+    description: {
+        type: String, required: false
+    }
 })
 
 const keyValue = computed(() => {
