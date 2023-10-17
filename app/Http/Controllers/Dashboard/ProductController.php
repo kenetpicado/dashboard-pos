@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Dashboard\ProductRequest;
 use App\Models\Product;
 use App\Repositories\ProductRepository;
+use Illuminate\Http\Request;
 
 class ProductController extends Controller
 {
@@ -14,10 +15,10 @@ class ProductController extends Controller
     ) {
     }
 
-    public function index()
+    public function index(Request $request)
     {
         return inertia('Dashboard/Product/Index', [
-            'products' => $this->productRepository->getAll(),
+            'products' => $this->productRepository->getAll($request->all()),
         ]);
     }
 

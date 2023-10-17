@@ -16,9 +16,15 @@ class ProductRepository
         $this->model = new Product();
     }
 
-    public function getAll()
+    public function getAll($request = [])
     {
-        return Product::select('id', 'name', 'sku', 'image')->paginate();
+        return Product::query()
+            ->select('id', 'name', 'sku', 'image')
+            ->when(isset($request['search']), function ($query) use ($request) {
+                $query->where('name', 'like', "%{$request['search']}%")
+                    ->orWhere('sku', 'like', "%{$request['search']}%");
+            })
+            ->paginate();
     }
 
     public function search($term = null, $hasInventory)

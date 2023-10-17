@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Dashboard;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\InventoryRequest;
 use App\Repositories\InventoryRepository;
+use Illuminate\Http\Request;
 
 class InventoryController extends Controller
 {
@@ -13,10 +14,10 @@ class InventoryController extends Controller
     ) {
     }
 
-    public function index()
+    public function index(Request $request)
     {
         return inertia('Dashboard/Inventory/Index', [
-            'inventory' => $this->inventoryRepository->getAllAvailable(),
+            'inventory' => $this->inventoryRepository->getAllAvailable($request->all()),
             'total' => $this->inventoryRepository->getTotalAmount(),
             'total_quantity' => $this->inventoryRepository->getTotalQuantity(),
         ]);

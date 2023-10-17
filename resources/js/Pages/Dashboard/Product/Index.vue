@@ -7,6 +7,12 @@
             <AddButton @click="openModal = true" />
         </template>
 
+        <div class="mb-3">
+            <div class="grid grid-cols-5 gap-4">
+                <InputForm text="Buscar" type="search" v-model="queryParams.search" />
+            </div>
+        </div>
+
         <TableSection>
             <template #header>
                 <th>SKU</th>
@@ -36,7 +42,7 @@
                         </div>
                     </td>
                 </tr>
-                <tr v-if="products.length == 0">
+                <tr v-if="products.data.length == 0">
                     <td colspan="3" class="text-center">No hay datos que mostrar</td>
                 </tr>
             </template>
@@ -66,8 +72,9 @@ import { router, useForm } from '@inertiajs/vue3';
 import ThePaginator from '@/Components/ThePaginator.vue';
 import FormModal from '@/Components/Modal/FormModal.vue';
 import InputForm from '@/Components/Form/InputForm.vue';
-import { ref } from 'vue';
+import { ref, reactive, watch } from 'vue';
 import { Link } from '@inertiajs/vue3';
+import { queryParams, watchSearch, setParams } from '@/Use/Search';
 
 defineProps({
     products: {
@@ -86,6 +93,8 @@ const breads = [
         route: route('dashboard.products.index'),
     },
 ];
+
+
 
 const openModal = ref(false);
 const isNew = ref(true);
@@ -144,5 +153,9 @@ function resetValues() {
     isNew.value = true;
     form.reset();
 }
+
+setParams()
+
+watchSearch(route('dashboard.products.index'), ["products"])
 
 </script>

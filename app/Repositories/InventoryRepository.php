@@ -17,11 +17,20 @@ class InventoryRepository
         $this->model = new Inventory();
     }
 
-    public function getAllAvailable()
+    public function getAllAvailable($request = [])
     {
         return Inventory::query()
             ->where('quantity', '>', 0)
             ->orderByDesc('quantity')
+            ->when(isset($request['search']), function ($query) use ($request) {
+                $query->where(function ($query) use ($request) {
+                    $query->whereHas('product', function ($query) use ($request) {
+                        $query->where('name', 'like', "%" . $request['search'] . "%")
+                            ->orWhere('sku', 'like', "%" . $request['search'] . "%");
+                    });
+                })
+                    ->orWhere('measure', 'like', "%" . $request['search'] . "%");
+            })
             ->with('product:id,sku,name')
             ->paginate();
     }

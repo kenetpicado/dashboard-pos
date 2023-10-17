@@ -52,21 +52,25 @@ const stats = [
         title: 'Compras del mes',
         value: 'C$' + props.buy_month.toLocaleString(),
         icon: IconCurrencyDollarOff,
+        href: route('dashboard.transactions.index'),
     },
     {
         title: 'Ventas del mes',
         value: 'C$' + props.sell_month.toLocaleString(),
         icon: IconCurrencyDollar,
+        href: route('dashboard.transactions.index'),
     },
     {
         title: 'Total en inventario',
         value: 'C$' + props.total_inventory.toLocaleString(),
         icon: IconCurrencyDollar,
+        href: route('dashboard.inventory.index'),
     },
     {
         title: 'Productos en inventario',
         value: props.total_quantity.toLocaleString(),
         icon: IconTag,
+        href: route('dashboard.inventory.index'),
     },
 ];
 
