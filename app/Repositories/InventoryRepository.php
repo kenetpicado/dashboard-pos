@@ -3,10 +3,20 @@
 namespace App\Repositories;
 
 use App\Models\Inventory;
+use App\Traits\BasicRepositoryTrait;
 use Illuminate\Support\Facades\DB;
 
 class InventoryRepository
 {
+    use BasicRepositoryTrait;
+
+    public $model;
+
+    public function __construct()
+    {
+        $this->model = new Inventory();
+    }
+
     public function getAllAvailable()
     {
         return Inventory::query()

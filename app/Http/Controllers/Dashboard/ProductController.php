@@ -5,19 +5,25 @@ namespace App\Http\Controllers\Dashboard;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Dashboard\ProductRequest;
 use App\Models\Product;
+use App\Repositories\ProductRepository;
 
 class ProductController extends Controller
 {
+    public function __construct(
+        private readonly ProductRepository $productRepository
+    ) {
+    }
+
     public function index()
     {
         return inertia('Dashboard/Product/Index', [
-            'products' => Product::select('id', 'name', 'sku', 'image')->paginate(),
+            'products' => $this->productRepository->getAll(),
         ]);
     }
 
     public function store(ProductRequest $request)
     {
-        Product::create($request->validated());
+        $this->productRepository->store($request->validated());
 
         return back();
     }
@@ -32,14 +38,14 @@ class ProductController extends Controller
 
     public function update(ProductRequest $request, $product)
     {
-        Product::where('id', $product)->update($request->validated());
+        $this->productRepository->update($product, $request->validated());
 
         return back();
     }
 
     public function destroy($product)
     {
-        Product::where('id', $product)->delete();
+        $this->productRepository->destroy($product);
 
         return back();
     }
