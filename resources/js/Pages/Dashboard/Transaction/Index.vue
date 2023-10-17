@@ -91,6 +91,7 @@ import { IconCurrencyDollar, IconCurrencyDollarOff, IconEye } from '@tabler/icon
 import SelectForm from "@/Components/Form/SelectForm.vue";
 import InputForm from "@/Components/Form/InputForm.vue";
 import { watch, reactive, computed } from "vue";
+import { IconBrandCarbon } from "@tabler/icons-vue";
 
 const props = defineProps({
     transactions: {
@@ -141,12 +142,12 @@ const queryParams = reactive({
 const stats = computed(() => {
     return [
         {
-            title: "Compras del mes",
+            title: queryParams.from || queryParams.to ? "Compras" : "Compras del mes",
             value: "C$" + props.buy_month.toLocaleString(),
             icon: IconCurrencyDollarOff
         },
         {
-            title: "Ventas del mes",
+            title: queryParams.from || queryParams.to ? "Ventas" : "ventas del mes",
             value: "C$" + props.sell_month.toLocaleString(),
             icon: IconCurrencyDollar
         },
