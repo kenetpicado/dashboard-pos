@@ -17,7 +17,7 @@ class DashboardController extends Controller
     public function __invoke()
     {
         return inertia('Dashboard/Index', [
-            'sell_month' => $this->transactionRepository->getMonthlyTotal(),
+            'sell_month' => $this->transactionRepository->getMonthlyTotal('sell'),
             'buy_month' => $this->transactionRepository->getMonthlyTotal('buy'),
             'total_inventory' => $this->inventoryRepository->getTotalAmount(),
             'total_quantity' => $this->inventoryRepository->getTotalQuantity(),

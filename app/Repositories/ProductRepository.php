@@ -45,6 +45,6 @@ class ProductRepository
 
     public function getInventory($product)
     {
-        return $product->inventory()->where('quantity', '>', 0)->latest()->paginate();
+        return $product->inventory()->where('quantity', '>', 0)->latest('id')->paginate();
     }
 }

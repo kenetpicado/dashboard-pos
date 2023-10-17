@@ -36,7 +36,7 @@ const props = defineProps({
         default: 0,
     },
     total_quantity: {
-        type: Number,
+        type: [String, Number],
         default: 0,
     },
 });
@@ -66,7 +66,7 @@ const stats = [
     },
     {
         title: 'Productos en inventario',
-        value: props.total_quantity,
+        value: props.total_quantity.toLocaleString(),
         icon: IconTag,
     },
 ];

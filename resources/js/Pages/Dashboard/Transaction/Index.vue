@@ -25,6 +25,7 @@
         <TableSection>
             <template #header>
                 <th>Fecha</th>
+                <th>Factura #</th>
                 <th>Tipo</th>
                 <th>Responsable</th>
                 <td>Productos</td>
@@ -37,6 +38,9 @@
                 <tr v-for="(transaction, index) in transactions.data" class="hover:bg-gray-50">
                     <td>
                         <DateColumn :date="transaction.created_at" />
+                    </td>
+                    <td>
+                        #{{ transaction.id.toString().padStart(5, '0') }}
                     </td>
                     <td>
                         <span :class="transactionClass[transaction.type]">

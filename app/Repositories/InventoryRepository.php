@@ -36,7 +36,7 @@ class InventoryRepository
 
     public function getTotalQuantity()
     {
-        return DB::table('inventories')
+        return (float) DB::table('inventories')
             ->where('quantity', '>', 0)
             ->sum('quantity');
     }

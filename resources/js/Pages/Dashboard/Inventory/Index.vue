@@ -56,12 +56,11 @@
 </template>
 
 <script setup>
-import AppLayout from '@/Layouts/AppLayout.vue';
-import TableSection from '@/Components/TableSection.vue';
-import ThePaginator from "@/Components/ThePaginator.vue"
 import StatCard from '@/Components/StatCard.vue';
-import { IconCurrencyDollar } from '@tabler/icons-vue';
-import { IconShirt, IconTag } from '@tabler/icons-vue';
+import TableSection from '@/Components/TableSection.vue';
+import ThePaginator from "@/Components/ThePaginator.vue";
+import AppLayout from '@/Layouts/AppLayout.vue';
+import { IconCurrencyDollar, IconTag } from '@tabler/icons-vue';
 
 const props = defineProps({
     inventory: {
@@ -73,7 +72,7 @@ const props = defineProps({
         required: true,
     },
     total_quantity: {
-        type: Number,
+        type: [Number, String],
         required: true,
     },
 });
@@ -97,7 +96,7 @@ const stats = [
     },
     {
         title: "Total de productos",
-        value: props.total_quantity,
+        value: props.total_quantity.toLocaleString(),
         icon: IconTag
     },
 ]
