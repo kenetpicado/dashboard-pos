@@ -25,9 +25,9 @@ class TransactionController extends Controller
     public function index(Request $request)
     {
         return inertia('Dashboard/Transaction/Index', [
-            'transactions' => $this->transactionRepository->getAll($request->user_id),
-            'sell_month' => $this->transactionRepository->getMonthlyTotal('sell', $request->user_id),
-            'buy_month' => $this->transactionRepository->getMonthlyTotal('buy', $request->user_id),
+            'transactions' => $this->transactionRepository->getAll($request->all()),
+            'sell_month' => $this->transactionRepository->getMonthlyTotal('sell', $request->all()),
+            'buy_month' => $this->transactionRepository->getMonthlyTotal('buy', $request->all()),
             'users' => $this->userRepository->getSimpleList(),
         ]);
     }

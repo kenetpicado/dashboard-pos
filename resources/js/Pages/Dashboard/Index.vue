@@ -1,7 +1,7 @@
 <template>
-    <AppLayout title="Users" :breads="breads">
+    <AppLayout title="Inicio" :breads="breads">
         <template #header>
-            <span class="title"> Overview </span>
+            <span class="title">Inicio</span>
         </template>
 
         <div class="grid grid-cols-4 gap-4">
@@ -12,7 +12,6 @@
 
 <script setup>
 import AppLayout from '@/Layouts/AppLayout.vue';
-import { IconUsers } from '@tabler/icons-vue';
 import StatCard from '@/Components/StatCard.vue';
 import { IconCurrencyDollar } from '@tabler/icons-vue';
 import { IconCurrencyDollarOff } from '@tabler/icons-vue';

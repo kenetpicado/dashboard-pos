@@ -13,6 +13,8 @@
                     <option selected value="">Todos</option>
                     <option v-for="item in users" :value="item.id">{{ item.name }}</option>
                 </SelectForm>
+                <InputForm text="Desde" type="date" v-model="queryParams.from" />
+                <InputForm text="Hasta" type="date" v-model="queryParams.to" />
             </div>
         </div>
 
@@ -68,7 +70,7 @@
                     </td>
                 </tr>
                 <tr v-if="transactions.data.length == 0">
-                    <td colspan="7" class="text-center">No hay datos que mostrar</td>
+                    <td colspan="8" class="text-center">No hay datos que mostrar</td>
                 </tr>
             </template>
             <template #paginator>
@@ -87,6 +89,7 @@ import AppLayout from '@/Layouts/AppLayout.vue';
 import { Link, router } from '@inertiajs/vue3';
 import { IconCurrencyDollar, IconCurrencyDollarOff, IconEye } from '@tabler/icons-vue';
 import SelectForm from "@/Components/Form/SelectForm.vue";
+import InputForm from "@/Components/Form/InputForm.vue";
 import { watch, reactive, computed } from "vue";
 
 const props = defineProps({
@@ -131,6 +134,8 @@ const transactionClass = {
 
 const queryParams = reactive({
     user_id: null,
+    from: null,
+    to: null,
 })
 
 const stats = computed(() => {
@@ -151,19 +156,43 @@ const stats = computed(() => {
 const searchParams = new URLSearchParams(window.location.search);
 
 if (searchParams.get("user_id")) {
-	queryParams.user_id = searchParams.get("user_id")
+    queryParams.user_id = searchParams.get("user_id")
+}
+
+if (searchParams.get("from")) {
+    queryParams.from = searchParams.get("from")
+}
+
+if (searchParams.get("to")) {
+    queryParams.to = searchParams.get("to")
 }
 
 watch(() => queryParams.user_id, (value) => {
-	if (!value) {
-		delete queryParams.user_id
-	}
+    if (!value) {
+        delete queryParams.user_id
+    }
 
-	router.get(route('dashboard.transactions.index'), queryParams, {
-		preserveState: true,
-		preserveScroll: true,
-		only: ["transactions", 'buy_month', 'sell_month']
-	})
+    getData()
 })
+
+watch(() => [queryParams.from, queryParams.to], ([from, to]) => {
+    if (!from) {
+        delete queryParams.from
+    }
+
+    if (!to) {
+        delete queryParams.to
+    }
+
+    getData()
+})
+
+function getData() {
+    router.get(route('dashboard.transactions.index'), queryParams, {
+        preserveState: true,
+        preserveScroll: true,
+        only: ["transactions", 'buy_month', 'sell_month']
+    })
+}
 
 </script>
