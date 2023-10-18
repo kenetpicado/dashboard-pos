@@ -10,8 +10,13 @@
                     {{ product.name }}
                 </div>
             </div>
-
         </template>
+
+        <div class="mb-4">
+            <div class="grid grid-cols-5 gap-4">
+                <StatCard v-for="stat in stats" :stat="stat" :key="stat.title" />
+            </div>
+        </div>
 
         <TableSection>
             <template #header>
@@ -48,7 +53,7 @@
                     </td>
                 </tr>
                 <tr v-if="inventory.data.length == 0">
-                    <td colspan="5" class="text-center">No hay datos que mostrar</td>
+                    <td colspan="6" class="text-center">No hay datos que mostrar</td>
                 </tr>
             </template>
             <template #paginator>
@@ -78,11 +83,14 @@ import TableSection from '@/Components/TableSection.vue';
 import ThePaginator from "@/Components/ThePaginator.vue"
 import { IconPencil } from '@tabler/icons-vue';
 import { useForm } from '@inertiajs/vue3';
-import { ref } from 'vue';
+import { ref, computed } from 'vue';
 import FormModal from '@/Components/Modal/FormModal.vue';
 import InputForm from '@/Components/Form/InputForm.vue';
 import { toast } from '@/Use/toast';
 import { IconTrash } from '@tabler/icons-vue';
+import StatCard from '@/Components/StatCard.vue';
+import { IconTag } from '@tabler/icons-vue';
+import { IconCurrencyDollar } from '@tabler/icons-vue';
 
 const props = defineProps({
     product: {
@@ -90,6 +98,10 @@ const props = defineProps({
         required: true,
     },
     inventory: {
+        type: Object,
+        required: true,
+    },
+    inventoryStatus: {
         type: Object,
         required: true,
     },
@@ -152,5 +164,20 @@ const destroy = (id) => {
         })
     }
 }
+
+const stats = computed(() => {
+    return [
+        {
+            title: "Items",
+            value: props.inventoryStatus.quantity,
+            icon: IconTag
+        },
+        {
+            title: "Inventario",
+            value: "C$" + props.inventoryStatus.unit_cost.toLocaleString(),
+            icon: IconCurrencyDollar
+        },
+    ]
+})
 
 </script>

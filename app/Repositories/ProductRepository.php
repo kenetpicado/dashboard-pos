@@ -53,4 +53,12 @@ class ProductRepository
     {
         return $product->inventory()->where('quantity', '>', 0)->latest('id')->paginate();
     }
+
+    public function getInventoryStatus($product)
+    {
+        return $product->inventory()
+            ->where('quantity', '>', 0)
+            ->selectRaw('COALESCE(sum(quantity), 0) as quantity, COALESCE(sum(unit_cost), 0) as unit_cost')
+            ->first();
+    }
 }
