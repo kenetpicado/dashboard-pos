@@ -173,6 +173,14 @@ watch(() => queryParams.user_id, (value) => {
         delete queryParams.user_id
     }
 
+    if (!queryParams.from) {
+        delete queryParams.from
+    }
+
+    if (!queryParams.to) {
+        delete queryParams.to
+    }
+
     getData()
 })
 
@@ -183,6 +191,10 @@ watch(() => [queryParams.from, queryParams.to], ([from, to]) => {
 
     if (!to) {
         delete queryParams.to
+    }
+
+    if (!queryParams.user_id) {
+        delete queryParams.user_id
     }
 
     getData()

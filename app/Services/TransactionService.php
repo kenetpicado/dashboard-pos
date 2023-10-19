@@ -16,7 +16,7 @@ class TransactionService
 
         $transaction = $transactionRepository->store($request);
 
-        $product_transaction = [];
+        $pivotData = [];
 
         foreach ($request['products'] as $product) {
 
@@ -25,9 +25,9 @@ class TransactionService
             else
                 $inventoryRepository->decrement($product['inventory_id'], $product['quantity']);
 
-            $product_transaction[] = $productTransactionRepository->build($transaction->id, $product, $request['type']);
+            $pivotData[] = $productTransactionRepository->build($transaction->id, $product, $request['type']);
         }
 
-        $productTransactionRepository->insert($product_transaction);
+        $productTransactionRepository->insert($pivotData);
     }
 }
