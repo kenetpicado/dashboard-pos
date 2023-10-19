@@ -15,8 +15,10 @@ return new class extends Migration
             $table->id();
             $table->foreignId('product_id')->constrained();
             $table->foreignId('user_id')->constrained();
+            $table->integer('initial_quantity');
             $table->integer('quantity');
             $table->double('unit_cost');
+            $table->double('total_cost');
             $table->double('unit_price');
             $table->string('measure')->nullable();
             $table->json('attributes')->nullable();

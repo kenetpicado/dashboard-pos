@@ -27,11 +27,13 @@ class TransactionService
             if ($request['type'] == 'buy') {
                 Inventory::create([
                     'product_id' => $product['product_id'],
+                    'initial_quantity' => $product['quantity'],
                     'quantity' => $product['quantity'],
                     'unit_cost' => $product['cost'],
+                    'total_cost' => $product['cost'] * $product['quantity'],
                     'unit_price' => $product['price'],
                     'measure' => $product['measure'],
-                    'user_id' => auth()->id(),
+                    'user_id' => $transaction->user_id,
                 ]);
             } else {
                 $inventory = Inventory::find($product['inventory_id']);

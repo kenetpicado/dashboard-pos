@@ -21,6 +21,7 @@ class InventoryRepository
     {
         return Inventory::query()
             ->where('quantity', '>', 0)
+            ->orderBy('product_id')
             ->orderByDesc('quantity')
             ->when(isset($request['search']), function ($query) use ($request) {
                 $query->where(function ($query) use ($request) {
@@ -39,8 +40,7 @@ class InventoryRepository
     {
         return DB::table('inventories')
             ->where('quantity', '>', 0)
-            ->select(DB::raw('COALESCE(SUM(unit_cost * quantity), 0)as total'))
-            ->value('total');
+            ->sum('total_cost');
     }
 
     public function getTotalQuantity()

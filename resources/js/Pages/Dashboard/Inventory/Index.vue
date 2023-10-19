@@ -21,7 +21,6 @@
 
         <TableSection>
             <template #header>
-                <th>SKU</th>
                 <th>Producto</th>
                 <th>Medida</th>
                 <th>Cantidad</th>
@@ -32,10 +31,12 @@
             <template #body>
                 <tr v-for="(i, index) in inventory.data" class="hover:bg-gray-50">
                     <td>
-                        {{ i.product.sku }}
-                    </td>
-                    <td class="uppercase">
-                        {{ i.product.name }}
+                        <div class="uppercase">
+                            {{ i.product.name }}
+                        </div>
+                        <div class="text-gray-400 mt-2">
+                            {{ i.product.sku }}
+                        </div>
                     </td>
                     <td>
                         {{ i.measure }}
@@ -47,7 +48,7 @@
                         C${{ i.unit_cost }}
                     </td>
                     <td>
-                        <span class="font-bold">C${{ (i.quantity * i.unit_cost).toLocaleString() }}</span>
+                        <span class="font-bold">C${{ i.total_cost.toLocaleString() }}</span>
                     </td>
                 </tr>
                 <tr v-if="inventory.data.length == 0">
@@ -98,12 +99,12 @@ const breads = [
 
 const stats = [
     {
-        title: "Total en inventario",
+        title: "Inventario",
         value: "C$" + props.total.toLocaleString(),
         icon: IconCurrencyDollar
     },
     {
-        title: "Total de productos",
+        title: "Productos",
         value: props.total_quantity.toLocaleString(),
         icon: IconTag
     },
