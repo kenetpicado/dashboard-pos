@@ -49,4 +49,24 @@ class InventoryRepository
             ->where('quantity', '>', 0)
             ->sum('quantity');
     }
+
+    public function decrement($inventory_id, $quentity)
+    {
+        $inventory = Inventory::find($inventory_id);
+        $inventory->decrement('quantity', $quentity);
+    }
+
+    public function store($request, $user_id)
+    {
+        return Inventory::create([
+            'product_id' => $request['product_id'],
+            'initial_quantity' => $request['quantity'],
+            'quantity' => $request['quantity'],
+            'unit_cost' => $request['cost'],
+            'total_cost' => $request['cost'] * $request['quantity'],
+            'unit_price' => $request['price'],
+            'measure' => $request['measure'],
+            'user_id' => $user_id,
+        ]);
+    }
 }

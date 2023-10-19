@@ -31,11 +31,11 @@
 						<div v-if="type == 'buy'" class="flex flex-col text-end text-xl font-bold">
 							C${{ (product.quantity * product.cost).toLocaleString('en-US') }}
 						</div>
-						<div>
+						<div  v-if="type == 'sell'">
 							<span v-if="product.discount > 0" class="text-red-300 text-sm">
 								-C${{ product.discount }}
 							</span>
-							<span v-if="type == 'sell'" class="text-xl font-bold">
+							<span class="text-xl font-bold">
 								C${{ (product.quantity * product.price).toLocaleString('en-US') }}
 							</span>
 						</div>
@@ -112,7 +112,6 @@ function storeTransaction() {
 			price: product.price,
 			inventory_id: product.inventory_id,
 			discount: product.discount ?? 0,
-			total: product.quantity * product.price - product.discount,
 		}
 	})
 

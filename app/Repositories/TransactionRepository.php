@@ -24,4 +24,16 @@ class TransactionRepository
             ->whenFromTo($request)
             ->sum('total');
     }
+
+    public function store(array $request)
+    {
+        return Transaction::create([
+            'user_id' => auth()->id(),
+            'type' => $request['type'],
+            'total' => $request['total'],
+            'note' => $request['note'],
+            'client' => $request['client'],
+            'discount' => $request['discount'],
+        ]);
+    }
 }

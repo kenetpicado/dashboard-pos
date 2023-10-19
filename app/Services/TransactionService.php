@@ -2,57 +2,32 @@
 
 namespace App\Services;
 
-use App\Models\Inventory;
-use App\Models\Transaction;
-use Carbon\Carbon;
-use Illuminate\Support\Facades\DB;
+use App\Repositories\InventoryRepository;
+use App\Repositories\ProductTransactionRepository;
+use App\Repositories\TransactionRepository;
 
 class TransactionService
 {
     public function store(array $request)
     {
-        $transaction = Transaction::create([
-            'user_id' => auth()->id(),
-            'type' => $request['type'],
-            'total' => $request['total'],
-            'note' => $request['note'],
-            'client' => $request['client'],
-            'discount' => $request['discount'],
-        ]);
+        $transactionRepository = new TransactionRepository();
+        $inventoryRepository = new InventoryRepository();
+        $productTransactionRepository = new ProductTransactionRepository();
+
+        $transaction = $transactionRepository->store($request);
 
         $product_transaction = [];
 
         foreach ($request['products'] as $product) {
 
-            if ($request['type'] == 'buy') {
-                Inventory::create([
-                    'product_id' => $product['product_id'],
-                    'initial_quantity' => $product['quantity'],
-                    'quantity' => $product['quantity'],
-                    'unit_cost' => $product['cost'],
-                    'total_cost' => $product['cost'] * $product['quantity'],
-                    'unit_price' => $product['price'],
-                    'measure' => $product['measure'],
-                    'user_id' => $transaction->user_id,
-                ]);
-            } else {
-                $inventory = Inventory::find($product['inventory_id']);
+            if ($request['type'] == 'buy')
+                $inventoryRepository->store($product, $transaction->user_id);
+            else
+                $inventoryRepository->decrement($product['inventory_id'], $product['quantity']);
 
-                $inventory->decrement('quantity', $product['quantity']);
-            }
-
-            $product_transaction[] = [
-                'created_at' => Carbon::now(),
-                'transaction_id' => $transaction->id,
-                'product_id' => $product['product_id'],
-                'quantity' => $product['quantity'],
-                'measure' => $product['measure'],
-                'value' => $request['type'] == 'buy' ? $product['cost'] : $product['price'],
-                'discount' => $product['discount'],
-                'total' => $product['total']
-            ];
+            $product_transaction[] = $productTransactionRepository->build($transaction->id, $product, $request['type']);
         }
 
-        DB::table('product_transaction')->insert($product_transaction);
+        $productTransactionRepository->insert($product_transaction);
     }
 }

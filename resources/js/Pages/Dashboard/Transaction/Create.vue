@@ -131,7 +131,7 @@ function addProduct() {
 		return;
 	}
 
-	if (props.type == 'buy' && selectedProducts.value.find((item) => item.id == currentProduct.id && item.measure == currentProduct.measure)) {
+	if (props.type == 'buy' && selectedProducts.value.find((item) => item.id == currentProduct.id && item.measure == currentProduct.measure) && !isEditing.value) {
 		toast.error("Este producto con esta medida ya ha sido agregado");
 		return;
 	}
