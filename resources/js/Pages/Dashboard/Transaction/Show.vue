@@ -36,7 +36,8 @@
             <template #header>
                 <th>Item</th>
                 <th>Cantidad</th>
-                <th>Importe</th>
+                <th>Importe (Unidad)</th>
+                <th>Descuento</th>
                 <th>Total</th>
             </template>
 
@@ -59,7 +60,10 @@
                         C${{ product.pivot.value.toLocaleString() }}
                     </td>
                     <td>
-                        C${{ (product.pivot.quantity * product.pivot.value).toLocaleString() }}
+                        C${{ product.pivot.discount.toLocaleString() }}
+                    </td>
+                    <td>
+                        C${{ product.pivot.total.toLocaleString() }}
                     </td>
                 </tr>
             </template>
@@ -67,7 +71,7 @@
             <template #footer>
                 <tfoot>
                     <tr>
-                        <th colspan="3" class="text-right font-bold">
+                        <th colspan="4" class="text-right font-bold">
                             Descuento
                         </th>
                         <td>
@@ -75,7 +79,7 @@
                         </td>
                     </tr>
                     <tr class="bg-gray-50">
-                        <th colspan="3" class="text-right font-bold">
+                        <th colspan="4" class="text-right font-bold">
                             Total
                         </th>
                         <td>

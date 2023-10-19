@@ -13,9 +13,9 @@ class Product extends Model
         'name',
         'sku',
         'description',
-        'status',
         'image',
         'notes',
+        'discount',
     ];
 
     public function supplier()

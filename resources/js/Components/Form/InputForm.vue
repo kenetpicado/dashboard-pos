@@ -1,7 +1,7 @@
 <template>
     <div class="w-full mb-4">
         <label class="block font-medium text-sm text-gray-700" v-if="text">
-            {{ text }}
+            {{ text }} <span v-if="description" class="text-indigo-600 text-xs">({{description}})</span>
         </label>
 
         <input :type="type" :placeholder="placeholder" :disabled="disabled" :autofocus="autofocus" :required="required" :min="min"
@@ -12,10 +12,6 @@
 
         <p class="text-sm text-red-600 mt-1" v-if="$page.props.errors[keyValue]">
             {{ $page.props.errors[keyValue] }}
-        </p>
-
-        <p class="text-sm text-indigo-600 mt-2" v-if="description">
-            {{description }}
         </p>
     </div>
 </template>

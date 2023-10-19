@@ -56,7 +56,7 @@
                         {{ transaction.products_count }}
                     </td>
                     <td>
-                        <span v-if="transaction.discount > 0">C${{ transaction.discount }}</span>
+                        C${{ transaction.discount }}
                     </td>
                     <td>
                         <span class="font-bold">C${{ transaction.total.toLocaleString() }}</span>
@@ -147,7 +147,7 @@ const stats = computed(() => {
             icon: IconCurrencyDollarOff
         },
         {
-            title: queryParams.from || queryParams.to ? "Ventas" : "ventas del mes",
+            title: queryParams.from || queryParams.to ? "Ventas" : "Ventas del mes",
             value: "C$" + props.sell_month.toLocaleString(),
             icon: IconCurrencyDollar
         },

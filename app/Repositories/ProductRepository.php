@@ -19,7 +19,7 @@ class ProductRepository
     public function getAll($request = [])
     {
         return Product::query()
-            ->select('id', 'name', 'sku', 'image')
+            ->select('id', 'name', 'sku', 'image', 'discount')
             ->when(isset($request['search']), function ($query) use ($request) {
                 $query->where('name', 'like', "%{$request['search']}%")
                     ->orWhere('sku', 'like', "%{$request['search']}%");

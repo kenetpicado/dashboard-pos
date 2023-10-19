@@ -6,7 +6,8 @@
 		<div v-for="(product, index) in products" class="w-full rounded-lg p-4 bg-white mb-2 border-2">
 			<div class="flex gap-2">
 				<div v-if="product.image" class="h-36 w-36 flex items-center justify-center">
-					<img :src="product.image" onerror="this.src='/not-found.jpg'" alt="Imagen" class="max-h-full max-w-full rounded-lg">
+					<img :src="product.image" onerror="this.src='/not-found.jpg'" alt="Imagen"
+						class="max-h-full max-w-full rounded-lg">
 				</div>
 				<div class="w-full flex flex-col justify-between">
 					<div class="mb-3">
@@ -14,7 +15,12 @@
 							{{ product.name }} - {{ product.measure }} ({{ product.quantity }})
 						</div>
 						<div class="text-gray-400">
-							<span v-if="type == 'buy'">Costo: C${{ product.cost }}, </span>Precio: C${{ product.price }}
+							<span v-if="type == 'buy'">
+								Costo: C${{ product.cost }},
+							</span>
+							<span>
+								Precio: C${{ product.price }}
+							</span>
 						</div>
 					</div>
 
@@ -25,8 +31,13 @@
 						<div v-if="type == 'buy'" class="flex flex-col text-end text-xl font-bold">
 							C${{ (product.quantity * product.cost).toLocaleString('en-US') }}
 						</div>
-						<div v-if="type == 'sell'" class="flex flex-col text-end text-xl font-bold">
-							C${{ (product.quantity * product.price).toLocaleString('en-US') }}
+						<div>
+							<span v-if="product.discount > 0" class="text-red-300 text-sm">
+								-C${{ product.discount }}
+							</span>
+							<span v-if="type == 'sell'" class="text-xl font-bold">
+								C${{ (product.quantity * product.price).toLocaleString('en-US') }}
+							</span>
 						</div>
 					</div>
 				</div>
@@ -88,7 +99,7 @@ const total = computed(() => {
 		return props.products.reduce((acc, product) => acc + (product.quantity * product.cost), 0) - (form.discount ?? 0);
 	}
 
-	return props.products.reduce((acc, product) => acc + (product.quantity * product.price), 0) - (form.discount ?? 0);
+	return props.products.reduce((acc, product) => acc + (product.quantity * product.price - product.discount), 0) - (form.discount ?? 0);
 });
 
 function storeTransaction() {
@@ -100,6 +111,8 @@ function storeTransaction() {
 			cost: product.cost,
 			price: product.price,
 			inventory_id: product.inventory_id,
+			discount: product.discount ?? 0,
+			total: product.quantity * product.price - product.discount,
 		}
 	})
 

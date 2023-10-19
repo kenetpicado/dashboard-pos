@@ -14,6 +14,7 @@ return new class extends Migration
         Schema::create('inventories', function (Blueprint $table) {
             $table->id();
             $table->foreignId('product_id')->constrained();
+            $table->foreignId('user_id')->constrained();
             $table->integer('quantity');
             $table->double('unit_cost');
             $table->double('unit_price');
@@ -21,6 +22,7 @@ return new class extends Migration
             $table->json('attributes')->nullable();
             $table->string('status')->nullable();
             $table->string('note')->nullable();
+            $table->double('discount')->default(0);
             $table->timestamps();
         });
     }

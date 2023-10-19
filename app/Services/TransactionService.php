@@ -4,6 +4,7 @@ namespace App\Services;
 
 use App\Models\Inventory;
 use App\Models\Transaction;
+use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
 
 class TransactionService
@@ -17,7 +18,6 @@ class TransactionService
             'note' => $request['note'],
             'client' => $request['client'],
             'discount' => $request['discount'],
-            'currency' => 'NIO',
         ]);
 
         $product_transaction = [];
@@ -25,24 +25,14 @@ class TransactionService
         foreach ($request['products'] as $product) {
 
             if ($request['type'] == 'buy') {
-                $alreadyExists = Inventory::query()
-                    ->where('product_id', $product['product_id'])
-                    ->where('measure', $product['measure'])
-                    ->where('unit_cost', $product['cost'])
-                    ->where('unit_price', $product['price'])
-                    ->first();
-
-                if ($alreadyExists != null) {
-                    $alreadyExists->increment('quantity', $product['quantity']);
-                } else {
-                    Inventory::create([
-                        'product_id' => $product['product_id'],
-                        'quantity' => $product['quantity'],
-                        'unit_cost' => $product['cost'],
-                        'unit_price' => $product['price'],
-                        'measure' => $product['measure'],
-                    ]);
-                }
+                Inventory::create([
+                    'product_id' => $product['product_id'],
+                    'quantity' => $product['quantity'],
+                    'unit_cost' => $product['cost'],
+                    'unit_price' => $product['price'],
+                    'measure' => $product['measure'],
+                    'user_id' => auth()->id(),
+                ]);
             } else {
                 $inventory = Inventory::find($product['inventory_id']);
 
@@ -50,12 +40,14 @@ class TransactionService
             }
 
             $product_transaction[] = [
-                'created_at' => now(),
+                'created_at' => Carbon::now(),
                 'transaction_id' => $transaction->id,
                 'product_id' => $product['product_id'],
                 'quantity' => $product['quantity'],
                 'measure' => $product['measure'],
                 'value' => $request['type'] == 'buy' ? $product['cost'] : $product['price'],
+                'discount' => $product['discount'],
+                'total' => $product['total']
             ];
         }
 

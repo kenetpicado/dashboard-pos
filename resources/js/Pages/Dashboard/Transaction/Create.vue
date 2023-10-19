@@ -37,10 +37,12 @@
 					<InputForm text="Cantidad" v-model="currentProduct.quantity" type="number" required :min="1"
 						:description="`Disponible: ${availableQuantity}`" />
 
+					<InputForm text="Descuento" v-model="currentProduct.discount" type="number" />
+
 					<div class="flex justify-end col-span-2">
 						<div class="text-xl font-bold text-end">
 							<div class="mb-2">Precio: C${{ currentProduct.price.toLocaleString() }}</div>
-							<div>Total: C${{ (currentProduct.quantity * currentProduct.price).toLocaleString() }}</div>
+							<div>Total: C${{ (currentProduct.quantity * currentProduct.price - currentProduct.discount).toLocaleString() }}</div>
 						</div>
 					</div>
 				</template>
@@ -103,6 +105,7 @@ const originalObject = {
 	price: null,
 	measure: null,
 	inventory_id: null,
+	discount: 0,
 };
 
 const currentProduct = reactive({ ...originalObject });
@@ -123,7 +126,7 @@ function setCurrentProduct(product) {
 }
 
 function addProduct() {
-	if (props.type == 'sell' && selectedProducts.value.find((item) => item.id == currentProduct.id && item.inventory_id == currentProduct.inventory_id)) {
+	if (props.type == 'sell' && productWithMeasureAdded() && !isEditing.value) {
 		toast.error("Este producto con esta medida ya ha sido agregado");
 		return;
 	}
@@ -138,6 +141,10 @@ function addProduct() {
 		return;
 	}
 
+	if (currentProduct.discount == null) {
+		currentProduct.discount = 0;
+	}
+
 	if (isEditing.value) {
 		selectedProducts.value[currentIndex.value] = { ...currentProduct };
 		toast.success("Producto actualizado");
@@ -147,6 +154,10 @@ function addProduct() {
 	}
 
 	resetValues();
+}
+
+function productWithMeasureAdded() {
+	return selectedProducts.value.find((item) => item.id == currentProduct.id && item.inventory_id == currentProduct.inventory_id);
 }
 
 function resetValues() {
@@ -169,6 +180,7 @@ function editProduct(index) {
 		inventory.value = props.products.find((item) => item.id == currentProduct.id).inventory;
 		currentProduct.inventory_id = selectedProducts.value[index].inventory_id;
 		selectedMeasure.value = selectedProducts.value[index].inventory_id;
+		currentProduct.discount = selectedProducts.value[index].discount;
 	} else {
 		currentProduct.cost = selectedProducts.value[index].cost;
 		currentProduct.measure = selectedProducts.value[index].measure;

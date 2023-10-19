@@ -25,8 +25,13 @@
                     <td>
                         {{ product.sku }}
                     </td>
-                    <td class="uppercase">
-                        {{ product.name }}
+                    <td>
+                        <span class="uppercase me-3">
+                            {{ product.name }}
+                        </span>
+                        <span v-if="product.discount" class="badge-red">
+                            C${{ product.discount }} Off
+                        </span>
                     </td>
                     <td>
                         <div class="flex gap-2">
@@ -56,6 +61,7 @@
             <InputForm text="SKU" v-model="form.sku" required />
             <InputForm text="Name" v-model="form.name" required />
             <InputForm text="Image" v-model="form.image" type="url" />
+            <InputForm text="Descuento" v-model="form.discount" type="number" :min="0" />
         </FormModal>
 
     </AppLayout>
@@ -104,6 +110,7 @@ const form = useForm({
     name: null,
     sku: null,
     image: null,
+    discount: 0,
 });
 
 function edit(product) {

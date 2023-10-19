@@ -15,9 +15,11 @@ return new class extends Migration
             $table->id();
             $table->foreignId('product_id')->constrained();
             $table->foreignId('transaction_id')->constrained();
+            $table->string('measure')->nullable();
             $table->integer('quantity');
             $table->double('value');
-            $table->string('measure')->nullable();
+            $table->double('total')->default(0);
+            $table->double('discount')->default(0);
             $table->timestamps();
         });
     }
