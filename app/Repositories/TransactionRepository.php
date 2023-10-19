@@ -36,4 +36,12 @@ class TransactionRepository
             'discount' => $request['discount'],
         ]);
     }
+
+    public function getPending($request = [])
+    {
+        return Transaction::query()
+            ->withCount('products')
+            ->whenStatus("PENDIENTE")
+            ->paginate();
+    }
 }

@@ -173,14 +173,14 @@ const destroy = (id) => {
 const stats = computed(() => {
     return [
         {
-            title: "Items",
-            value: props.inventoryStatus.quantity,
-            icon: IconTag
-        },
-        {
             title: "Inventario",
             value: "C$" + props.inventoryStatus.unit_cost.toLocaleString(),
             icon: IconCurrencyDollar
+        },
+        {
+            title: "Productos",
+            value: props.inventoryStatus.quantity,
+            icon: IconTag
         },
     ]
 })

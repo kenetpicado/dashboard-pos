@@ -48,8 +48,13 @@
 				<InputForm text="Notas (Opcional)" v-model="form.note"></InputForm>
 				<template v-if="type == 'sell'">
 					<InputForm text="Cliente (Opcional)" v-model="form.client" />
-					<InputForm v-if="type == 'sell'" text="Descuento C$" v-model="form.discount" />
+					<InputForm text="Descuento C$" v-model="form.discount" />
+					<InputForm text="Pago C$" :placeholder="`Todo: C$${total}`" v-model="form.payment" />
 				</template>
+			</div>
+
+			<div v-if="form.payment && form.payment > 0" class="text-gray-400">
+				Dejar el campo vacio si desea pagar todo el monto.
 			</div>
 
 			<div class="flex justify-end my-8">
@@ -68,7 +73,7 @@
 </template>
 
 <script setup>
-import { computed } from 'vue';
+import { computed, watch } from 'vue';
 import InputForm from '@/Components/Form/InputForm.vue';
 import { IconTrash } from '@tabler/icons-vue';
 import { useForm } from '@inertiajs/vue3';
@@ -91,7 +96,8 @@ const form = useForm({
 	note: "",
 	client: "",
 	total: 0,
-	products: null
+	products: null,
+	payment: null,
 })
 
 const total = computed(() => {

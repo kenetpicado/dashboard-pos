@@ -24,6 +24,11 @@ class Transaction extends Model
         return $this->belongsTo(User::class);
     }
 
+    public function payments()
+    {
+        return $this->hasMany(Payment::class);
+    }
+
     public function scopeWhenUser($query, $request)
     {
         return $query->when(isset($request['user_id']), function ($query) use ($request) {
@@ -39,6 +44,13 @@ class Transaction extends Model
             $query->whereDate('created_at', '>=', Carbon::now()->startOfMonth()->format('Y-m-d H:i:s'));
         })->when(isset($request['to']), function ($query) use ($request) {
             $query->where('created_at', '<=', $request['to'] . ' 23:59:59');
+        });
+    }
+
+    public function scopeWhenStatus($query, $status)
+    {
+        return $query->when($status, function ($query) use ($status) {
+            $query->where('status', $status);
         });
     }
 }

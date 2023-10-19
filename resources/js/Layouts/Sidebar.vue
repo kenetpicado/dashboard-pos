@@ -74,6 +74,11 @@ const items = [
         icon: IconEyeCheck
     },
     {
+        name: 'Pendientes',
+        route: route('dashboard.pending.index'),
+        icon: IconEyeCheck
+    },
+    {
         header: 'Administration'
     },
     {
