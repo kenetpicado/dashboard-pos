@@ -21,6 +21,7 @@
 
         <TableSection>
             <template #header>
+                <th>Fecha</th>
                 <th>Producto</th>
                 <th>Medida</th>
                 <th>Cantidad</th>
@@ -30,6 +31,9 @@
 
             <template #body>
                 <tr v-for="(i, index) in inventory.data" class="hover:bg-gray-50">
+                    <td>
+                        <DateColumn :date="i.created_at" />
+                    </td>
                     <td>
                         <div class="uppercase">
                             {{ i.product.name }}
@@ -70,6 +74,7 @@ import ThePaginator from "@/Components/ThePaginator.vue";
 import AppLayout from '@/Layouts/AppLayout.vue';
 import { IconCurrencyDollar, IconTag } from '@tabler/icons-vue';
 import { queryParams, watchSearch, setParams } from '@/Use/Search';
+import DateColumn from '@/Components/DateColumn.vue';
 
 const props = defineProps({
     inventory: {

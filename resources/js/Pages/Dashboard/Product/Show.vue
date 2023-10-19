@@ -20,6 +20,7 @@
 
         <TableSection>
             <template #header>
+                <th>Fecha</th>
                 <th>Medida</th>
                 <th>Cantidad</th>
                 <th>Costo (ud.)</th>
@@ -30,6 +31,9 @@
 
             <template #body>
                 <tr v-for="(i, index) in inventory.data" class="hover:bg-gray-50">
+                    <td>
+                        <DateColumn :date="i.created_at" />
+                    </td>
                     <td>
                         {{ i.measure }}
                     </td>
@@ -91,6 +95,7 @@ import { IconTrash } from '@tabler/icons-vue';
 import StatCard from '@/Components/StatCard.vue';
 import { IconTag } from '@tabler/icons-vue';
 import { IconCurrencyDollar } from '@tabler/icons-vue';
+import DateColumn from '@/Components/DateColumn.vue';
 
 const props = defineProps({
     product: {
