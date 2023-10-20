@@ -27,7 +27,7 @@
                 <tr v-for="(product, index) in transaction.products" class="hover:bg-gray-50">
                     <td>
                         <div>
-                            <div>
+                            <div class="font-bold mb-2">
                                 {{ product.name }}
                             </div>
                             <div>
