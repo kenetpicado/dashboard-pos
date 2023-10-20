@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Dashboard\CategoryController;
+use App\Http\Controllers\Dashboard\ClientController;
 use App\Http\Controllers\Dashboard\DashboardController;
 use App\Http\Controllers\Dashboard\InventoryController;
 use App\Http\Controllers\Dashboard\PaymentController;
@@ -39,4 +40,6 @@ Route::middleware(['auth:sanctum'])
 
         Route::resource('payments', PaymentController::class)
             ->only(['store', 'update', 'destroy']);
+
+        Route::resource('clients', ClientController::class);
     });

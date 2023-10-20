@@ -36,6 +36,7 @@
 import { Link, router } from '@inertiajs/vue3';
 import { IconShoppingCart } from '@tabler/icons-vue';
 import { IconClock } from '@tabler/icons-vue';
+import { IconUserCheck } from '@tabler/icons-vue';
 import { IconTag } from '@tabler/icons-vue';
 import { IconShoppingBag } from '@tabler/icons-vue';
 import { IconUserCog } from '@tabler/icons-vue';
@@ -91,6 +92,11 @@ const items = [
         name: 'Inventario',
         route: route('dashboard.inventory.index'),
         icon: IconClipboardList
+    },
+    {
+        name: 'Clientes',
+        route: route('dashboard.clients.index'),
+        icon: IconUserCheck
     },
     {
         header: 'Sistema'

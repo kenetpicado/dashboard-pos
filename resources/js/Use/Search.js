@@ -1,5 +1,6 @@
 import { watch, reactive } from "vue";
-import { router, useForm } from "@inertiajs/vue3";
+import { router } from "@inertiajs/vue3";
+import { debounce } from "lodash";
 
 export const queryParams = reactive({
     search: null,
@@ -14,18 +15,31 @@ export function setParams() {
 }
 
 export function watchSearch(fullRoute, array) {
-    watch(
-        () => queryParams.search,
-        (value) => {
-            if (!value) {
-                delete queryParams.search;
-            }
+    // watch(
+    //     () => queryParams.search,
+    //     (value) => {
+    //         if (!value) {
+    //             delete queryParams.search;
+    //         }
 
-            router.get(fullRoute, queryParams, {
-                preserveState: true,
-                preserveScroll: true,
-                only: array,
-            });
+    //         router.get(fullRoute, queryParams, {
+    //             preserveState: true,
+    //             preserveScroll: true,
+    //             only: array,
+    //         });
+    //     }
+    // );
+    const debouncedSearch = debounce((value) => {
+        if (!value) {
+            delete queryParams.search;
         }
-    );
+
+        router.get(fullRoute, queryParams, {
+            preserveState: true,
+            preserveScroll: true,
+            only: array,
+        });
+    }, 500);
+
+    watch(() => queryParams.search, debouncedSearch);
 }
