@@ -56,7 +56,7 @@ class InventoryRepository
         $inventory->decrement('quantity', $quentity);
     }
 
-    public function store($request, $user_id)
+    public function store(array $request, $user_id)
     {
         return Inventory::create([
             'product_id' => $request['product_id'],

@@ -28,6 +28,7 @@ class ProductRequest extends FormRequest
             'description' => 'nullable',
             'image' => ['nullable', 'url'],
             'discount' => 'numeric|min:0',
+            'inventory' => 'nullable|array',
         ];
     }
 }

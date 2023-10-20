@@ -6,63 +6,65 @@
             </span>
         </template>
 
-        <FormSection>
+        <FormSection @onSubmit="onSubmit">
             <InputForm text="SKU" v-model="form.sku" required />
             <InputForm text="Name" v-model="form.name" required />
             <InputForm text="Image" v-model="form.image" type="url" />
             <InputForm text="Descuento" v-model="form.discount" type="number" :min="0" />
 
-            <div class="col-span-2">
-                <button class="primary-button" type="button" @click="openModal = true">
-                    Agregar inventario
-                </button>
-            </div>
+            <template v-if="isNew">
+                <div class="col-span-2">
+                    <button class="primary-button" type="button" @click="openModal = true">
+                        Agregar inventario
+                    </button>
+                </div>
 
-            <div class="overflow-y-auto col-span-2">
-                <table class="w-full text-sm text-left text-gray-600 mt-5">
-                    <thead class="bg-gray-50">
-                        <tr>
-                            <th>Medida</th>
-                            <th>Cant.</th>
-                            <th>Costo (ud.)</th>
-                            <th>Total</th>
-                            <th>Precio (ud.)</th>
-                            <th>Acciones</th>
-                        </tr>
-                    </thead>
-                    <tbody class="divide-y divide-gray-100 border-t border-gray-100">
-                        <tr v-for="(i, index) in form.inventory">
-                            <td>{{ i.measure }}</td>
-                            <td>{{ i.quantity }}</td>
-                            <td>C${{ i.cost }}</td>
-                            <td>C${{ (i.quantity * i.cost).toLocaleString() }}</td>
-                            <td>
-                                C${{ i.price }}
-                            </td>
-                            <td>
-                                <div class="flex gap-2">
-                                    <IconTrash role="button" @click="remove(index)" size="20"/>
-                                    <IconEdit role="button" @click="edit(index)" size="20"/>
-                                </div>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td v-if="form.inventory.length == 0" colspan="6" class="text-center">
-                                No hay datos que mostrar
-                            </td>
-                        </tr>
-                    </tbody>
-                    <tfoot>
-                        <tr>
-                            <td colspan="3" class="text-right font-bold">Total</td>
-                            <td colspan="3" class="font-bold">
-                                C${{ form.inventory.reduce((acc, i) => acc + (i.quantity * i.cost), 0).toLocaleString() }}
-                            </td>
-                        </tr>
-                    </tfoot>
-                </table>
-            </div>
-
+                <div class="overflow-y-auto col-span-2">
+                    <table class="w-full text-sm text-left text-gray-600 mt-5">
+                        <thead class="bg-gray-50">
+                            <tr>
+                                <th>Medida</th>
+                                <th>Cant.</th>
+                                <th>Costo (ud.)</th>
+                                <th>Total</th>
+                                <th>Precio (ud.)</th>
+                                <th>Acciones</th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y divide-gray-100 border-t border-gray-100">
+                            <tr v-for="(i, index) in form.inventory">
+                                <td>{{ i.measure }}</td>
+                                <td>{{ i.quantity }}</td>
+                                <td>C${{ i.cost }}</td>
+                                <td>C${{ (i.quantity * i.cost).toLocaleString() }}</td>
+                                <td>
+                                    C${{ i.price }}
+                                </td>
+                                <td>
+                                    <div class="flex gap-2">
+                                        <IconTrash role="button" @click="remove(index)" size="20" />
+                                        <IconEdit role="button" @click="edit(index)" size="20" />
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td v-if="form.inventory.length == 0" colspan="6" class="text-center">
+                                    No hay datos que mostrar
+                                </td>
+                            </tr>
+                        </tbody>
+                        <tfoot>
+                            <tr>
+                                <td colspan="3" class="text-right font-bold">Total</td>
+                                <td colspan="3" class="font-bold">
+                                    C${{ form.inventory.reduce((acc, i) => acc + (i.quantity * i.cost), 0).toLocaleString()
+                                    }}
+                                </td>
+                            </tr>
+                        </tfoot>
+                    </table>
+                </div>
+            </template>
         </FormSection>
 
         <FormModal :show="openModal" title="Inventario" @onCancel="resetValues" @onSubmit="addInventory">
@@ -105,10 +107,11 @@ const props = defineProps({
 });
 
 const form = useForm({
-    sku: null,
-    name: null,
-    image: null,
-    discount: null,
+    id: props.product?.id ?? null,
+    sku: props.product?.sku ?? null,
+    name: props.product?.name ?? null,
+    image: props.product?.image ?? null,
+    discount: props.product?.discount ?? null,
     inventory: [],
 })
 
@@ -171,7 +174,7 @@ function resetValues() {
 }
 
 function onSubmit() {
-    if (isNew.value) {
+    if (props.isNew) {
         form.post(route('dashboard.products.store'), {
             preserveScroll: true,
             preserveState: true,
