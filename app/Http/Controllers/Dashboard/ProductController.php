@@ -8,13 +8,14 @@ use App\Models\Inventory;
 use App\Models\Product;
 use App\Repositories\InventoryRepository;
 use App\Repositories\ProductRepository;
+use App\Services\ProductService;
 use Illuminate\Http\Request;
 
 class ProductController extends Controller
 {
     public function __construct(
         private readonly ProductRepository $productRepository,
-        private readonly InventoryRepository $inventoryRepository
+        private readonly InventoryRepository $inventoryRepository,
     ) {
     }
 
@@ -40,12 +41,11 @@ class ProductController extends Controller
 
     public function store(ProductRequest $request)
     {
+        $productService = new ProductService();
         $product = $this->productRepository->store($request->validated());
 
-        //TODO: Crear transacción como corresponde
-        foreach ($request->inventory as $inventory) {
-            $inventory['product_id'] = $product->id;
-            $this->inventoryRepository->store($inventory, auth()->id());
+        if (count($request->inventory) > 0) {
+            $productService->storeItems($product, $request->inventory, $request->total);
         }
 
         return redirect()->route('dashboard.products.index');

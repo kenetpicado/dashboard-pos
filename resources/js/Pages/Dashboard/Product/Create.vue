@@ -35,7 +35,9 @@
                             <tr v-for="(i, index) in form.inventory">
                                 <td>{{ i.measure }}</td>
                                 <td>{{ i.quantity }}</td>
-                                <td>C${{ i.cost }}</td>
+                                <td>
+                                    <span class="font-bold">C${{ i.cost }}</span>
+                                </td>
                                 <td>C${{ (i.quantity * i.cost).toLocaleString() }}</td>
                                 <td>
                                     C${{ i.price }}
@@ -55,10 +57,11 @@
                         </tbody>
                         <tfoot>
                             <tr>
-                                <td colspan="3" class="text-right font-bold">Total</td>
-                                <td colspan="3" class="font-bold">
-                                    C${{ form.inventory.reduce((acc, i) => acc + (i.quantity * i.cost), 0).toLocaleString()
-                                    }}
+                                <td colspan="5" class="text-right font-bold">
+                                    Costo total
+                                </td>
+                                <td class="font-bold">
+                                    C${{ total.toLocaleString() }}
                                 </td>
                             </tr>
                         </tfoot>
@@ -88,7 +91,7 @@
 <script setup>
 import AppLayout from '@/Layouts/AppLayout.vue';
 import { useForm } from '@inertiajs/vue3';
-import { ref, reactive } from 'vue';
+import { ref, reactive, computed } from 'vue';
 import FormSection from '@/Components/Form/FormSection.vue';
 import InputForm from '@/Components/Form/InputForm.vue';
 import { IconTrash } from '@tabler/icons-vue';
@@ -113,6 +116,7 @@ const form = useForm({
     image: props.product?.image ?? null,
     discount: props.product?.discount ?? null,
     inventory: [],
+    total: 0,
 })
 
 const currentProduct = reactive({
@@ -175,6 +179,7 @@ function resetValues() {
 
 function onSubmit() {
     if (props.isNew) {
+        form.total = total.value
         form.post(route('dashboard.products.store'), {
             preserveScroll: true,
             preserveState: true,
@@ -194,5 +199,9 @@ function onSubmit() {
         });
     }
 }
+
+const total = computed(() => {
+    return form.inventory.reduce((acc, i) => acc + (i.quantity * i.cost), 0);
+});
 
 </script>

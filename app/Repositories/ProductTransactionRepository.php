@@ -23,6 +23,19 @@ class ProductTransactionRepository
         ];
     }
 
+    public function buildBuyType($request, $transaction_id)
+    {
+        return [
+            'created_at' => Carbon::now(),
+            'transaction_id' => $transaction_id,
+            'product_id' => $request['product_id'],
+            'quantity' => $request['quantity'],
+            'measure' => $request['measure'],
+            'value' => $request['cost'],
+            'total' => $request['cost'] * $request['quantity'],
+        ];
+    }
+
     public function insert($data)
     {
         DB::table('product_transaction')->insert($data);
