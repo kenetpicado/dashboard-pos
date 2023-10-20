@@ -11,7 +11,12 @@
 			</thead>
 			<tbody class="divide-y divide-gray-100 border-t border-gray-100">
 				<tr v-for="(product, index) in products">
-					<td>{{ index + 1 }}</td>
+					<td>
+						<div v-if="product.image" class="h-36 w-36 flex items-center justify-center">
+							<img :src="product.image" onerror="this.src='/not-found.jpg'" alt="Imagen"
+								class="max-h-full max-w-full rounded-lg">
+						</div>
+					</td>
 					<td>
 						<div>
 							{{ product.name }}
