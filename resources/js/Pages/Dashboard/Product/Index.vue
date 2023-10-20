@@ -4,7 +4,7 @@
             <span class="title">
                 Productos
             </span>
-            <AddButton @click="openModal = true" />
+            <AddButton :href="route('dashboard.products.create')"/>
         </template>
 
         <div class="mb-3">
@@ -38,9 +38,11 @@
                             <Link :href="route('dashboard.products.show', product.id)" tooltip="Detalles">
                             <IconEye size="22" role="button" />
                             </Link>
-                            <label tooltip="Editar">
-                                <IconPencil size="22" role="button" @click="edit(product)" />
-                            </label>
+
+                            <Link :href="route('dashboard.products.edit', product.id)" tooltip="Editar">
+                            <IconPencil size="22" role="button" />
+                            </Link>
+
                             <label tooltip="Eliminar">
                                 <IconTrash size="22" role="button" @click="destroy(product.id)" />
                             </label>
@@ -56,49 +58,20 @@
                 <ThePaginator :links="products.links" />
             </template>
         </TableSection>
-
-        <FormModal :show="openModal" title="Product" @onCancel="resetValues" @onSubmit="onSubmit">
-            <div class="grid grid-cols-2 gap-4">
-                <InputForm text="SKU" v-model="form.sku" required />
-                <InputForm text="Name" v-model="form.name" required />
-            </div>
-            <InputForm text="Image" v-model="form.image" type="url" />
-            <InputForm text="Descuento" v-model="form.discount" type="number" :min="0" />
-
-            <div class="text-xl font-bold mt-4 mb-4">
-                Inventario
-            </div>
-
-            <div class="grid grid-cols-2 gap-4">
-                <InputForm text="Medida" v-model="currentProduct.measure" required />
-                <InputForm text="Cantidad" v-model="currentProduct.quantity" type="number" required :min="1" />
-                <InputForm text="Costo (Unidad)" v-model="currentProduct.cost" type="number" required :min="1" />
-                <InputForm text="Precio (Unidad)" v-model="currentProduct.price" type="number" required :min="1" />
-                <!-- <div class="flex justify-end col-span-2">
-                    <div class="text-xl font-bold">
-                        Total: {{ (currentProduct.quantity * currentProduct.cost).toLocaleString() }}
-                    </div>
-                </div> -->
-            </div>
-
-        </FormModal>
-
     </AppLayout>
 </template>
 
 <script setup>
 import AddButton from '@/Components/Buttons/AddButton.vue';
 import InputForm from '@/Components/Form/InputForm.vue';
-import FormModal from '@/Components/Modal/FormModal.vue';
 import TableSection from '@/Components/TableSection.vue';
 import ThePaginator from '@/Components/ThePaginator.vue';
 import AppLayout from '@/Layouts/AppLayout.vue';
 import { queryParams, setParams, watchSearch } from '@/Use/Search';
 import { confirmAlert } from '@/Use/helpers';
 import { toast } from '@/Use/toast';
-import { Link, router, useForm } from '@inertiajs/vue3';
+import { Link, router } from '@inertiajs/vue3';
 import { IconEye, IconPencil, IconTrash } from '@tabler/icons-vue';
-import { reactive, ref } from 'vue';
 
 defineProps({
     products: {
@@ -118,54 +91,6 @@ const breads = [
     },
 ];
 
-
-
-const openModal = ref(false);
-const isNew = ref(true);
-
-const form = useForm({
-    id: null,
-    name: null,
-    sku: null,
-    image: null,
-    discount: 0,
-});
-
-const currentProduct = reactive({
-    measure: null,
-    quantity: null,
-    cost: null,
-    price: null,
-});
-
-function edit(product) {
-    Object.assign(form, product);
-    isNew.value = false;
-    openModal.value = true;
-}
-
-function onSubmit() {
-    if (isNew.value) {
-        form.post(route('dashboard.products.store'), {
-            preserveScroll: true,
-            preserveState: true,
-            onSuccess: () => {
-                resetValues();
-                toast.success('Producto agregado');
-            },
-        });
-    } else {
-        form.put(route('dashboard.products.update', form.id), {
-            preserveScroll: true,
-            preserveState: true,
-            onSuccess: () => {
-                resetValues();
-                toast.success('Producto actualizado');
-            },
-        });
-    }
-}
-
 function destroy(id) {
     confirmAlert({
         onConfirm: () => {
@@ -178,12 +103,6 @@ function destroy(id) {
             });
         },
     })
-}
-
-function resetValues() {
-    openModal.value = false;
-    isNew.value = true;
-    form.reset();
 }
 
 setParams()

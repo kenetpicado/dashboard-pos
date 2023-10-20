@@ -22,6 +22,11 @@ class ProductController extends Controller
         ]);
     }
 
+    public function create()
+    {
+        return inertia('Dashboard/Product/Create');
+    }
+
     public function store(ProductRequest $request)
     {
         $this->productRepository->store($request->validated());
