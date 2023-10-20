@@ -1,1 +1,0 @@
-import{j as c,k as t,O as h}from"./app-a13fef8a.js";const a=c({search:null});function n(){const e=new URLSearchParams(window.location.search);e.get("search")&&(a.search=e.get("search"))}function i(e,r){t(()=>a.search,s=>{s||delete a.search,h.get(e,a,{preserveState:!0,preserveScroll:!0,only:r})})}export{a as q,n as s,i as w};
