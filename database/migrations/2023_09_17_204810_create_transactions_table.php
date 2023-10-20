@@ -18,6 +18,7 @@ return new class extends Migration
             $table->string('client')->nullable();
             $table->double('discount')->default(0);
             $table->string('status')->nullable();
+            $table->double('goal')->nullable();
             $table->double('total');
             $table->string('note')->nullable();
             $table->timestamps();

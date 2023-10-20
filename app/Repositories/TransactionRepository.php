@@ -27,13 +27,25 @@ class TransactionRepository
 
     public function store(array $request)
     {
+        $total = $request['total'];
+        $status = 'COMPLETADO';
+        $goal = null;
+
+        if (isset($request['payment']) && $request['payment'] >= 0) {
+            $status  = 'PENDIENTE';
+            $total = $request['payment'];
+            $goal = $request['total'];
+        }
+
         return Transaction::create([
             'user_id' => auth()->id(),
             'type' => $request['type'],
-            'total' => $request['total'],
+            'total' => $total,
             'note' => $request['note'],
             'client' => $request['client'],
             'discount' => $request['discount'],
+            'goal' => $goal,
+            'status' => $status,
         ]);
     }
 
@@ -43,5 +55,28 @@ class TransactionRepository
             ->withCount('products')
             ->whenStatus("PENDIENTE")
             ->paginate();
+    }
+
+    public function updateStatus($payment)
+    {
+        $transaction = Transaction::find($payment->transaction_id);
+
+        $transaction->total = $transaction->total + $payment->value;
+
+        if ($transaction->total >= $transaction->goal) {
+            $transaction->goal = null;
+            $transaction->status = 'COMPLETADO';
+        }
+
+        $transaction->save();
+
+        return $transaction->status == 'COMPLETADO';
+    }
+
+    public function decrementPayment($payment)
+    {
+        $transaction = Transaction::find($payment->transaction_id);
+
+        $transaction->decrement('total', $payment->value);
     }
 }

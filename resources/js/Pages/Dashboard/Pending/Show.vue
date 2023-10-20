@@ -7,6 +7,12 @@
             <AddButton @click="openModal = true" />
         </template>
 
+        <div class="mb-4">
+            <div class="grid grid-cols-5 gap-4">
+                <StatCard v-for="stat in stats" :stat="stat" :key="stat.title" />
+            </div>
+        </div>
+
         <TableSection>
             <template #header>
                 <th>Fecha</th>
@@ -40,7 +46,7 @@
         </TableSection>
 
         <FormModal :show="openModal" title="Product" @onCancel="resetValues" @onSubmit="onSubmit">
-            <InputForm text="Cantidad C$" v-model="form.value" type="number" :min="1" />
+            <InputForm text="Cantidad C$" v-model="form.value" type="number" :min="1" required />
         </FormModal>
 
     </AppLayout>
@@ -51,13 +57,15 @@ import AddButton from '@/Components/Buttons/AddButton.vue';
 import DateColumn from "@/Components/DateColumn.vue";
 import InputForm from '@/Components/Form/InputForm.vue';
 import FormModal from '@/Components/Modal/FormModal.vue';
+import StatCard from '@/Components/StatCard.vue';
 import TableSection from '@/Components/TableSection.vue';
 import AppLayout from '@/Layouts/AppLayout.vue';
 import { confirmAlert } from '@/Use/helpers';
 import { toast } from '@/Use/toast';
-import { useForm } from '@inertiajs/vue3';
+import { router, useForm } from '@inertiajs/vue3';
+import { IconCurrencyDollar } from '@tabler/icons-vue';
 import { IconPencil, IconTrash } from '@tabler/icons-vue';
-import { ref } from 'vue';
+import { ref, computed } from 'vue';
 
 const props = defineProps({
     transaction: {
@@ -71,7 +79,7 @@ const props = defineProps({
 });
 
 const breads = [
-{
+    {
         name: 'Inicio',
         route: route('dashboard.users.index'),
     },
@@ -90,7 +98,7 @@ const isNew = ref(true);
 
 const form = useForm({
     id: null,
-    value: 0,
+    value: null,
     transaction_id: props.transaction.id,
 });
 
@@ -142,5 +150,28 @@ function destroy(id) {
         },
     })
 }
+
+const stats = computed(() => [
+    {
+        title: "Total a pagar",
+        value: "C$" + props.transaction.goal.toLocaleString(),
+        icon: IconCurrencyDollar
+    },
+    {
+        title: "Pago inicial",
+        value: "C$" + (props.transaction.total - props.payments.reduce((acc, item) => acc + item.value, 0)).toLocaleString(),
+        icon: IconCurrencyDollar
+    },
+    {
+        title: "Total abonado",
+        value: "C$" + props.transaction.total.toLocaleString(),
+        icon: IconCurrencyDollar
+    },
+    {
+        title: "Faltante",
+        value: "C$" + (props.transaction.goal - props.transaction.total).toLocaleString(),
+        icon: IconCurrencyDollar
+    },
+]);
 
 </script>

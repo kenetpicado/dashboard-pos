@@ -31,7 +31,7 @@
 						<div v-if="type == 'buy'" class="flex flex-col text-end text-xl font-bold">
 							C${{ (product.quantity * product.cost).toLocaleString('en-US') }}
 						</div>
-						<div  v-if="type == 'sell'">
+						<div v-if="type == 'sell'">
 							<span v-if="product.discount > 0" class="text-red-300 text-sm">
 								-C${{ product.discount }}
 							</span>
@@ -53,8 +53,9 @@
 				</template>
 			</div>
 
-			<div v-if="form.payment && form.payment > 0" class="text-gray-400">
-				Dejar el campo vacio si desea pagar todo el monto.
+			<div v-if="form.payment" class="text-gray-400">
+				Dejar el campo vacio si desea pagar todo el monto. De lo contrario especifique la cantidad que desea abonar.
+				La transaccion se guardara como PENDIENTE.
 			</div>
 
 			<div class="flex justify-end my-8">

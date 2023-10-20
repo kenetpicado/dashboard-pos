@@ -35,6 +35,7 @@
 <script setup>
 import { Link, router } from '@inertiajs/vue3';
 import { IconShoppingCart } from '@tabler/icons-vue';
+import { IconClock } from '@tabler/icons-vue';
 import { IconTag } from '@tabler/icons-vue';
 import { IconShoppingBag } from '@tabler/icons-vue';
 import { IconUserCog } from '@tabler/icons-vue';
@@ -76,7 +77,7 @@ const items = [
     {
         name: 'Pendientes',
         route: route('dashboard.pending.index'),
-        icon: IconEyeCheck
+        icon: IconClock
     },
     {
         header: 'Administration'

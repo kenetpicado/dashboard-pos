@@ -1,9 +1,9 @@
 <template>
-    <AppLayout title="Transacciones" :breads="breads">
+    <AppLayout title="Transacciones pendientes" :breads="breads">
 
         <template #header>
             <span class="title">
-                Transacciones
+                Transacciones pendientes
             </span>
         </template>
 

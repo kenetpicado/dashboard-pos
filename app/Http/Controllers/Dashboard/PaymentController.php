@@ -5,27 +5,47 @@ namespace App\Http\Controllers\Dashboard;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Dashboard\PaymentRequest;
 use App\Models\Payment;
+use App\Repositories\TransactionRepository;
 use Illuminate\Http\Request;
 
 class PaymentController extends Controller
 {
+    public function __construct(
+        private readonly TransactionRepository $transactionRepository
+    ) {
+    }
+
     public function store(PaymentRequest $request)
     {
-        Payment::create($request->validated());
+        $payment = Payment::create($request->validated());
+
+        $isCompleted = $this->transactionRepository->updateStatus($payment);
+
+        if ($isCompleted) {
+            return redirect()->route('dashboard.transactions.index');
+        }
 
         return back();
     }
 
     public function update(PaymentRequest $request, $payment)
     {
-        Payment::where('id', $payment)->update($request->validated());
+        $payment = Payment::where('id', $payment)->update($request->validated());
+
+        $isCompleted = $this->transactionRepository->updateStatus($payment);
+
+        if ($isCompleted) {
+            return redirect()->route('dashboard.transactions.index');
+        }
 
         return back();
     }
 
-    public function destroy($payment)
+    public function destroy(Payment $payment)
     {
-        Payment::destroy($payment);
+        $this->transactionRepository->decrementPayment($payment);
+
+        Payment::destroy($payment->id);
 
         return back();
     }
