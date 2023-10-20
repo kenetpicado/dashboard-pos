@@ -7,36 +7,18 @@
             </span>
         </template>
 
+        <div class="mb-4">
+            <div class="grid grid-cols-5 gap-4">
+                <StatCard v-for="stat in stats" :stat="stat" :key="stat.title" />
+            </div>
+        </div>
+
         <TableSection>
-            <template #options>
-                <div class="p-4 bg-gray-50 rounded-xl m-5">
-                    <div class="flex justify-between">
-                        <div class="space-y-1">
-                            <div class="font-bold">
-                                {{ transactionTypes[transaction.type] }}
-                            </div>
-                            <div>
-                                Responsable: {{ transaction.user.name }}
-                            </div>
-                            <div>
-                                Cliente: {{ transaction.client ?? 'N/A' }}
-                            </div>
-                        </div>
-                        <div class="space-y-1">
-                            <div class="font-bold text-end">
-                                {{ Carbon.create(transaction.created_at).format('d/m/Y H:i') }}
-                            </div>
-                            <div class="text-end">
-                                Factura No.: #{{ transaction.id }}
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </template>
             <template #header>
                 <th>Item</th>
+                <th>Medida</th>
                 <th>Cantidad</th>
-                <th>Importe (Unidad)</th>
+                <th>Importe</th>
                 <th>Descuento</th>
                 <th>Total</th>
             </template>
@@ -45,7 +27,7 @@
                 <tr v-for="(product, index) in transaction.products" class="hover:bg-gray-50">
                     <td>
                         <div>
-                            <div class="font-bold">
+                            <div>
                                 {{ product.name }}
                             </div>
                             <div>
@@ -54,16 +36,19 @@
                         </div>
                     </td>
                     <td>
+                        {{ product.pivot.measure }}
+                    </td>
+                    <td>
                         {{ product.pivot.quantity }}
                     </td>
                     <td>
-                        C${{ product.pivot.value.toLocaleString() }}
+                        {{ product.pivot.value.toLocaleString() }}
                     </td>
                     <td>
-                        C${{ product.pivot.discount.toLocaleString() }}
+                        {{ product.pivot.discount.toLocaleString() }}
                     </td>
                     <td>
-                        C${{ product.pivot.total.toLocaleString() }}
+                        {{ product.pivot.total.toLocaleString() }}
                     </td>
                 </tr>
             </template>
@@ -71,15 +56,15 @@
             <template #footer>
                 <tfoot>
                     <tr>
-                        <th colspan="4" class="text-right font-bold">
+                        <th colspan="5" class="text-end">
                             Descuento
                         </th>
                         <td>
                             C${{ transaction.discount.toLocaleString() }}
                         </td>
                     </tr>
-                    <tr class="bg-gray-50">
-                        <th colspan="4" class="text-right font-bold">
+                    <tr>
+                        <th colspan="5" class="text-end">
                             Total
                         </th>
                         <td>
@@ -99,6 +84,8 @@
 import AppLayout from '@/Layouts/AppLayout.vue';
 import TableSection from '@/Components/TableSection.vue';
 import { Carbon } from '@/Use/Carbon';
+import StatCard from '@/Components/StatCard.vue';
+import { IconCurrencyDollar } from '@tabler/icons-vue';
 
 const props = defineProps({
     transaction: {
@@ -126,5 +113,24 @@ const breads = [
         route: route('dashboard.transactions.show', props.transaction.id),
     }
 ];
+
+const stats = [
+    {
+        title: 'Factura',
+        value: props.transaction.id.toString().padStart(5, '0'),
+    },
+    {
+        title: 'Tipo',
+        value: transactionTypes[props.transaction.type],
+    },
+    {
+        title: 'Estado',
+        value: props.transaction.status,
+    },
+    {
+        title: 'Fecha',
+        value: Carbon.create(props.transaction.created_at).format('d/m/Y H:i'),
+    },
+]
 
 </script>
