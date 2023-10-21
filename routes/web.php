@@ -3,6 +3,7 @@
 use App\Http\Controllers\Dashboard\CategoryController;
 use App\Http\Controllers\Dashboard\ClientController;
 use App\Http\Controllers\Dashboard\DashboardController;
+use App\Http\Controllers\Dashboard\DownloadTransactionController;
 use App\Http\Controllers\Dashboard\InventoryController;
 use App\Http\Controllers\Dashboard\PaymentController;
 use App\Http\Controllers\Dashboard\PendingController;
@@ -45,4 +46,6 @@ Route::middleware(['auth:sanctum'])
 
         Route::resource('clients', ClientController::class)
             ->only(['index', 'show']);
+
+        Route::get('download/transaction/{transaction}', DownloadTransactionController::class)->name('download.transaction');
     });

@@ -25,6 +25,9 @@
                     <div>
                         Responsable: {{ transaction.user?.name }}
                     </div>
+                    <div>
+                        <a :href="route('dashboard.download.transaction', transaction.id)" class="text-indigo-600">Descargar Excel</a>
+                    </div>
                 </div>
             </template>
             <template #header>
@@ -55,13 +58,13 @@
                         {{ product.pivot.quantity }}
                     </td>
                     <td>
-                        {{ product.pivot.value.toLocaleString() }}
+                        C${{ product.pivot.value.toLocaleString() }}
                     </td>
                     <td>
-                        {{ product.pivot.discount.toLocaleString() }}
+                        C${{ product.pivot.discount.toLocaleString() }}
                     </td>
                     <td>
-                        {{ product.pivot.total.toLocaleString() }}
+                        C${{ product.pivot.total.toLocaleString() }}
                     </td>
                 </tr>
             </template>
