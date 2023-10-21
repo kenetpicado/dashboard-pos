@@ -16,11 +16,6 @@ class UserController extends Controller
         ]);
     }
 
-    public function create()
-    {
-        return inertia('Dashboard/User/Create');
-    }
-
     public function store(UserRequest $request)
     {
         User::create([

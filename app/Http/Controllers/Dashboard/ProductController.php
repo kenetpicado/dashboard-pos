@@ -5,41 +5,70 @@ namespace App\Http\Controllers\Dashboard;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Dashboard\ProductRequest;
 use App\Models\Product;
+use App\Repositories\InventoryRepository;
+use App\Repositories\ProductRepository;
+use App\Services\ProductService;
+use Illuminate\Http\Request;
 
 class ProductController extends Controller
 {
-    public function index()
+    public function __construct(
+        private readonly ProductRepository $productRepository,
+        private readonly InventoryRepository $inventoryRepository,
+    ) {
+    }
+
+    public function index(Request $request)
     {
         return inertia('Dashboard/Product/Index', [
-            'products' => Product::select('id', 'name', 'sku', 'image', 'notes')->paginate(),
+            'products' => $this->productRepository->getAll($request->all()),
+        ]);
+    }
+
+    public function create()
+    {
+        return inertia('Dashboard/Product/Create');
+    }
+
+    public function edit(Product $product)
+    {
+        return inertia('Dashboard/Product/Create', [
+            'product' => $product,
+            'isNew' => false,
         ]);
     }
 
     public function store(ProductRequest $request)
     {
-        Product::create($request->validated());
+        $productService = new ProductService();
+        $product = $this->productRepository->store($request->validated());
 
-        return back();
+        if (count($request->inventory) > 0) {
+            $productService->storeItems($product, $request->inventory, $request->total);
+        }
+
+        return redirect()->route('dashboard.products.index');
     }
 
     public function show(Product $product)
     {
         return inertia('Dashboard/Product/Show', [
             'product' => $product,
-            'inventory' => $product->inventory()->latest()->paginate(),
+            'inventory' => $this->productRepository->getInventory($product),
+            'inventoryStatus' => $this->productRepository->getInventoryStatus($product),
         ]);
     }
 
     public function update(ProductRequest $request, $product)
     {
-        Product::where('id', $product)->update($request->validated());
+        $this->productRepository->update($product, $request->validated());
 
-        return back();
+        return redirect()->route('dashboard.products.index');
     }
 
     public function destroy($product)
     {
-        Product::where('id', $product)->delete();
+        $this->productRepository->destroy($product);
 
         return back();
     }

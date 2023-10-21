@@ -26,10 +26,10 @@ class ProductRequest extends FormRequest
             'name' => 'required',
             'sku' => ['required', 'alpha_dash', Rule::unique('products')->ignore($this->id)],
             'description' => 'nullable',
-            'supplier_id' => 'nullable',
-            'status' => 'nullable',
             'image' => ['nullable', 'url'],
-            'notes' => 'nullable',
+            'discount' => 'numeric|min:0',
+            'inventory' => 'nullable|array',
+            'total' => 'nullable',
         ];
     }
 }

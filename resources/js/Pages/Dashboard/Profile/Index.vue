@@ -9,10 +9,11 @@
         <FormSection title="Create" @onSubmit="onSubmit" @onCancel="onCancel" :isNew="false">
             <InputForm text="Name" v-model="form.name" required />
             <InputForm text="Email" v-model="form.email" type="email" required />
+            <InputForm text="Logo" v-model="form.logo" type="file" />
             <InputForm text="Password" v-model="form.password" type="password" />
             <InputForm text="Password confirmation" v-model="form.password_confirmation" type="password" />
             <div class="col-span-2 mb-2 text-end">
-                <span class="text-sm text-gray-600">Leave password blank if you don't want to change it</span>
+                <span class="text-sm text-gray-600">Dejar la contrasena el blanco si desea conservar la actual.</span>
             </div>
         </FormSection>
     </AppLayout>

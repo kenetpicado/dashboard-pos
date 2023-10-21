@@ -15,9 +15,9 @@ return new class extends Migration
             $table->id();
             $table->string('name');
             $table->string('sku');
-            $table->string('status')->nullable();
             $table->string('image')->nullable();
             $table->string('notes')->nullable();
+            $table->double('discount')->default(0);
             $table->timestamps();
         });
     }

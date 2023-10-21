@@ -1,7 +1,7 @@
 <template>
     <div class="w-full mb-4">
         <label class="block font-medium text-sm text-gray-700" v-if="text">
-            {{ text }}
+            {{ text }} <span v-if="description" class="text-indigo-600 text-xs">({{description}})</span>
         </label>
 
         <input :type="type" :placeholder="placeholder" :disabled="disabled" :autofocus="autofocus" :required="required" :min="min"
@@ -50,6 +50,9 @@ const props = defineProps({
     min: {
         type: Number, required: false
     },
+    description: {
+        type: String, required: false
+    }
 })
 
 const keyValue = computed(() => {

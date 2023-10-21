@@ -28,6 +28,7 @@ class TransactionRequest extends FormRequest
             'total' => 'required|numeric',
             'products' => 'required|array|min:1',
             'type' => 'required|in:buy,sell',
+            'payment' => 'nullable',
         ];
     }
 }

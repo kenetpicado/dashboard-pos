@@ -2,63 +2,38 @@
 
 namespace App\Services;
 
-use App\Models\Inventory;
-use App\Models\Transaction;
-use Illuminate\Support\Facades\DB;
+use App\Models\Client;
+use App\Repositories\InventoryRepository;
+use App\Repositories\ProductTransactionRepository;
+use App\Repositories\TransactionRepository;
 
 class TransactionService
 {
     public function store(array $request)
     {
-        $transaction = Transaction::create([
-            'user_id' => auth()->id(),
-            'type' => $request['type'],
-            'total' => $request['total'],
-            'note' => $request['note'],
-            'client' => $request['client'],
-            'discount' => $request['discount'],
-            'currency' => 'NIO',
-        ]);
+        $transactionRepository = new TransactionRepository();
+        $inventoryRepository = new InventoryRepository();
+        $productTransactionRepository = new ProductTransactionRepository();
 
-        $product_transaction = [];
+        $transaction = $transactionRepository->store($request);
+
+        $pivotData = [];
 
         foreach ($request['products'] as $product) {
 
             if ($request['type'] == 'buy') {
-                $alreadyExists = Inventory::query()
-                    ->where('product_id', $product['product_id'])
-                    ->where('measure', $product['measure'])
-                    ->where('unit_cost', $product['cost'])
-                    ->where('unit_price', $product['price'])
-                    ->first();
-
-                if ($alreadyExists != null) {
-                    $alreadyExists->increment('quantity', $product['quantity']);
-                } else {
-                    Inventory::create([
-                        'product_id' => $product['product_id'],
-                        'quantity' => $product['quantity'],
-                        'unit_cost' => $product['cost'],
-                        'unit_price' => $product['price'],
-                        'measure' => $product['measure'],
-                    ]);
-                }
+                $inventoryRepository->store($product, $transaction->user_id);
             } else {
-                $inventory = Inventory::find($product['inventory_id']);
+                $inventoryRepository->decrement($product['inventory_id'], $product['quantity']);
 
-                $inventory->decrement('quantity', $product['quantity']);
+                if ($transaction->client) {
+                    Client::updateOrCreate(['name' => $transaction->client]);
+                }
             }
 
-            $product_transaction[] = [
-                'created_at' => now(),
-                'transaction_id' => $transaction->id,
-                'product_id' => $product['product_id'],
-                'quantity' => $product['quantity'],
-                'measure' => $product['measure'],
-                'value' => $request['type'] == 'buy' ? $product['cost'] : $product['price'],
-            ];
+            $pivotData[] = $productTransactionRepository->build($transaction->id, $product, $request['type']);
         }
 
-        DB::table('product_transaction')->insert($product_transaction);
+        $productTransactionRepository->insert($pivotData);
     }
 }

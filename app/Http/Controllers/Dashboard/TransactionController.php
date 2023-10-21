@@ -5,30 +5,30 @@ namespace App\Http\Controllers\Dashboard;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Dashboard\TransactionRequest;
 use App\Http\Requests\Dashboard\TransactionTypeRequest;
-use App\Models\Inventory;
-use App\Models\Product;
 use App\Models\Transaction;
 use App\Repositories\ProductRepository;
 use App\Repositories\TransactionRepository;
+use App\Repositories\UserRepository;
 use App\Services\TransactionService;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
 
 class TransactionController extends Controller
 {
-    public $transactionTypes = ['buy', 'sell'];
-
     public function __construct(
         private readonly TransactionRepository $transactionRepository,
         private readonly ProductRepository $productRepository,
-        private readonly TransactionService $transactionService
+        private readonly TransactionService $transactionService,
+        private readonly UserRepository $userRepository
     ) {
     }
 
-    public function index()
+    public function index(Request $request)
     {
         return inertia('Dashboard/Transaction/Index', [
-            'transactions' => $this->transactionRepository->getAll(),
+            'transactions' => $this->transactionRepository->getAll($request->all()),
+            'sell_month' => $this->transactionRepository->getMonthlyTotal('sell', $request->all()),
+            'buy_month' => $this->transactionRepository->getMonthlyTotal('buy', $request->all()),
+            'users' => $this->userRepository->getSimpleList(),
         ]);
     }
 
