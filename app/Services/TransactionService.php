@@ -21,9 +21,9 @@ class TransactionService
 
         foreach ($request['products'] as $product) {
 
-            if ($request['type'] == 'buy')
+            if ($request['type'] == 'buy') {
                 $inventoryRepository->store($product, $transaction->user_id);
-            else {
+            } else {
                 $inventoryRepository->decrement($product['inventory_id'], $product['quantity']);
 
                 if ($transaction->client) {

@@ -9,6 +9,7 @@ use App\Repositories\ProductTransactionRepository;
 class ProductService
 {
     private $inventoryRepository;
+
     private $productTransactionRepository;
 
     public function __construct()

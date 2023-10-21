@@ -24,16 +24,18 @@ Route::middleware(['auth:sanctum'])
             ->only(['index', 'update']);
 
         Route::resource('users', UserController::class)
-            ->except(['show', 'edit']);
+            ->except(['show', 'edit', 'create']);
 
         Route::resource('categories', CategoryController::class)
             ->except(['create', 'edit', 'show']);
 
-        Route::resource('transactions', TransactionController::class);
+        Route::resource('transactions', TransactionController::class)
+            ->except(['destroy', 'update', 'edit']);
 
         Route::resource('products', ProductController::class);
 
-        Route::resource('inventory', InventoryController::class);
+        Route::resource('inventory', InventoryController::class)
+            ->only(['index', 'show']);
 
         Route::resource('pending', PendingController::class)
             ->only(['index', 'show']);
@@ -41,5 +43,6 @@ Route::middleware(['auth:sanctum'])
         Route::resource('payments', PaymentController::class)
             ->only(['store', 'update', 'destroy']);
 
-        Route::resource('clients', ClientController::class);
+        Route::resource('clients', ClientController::class)
+            ->only(['index', 'show']);
     });

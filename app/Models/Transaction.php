@@ -11,7 +11,7 @@ class Transaction extends Model
     use HasFactory;
 
     protected $fillable = [
-        'user_id', 'type', 'client', 'discount', 'currency', 'total', 'note', 'goal', 'status'
+        'user_id', 'type', 'client', 'discount', 'currency', 'total', 'note', 'goal', 'status',
     ];
 
     public function products()
@@ -39,11 +39,11 @@ class Transaction extends Model
     public function scopeWhenFromTo($query, $request)
     {
         return $query->when(isset($request['from']), function ($query) use ($request) {
-            $query->where('created_at', '>=', $request['from'] . ' 00:00:00');
+            $query->where('created_at', '>=', $request['from'].' 00:00:00');
         }, function ($query) {
             $query->whereDate('created_at', '>=', Carbon::now()->startOfMonth()->format('Y-m-d H:i:s'));
         })->when(isset($request['to']), function ($query) use ($request) {
-            $query->where('created_at', '<=', $request['to'] . ' 23:59:59');
+            $query->where('created_at', '<=', $request['to'].' 23:59:59');
         });
     }
 

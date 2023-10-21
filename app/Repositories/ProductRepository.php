@@ -27,7 +27,7 @@ class ProductRepository
             ->paginate();
     }
 
-    public function search($term = null, $hasInventory)
+    public function search($term, $hasInventory)
     {
         if (is_null($term)) {
             return [];

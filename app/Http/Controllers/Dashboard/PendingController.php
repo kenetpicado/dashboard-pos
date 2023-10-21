@@ -16,7 +16,7 @@ class PendingController extends Controller
     public function index()
     {
         return inertia('Dashboard/Pending/Index', [
-            'transactions' => $this->transactionRepository->getPending()
+            'transactions' => $this->transactionRepository->getPending(),
         ]);
     }
 

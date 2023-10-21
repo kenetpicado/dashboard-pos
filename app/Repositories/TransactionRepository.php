@@ -32,7 +32,7 @@ class TransactionRepository
         $goal = null;
 
         if (isset($request['payment']) && $request['payment'] >= 0) {
-            $status  = 'PENDIENTE';
+            $status = 'PENDIENTE';
             $total = $request['payment'];
             $goal = $request['total'];
         }
@@ -53,7 +53,7 @@ class TransactionRepository
     {
         return Transaction::query()
             ->withCount('products')
-            ->whenStatus("PENDIENTE")
+            ->whenStatus('PENDIENTE')
             ->paginate();
     }
 

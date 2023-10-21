@@ -29,7 +29,7 @@ class ProductRequest extends FormRequest
             'image' => ['nullable', 'url'],
             'discount' => 'numeric|min:0',
             'inventory' => 'nullable|array',
-            'total' => 'nullable'
+            'total' => 'nullable',
         ];
     }
 }

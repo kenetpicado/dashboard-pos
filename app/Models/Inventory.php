@@ -18,7 +18,7 @@ class Inventory extends Model
         'unit_price',
         'measure',
         'user_id',
-        'discount'
+        'discount',
     ];
 
     public function product()

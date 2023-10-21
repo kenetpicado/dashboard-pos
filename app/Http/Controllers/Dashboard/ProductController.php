@@ -4,7 +4,6 @@ namespace App\Http\Controllers\Dashboard;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Dashboard\ProductRequest;
-use App\Models\Inventory;
 use App\Models\Product;
 use App\Repositories\InventoryRepository;
 use App\Repositories\ProductRepository;

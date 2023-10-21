@@ -6,7 +6,6 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Dashboard\PaymentRequest;
 use App\Models\Payment;
 use App\Repositories\TransactionRepository;
-use Illuminate\Http\Request;
 
 class PaymentController extends Controller
 {
