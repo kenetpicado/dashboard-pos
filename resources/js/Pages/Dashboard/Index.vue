@@ -43,7 +43,7 @@ const props = defineProps({
 const breads = [
     {
         name: 'Home',
-        route: route('dashboard.users.index'),
+        route: route('dashboard.index'),
     },
 ];
 

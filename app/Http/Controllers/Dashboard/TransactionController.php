@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Dashboard\TransactionRequest;
 use App\Http\Requests\Dashboard\TransactionTypeRequest;
 use App\Models\Transaction;
+use App\Repositories\MeasureRepository;
 use App\Repositories\ProductRepository;
 use App\Repositories\TransactionRepository;
 use App\Repositories\UserRepository;
@@ -18,7 +19,8 @@ class TransactionController extends Controller
         private readonly TransactionRepository $transactionRepository,
         private readonly ProductRepository $productRepository,
         private readonly TransactionService $transactionService,
-        private readonly UserRepository $userRepository
+        private readonly UserRepository $userRepository,
+        private readonly MeasureRepository $measureRespository
     ) {
     }
 
@@ -34,9 +36,16 @@ class TransactionController extends Controller
 
     public function create(TransactionTypeRequest $request)
     {
+        $measures = [];
+
+        if ($request->type == 'buy') {
+            $measures = $this->measureRespository->getNames();
+        }
+
         return inertia('Dashboard/Transaction/Create', [
             'products' => $this->productRepository->search($request->search, $request->type == 'sell'),
             'type' => $request->type,
+            'measures' => $measures
         ]);
     }
 

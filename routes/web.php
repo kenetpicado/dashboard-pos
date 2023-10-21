@@ -5,6 +5,7 @@ use App\Http\Controllers\Dashboard\ClientController;
 use App\Http\Controllers\Dashboard\DashboardController;
 use App\Http\Controllers\Dashboard\DownloadTransactionController;
 use App\Http\Controllers\Dashboard\InventoryController;
+use App\Http\Controllers\Dashboard\MeasureController;
 use App\Http\Controllers\Dashboard\PaymentController;
 use App\Http\Controllers\Dashboard\PendingController;
 use App\Http\Controllers\Dashboard\ProductController;
@@ -48,4 +49,6 @@ Route::middleware(['auth:sanctum'])
             ->only(['index', 'show']);
 
         Route::get('download/transaction/{transaction}', DownloadTransactionController::class)->name('download.transaction');
+
+        Route::resource('measures', MeasureController::class);
     });

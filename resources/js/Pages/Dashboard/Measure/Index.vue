@@ -10,49 +10,34 @@
 
         <TableSection>
             <template #header>
+            	<th>#</th>
                 <th>Nombre</th>
                 <th>Acciones</th>
             </template>
 
             <template #body>
-                <template v-for="(category, index) in categories">
+                <template v-for="(m, index) in measures.data">
                     <tr class="hover:bg-gray-50">
+                    	<td>{{ m.id }}</td>
                         <td>
-                            <span class="font-semibold">{{ category.name }}</span>
+                            <span class="font-semibold">{{ m.name }}</span>
                         </td>
                         <td>
                             <div class="flex gap-4">
-                                <IconPencil role="button" @click="edit(category)" />
-                                <IconTrash role="button" @click="destroy(category.id)" />
-                            </div>
-                        </td>
-                    </tr>
-                    <tr class="hover:bg-gray-50" v-for="(children, index) in category.childrens">
-                        <td>
-                            <span class="text-xs ml-4">
-                                {{ children.name }}
-                            </span>
-                        </td>
-                        <td>
-                            <div class="flex gap-4">
-                                <IconPencil size="22" role="button" @click="edit(children)" />
-                                <IconTrash size="22" role="button" @click="destroy(children.id)" />
+                                <IconPencil role="button" @click="edit(m)" />
+                                <IconTrash role="button" @click="destroy(m.id)" />
                             </div>
                         </td>
                     </tr>
                 </template>
-                <tr v-if="categories.length == 0">
-                    <td colspan="3" class="text-center">No data to display</td>
+                <tr v-if="measures.data.length == 0">
+                    <td colspan="3" class="text-center">No hay datos que mostrar</td>
                 </tr>
             </template>
         </TableSection>
 
-        <FormModal :show="openModal" title="Categoria" @onCancel="resetValues()" @onSubmit="onSubmit()">
+        <FormModal :show="openModal" title="Medida" @onCancel="resetValues()" @onSubmit="onSubmit()">
             <InputForm text="Name" v-model="form.name" />
-            <SelectForm v-model="form.parent_id" text="Parent category" name="parent_id">
-                <option selected value="">None</option>
-                <option v-for="category in categories" :value="category.id">{{ category.name }}</option>
-            </SelectForm>
         </FormModal>
 
     </AppLayout>
@@ -68,9 +53,12 @@ import InputForm from '@/Components/Form/InputForm.vue';
 import SelectForm from "@/Components/Form/SelectForm.vue"
 import { ref } from 'vue';
 import { useCategory } from '@/Composables/useCategory.js';
+import { confirmAlert } from '@/Use/helpers';
+import { router, useForm } from '@inertiajs/vue3';
+import { toast } from '@/Use/toast';
 
 defineProps({
-    categories: {
+    measures: {
         type: Object,
         required: true,
     }
@@ -82,14 +70,18 @@ const breads = [
         route: route('dashboard.index'),
     },
     {
-        name: 'Categorias',
-        route: route('dashboard.categories.index'),
+        name: 'Medidas',
+        route: route('dashboard.measures.index'),
     },
 ];
 
 const isNew = ref(true)
-const { store, update, destroy, form } = useCategory();
 const openModal = ref(false);
+
+const form = useForm({
+    id: "",
+    name: "",
+});
 
 function edit(c) {
     Object.assign(form, c)
@@ -98,10 +90,25 @@ function edit(c) {
 }
 
 function onSubmit() {
+	form.name = form.name.toUpperCase()
     if (isNew.value) {
-        store(resetValues)
+        form.post(route("dashboard.measures.store"), {
+            preserveScroll: true,
+            preserveState: true,
+            onSuccess: () => {
+                toast.success("Medida agregada");
+                resetValues()
+            },
+        });
     } else {
-        update(resetValues)
+        form.put(route('dashboard.measures.update', form.id), {
+            preserveScroll: true,
+            preserveState: true,
+            onSuccess: () => {
+                toast.success('Medida actualizada');
+                resetValues()
+            },
+        });
     }
 }
 
@@ -109,6 +116,20 @@ function resetValues() {
     openModal.value = false
     isNew.value = true
     form.reset()
+}
+
+function destroy(id) {
+    confirmAlert({
+        onConfirm: () => {
+            router.delete(route('dashboard.measures.destroy', id), {
+                preserveScroll: true,
+                preserveState: true,
+                onSuccess: () => {
+                    toast.success('Medida eliminada');
+                },
+            });
+        },
+    })
 }
 
 </script>
