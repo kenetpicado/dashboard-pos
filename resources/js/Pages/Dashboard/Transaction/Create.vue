@@ -127,6 +127,7 @@ function setCurrentProduct(product) {
 		inventory.value = product.inventory;
 		selectedMeasure.value = inventory.value[0].id;
 		currentProduct.inventory_id = inventory.value[0].id;
+		currentProduct.discount = product.discount;
 	}
 
 	openModal.value = true;

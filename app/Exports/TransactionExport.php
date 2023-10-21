@@ -2,12 +2,11 @@
 
 namespace App\Exports;
 
-use Maatwebsite\Excel\Concerns\FromView;
 use Illuminate\Contracts\View\View;
+use Maatwebsite\Excel\Concerns\FromView;
 
 class TransactionExport implements FromView
 {
-
     public function __construct(private readonly object $transaction)
     {
         //

@@ -58,7 +58,7 @@ class ProductRepository
     {
         return $product->inventory()
             ->where('quantity', '>', 0)
-            ->selectRaw('COALESCE(sum(quantity), 0) as quantity, COALESCE(sum(unit_cost), 0) as unit_cost')
+            ->selectRaw('COALESCE(sum(quantity * unit_cost), 0) as total, COALESCE(sum(quantity), 0) as quantity')
             ->first();
     }
 }

@@ -27,7 +27,7 @@ class ProductRequest extends FormRequest
             'sku' => ['required', 'alpha_dash', Rule::unique('products')->ignore($this->id)],
             'description' => 'nullable',
             'image' => ['nullable', 'url'],
-            'discount' => 'numeric|min:0',
+            'discount' => 'nullable',
             'inventory' => 'nullable|array',
             'total' => 'nullable',
         ];

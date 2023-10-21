@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Dashboard\ProductRequest;
 use App\Models\Product;
 use App\Repositories\InventoryRepository;
+use App\Repositories\MeasureRepository;
 use App\Repositories\ProductRepository;
 use App\Services\ProductService;
 use Illuminate\Http\Request;
@@ -15,6 +16,7 @@ class ProductController extends Controller
     public function __construct(
         private readonly ProductRepository $productRepository,
         private readonly InventoryRepository $inventoryRepository,
+        private readonly MeasureRepository $measureRepository,
     ) {
     }
 
@@ -27,7 +29,9 @@ class ProductController extends Controller
 
     public function create()
     {
-        return inertia('Dashboard/Product/Create');
+        return inertia('Dashboard/Product/Create', [
+            'measures' => $this->measureRepository->getNames(),
+        ]);
     }
 
     public function edit(Product $product)

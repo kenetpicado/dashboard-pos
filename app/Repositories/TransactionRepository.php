@@ -79,4 +79,12 @@ class TransactionRepository
 
         $transaction->decrement('total', $payment->value);
     }
+
+    public function byClient($client_name)
+    {
+        return Transaction::query()
+            ->where('client', 'like', '%'.$client_name.'%')
+            ->latest('id')
+            ->paginate();
+    }
 }
