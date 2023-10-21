@@ -5,7 +5,6 @@ namespace App\Http\Controllers\Dashboard;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Dashboard\MeasureRequest;
 use App\Repositories\MeasureRepository;
-use Illuminate\Http\Request;
 
 class MeasureController extends Controller
 {
@@ -17,7 +16,7 @@ class MeasureController extends Controller
     public function index()
     {
         return inertia('Dashboard/Measure/Index', [
-            'measures' => $this->measureRespository->getAll()
+            'measures' => $this->measureRespository->getAll(),
         ]);
     }
 

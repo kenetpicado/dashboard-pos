@@ -45,7 +45,7 @@ class TransactionController extends Controller
         return inertia('Dashboard/Transaction/Create', [
             'products' => $this->productRepository->search($request->search, $request->type == 'sell'),
             'type' => $request->type,
-            'measures' => $measures
+            'measures' => $measures,
         ]);
     }
 
