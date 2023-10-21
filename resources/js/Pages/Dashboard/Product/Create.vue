@@ -2,7 +2,7 @@
     <AppLayout title="Agregar" :breads="breads">
         <template #header>
             <span class="title">
-                Agregar producto
+                Agregar
             </span>
         </template>
 
@@ -72,7 +72,10 @@
 
         <FormModal :show="openModal" title="Inventario" @onCancel="resetValues" @onSubmit="addInventory">
             <div class="grid grid-cols-2 gap-4">
-                <InputForm text="Medida" v-model="currentProduct.measure" required />
+                <SelectForm text="Medida" v-model="currentProduct.measure" required>
+                    <option selected disabled value="">Seleccionar medida</option>
+                    <option v-for="item in measures" :value="item">{{ item }}</option>
+                </SelectForm>
                 <InputForm text="Cantidad" v-model="currentProduct.quantity" type="number" required :min="1" />
                 <InputForm text="Costo (Unidad)" v-model="currentProduct.cost" type="number" required :min="1" />
                 <InputForm text="Precio (Unidad)" v-model="currentProduct.price" type="number" required :min="1" />
@@ -97,6 +100,8 @@ import InputForm from '@/Components/Form/InputForm.vue';
 import { IconTrash } from '@tabler/icons-vue';
 import FormModal from '@/Components/Modal/FormModal.vue';
 import { IconEdit } from '@tabler/icons-vue';
+import SelectForm from '@/Components/Form/SelectForm.vue';
+import { toast } from '@/Use/toast';
 
 const props = defineProps({
     product: {
@@ -107,6 +112,10 @@ const props = defineProps({
         type: Boolean,
         default: true,
     },
+    measures: {
+        type: Object,
+        required: false,
+    },
 });
 
 const form = useForm({
@@ -114,7 +123,7 @@ const form = useForm({
     sku: props.product?.sku ?? null,
     name: props.product?.name ?? null,
     image: props.product?.image ?? null,
-    discount: props.product?.discount ?? null,
+    discount: props.product?.discount ?? 0,
     inventory: [],
     total: 0,
 })
@@ -178,6 +187,10 @@ function resetValues() {
 }
 
 function onSubmit() {
+    if (!form.discount) {
+        form.discount = 0;
+    }
+
     if (props.isNew) {
         form.total = total.value
         form.post(route('dashboard.products.store'), {
@@ -186,6 +199,9 @@ function onSubmit() {
             onSuccess: () => {
                 resetValues();
                 toast.success('Producto agregado');
+            },
+            onError: (err) => {
+                console.log(err);
             },
         });
     } else {

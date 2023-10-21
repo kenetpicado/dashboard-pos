@@ -174,7 +174,7 @@ const stats = computed(() => {
     return [
         {
             title: "Inventario",
-            value: "C$" + props.inventoryStatus.unit_cost.toLocaleString(),
+            value: "C$" + props.inventoryStatus.total.toLocaleString(),
             icon: IconCurrencyDollar
         },
         {
