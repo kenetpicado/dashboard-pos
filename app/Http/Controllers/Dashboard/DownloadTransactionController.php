@@ -12,9 +12,7 @@ class DownloadTransactionController extends Controller
 {
     public function __invoke($id)
     {
-        $transaction = Transaction::with(['user:id,name', 'products:id,name,sku'])
-            ->withCount('products')
-            ->find($id);
+        $transaction = Transaction::with(['user:id,name', 'products:id,name,sku'])->find($id);
 
         return Excel::download(new TransactionExport($transaction), "Transaccion_{$transaction->id}.xlsx");
     }

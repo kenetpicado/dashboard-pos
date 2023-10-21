@@ -105,9 +105,15 @@ const items = [
         name: 'Usuarios',
         route: route('dashboard.users.index'),
         icon: IconUserCog
-    },    {
+    },
+    {
         name: 'Categorias',
         route: route('dashboard.categories.index'),
+        icon: IconCategory
+    },
+     {
+        name: 'Medidas',
+        route: route('dashboard.measures.index'),
         icon: IconCategory
     },
     {

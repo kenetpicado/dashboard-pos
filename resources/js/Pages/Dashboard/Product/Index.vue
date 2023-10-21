@@ -83,7 +83,7 @@ defineProps({
 const breads = [
     {
         name: 'Inicio',
-        route: route('dashboard.products.index'),
+        route: route('dashboard.index'),
     },
     {
         name: 'Productos',

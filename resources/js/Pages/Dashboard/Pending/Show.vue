@@ -81,7 +81,7 @@ const props = defineProps({
 const breads = [
     {
         name: 'Inicio',
-        route: route('dashboard.users.index'),
+        route: route('dashboard.index'),
     },
     {
         name: 'Pendientes',
