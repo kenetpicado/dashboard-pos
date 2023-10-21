@@ -10,6 +10,10 @@
         <div class="mb-1">
             <div class="grid grid-cols-5 gap-4">
                 <InputForm text="Buscar" type="search" v-model="queryParams.search" />
+                <SelectForm text="Responsable" v-model="queryParams.user_id">
+                    <option selected value="">Todos</option>
+                    <option v-for="item in users" :value="item.id">{{ item.name }}</option>
+                </SelectForm>
             </div>
         </div>
 
@@ -56,7 +60,7 @@
                     </td>
                 </tr>
                 <tr v-if="inventory.data.length == 0">
-                    <td colspan="5" class="text-center">No hay datos que mostrar</td>
+                    <td colspan="6" class="text-center">No hay datos que mostrar</td>
                 </tr>
             </template>
             <template #paginator>
@@ -67,14 +71,16 @@
 </template>
 
 <script setup>
+import DateColumn from '@/Components/DateColumn.vue';
 import InputForm from '@/Components/Form/InputForm.vue';
+import SelectForm from "@/Components/Form/SelectForm.vue";
 import StatCard from '@/Components/StatCard.vue';
 import TableSection from '@/Components/TableSection.vue';
 import ThePaginator from "@/Components/ThePaginator.vue";
 import AppLayout from '@/Layouts/AppLayout.vue';
+import { queryParams, setParams, watchSearch, watchUser } from '@/Use/Search';
 import { IconCurrencyDollar, IconTag } from '@tabler/icons-vue';
-import { queryParams, watchSearch, setParams } from '@/Use/Search';
-import DateColumn from '@/Components/DateColumn.vue';
+import { computed } from 'vue';
 
 const props = defineProps({
     inventory: {
@@ -87,6 +93,10 @@ const props = defineProps({
     },
     total_quantity: {
         type: [Number, String],
+        required: true,
+    },
+    users: {
+        type: Object,
         required: true,
     },
 });
@@ -102,21 +112,25 @@ const breads = [
     },
 ];
 
-const stats = [
-    {
-        title: "Inventario",
-        value: "C$" + props.total.toLocaleString(),
-        icon: IconCurrencyDollar
-    },
-    {
-        title: "Productos",
-        value: props.total_quantity.toLocaleString(),
-        icon: IconTag
-    },
-]
+const stats = computed(() => {
+    return [
+        {
+            title: "Inventario",
+            value: "C$" + props.total.toLocaleString(),
+            icon: IconCurrencyDollar
+        },
+        {
+            title: "Productos",
+            value: props.total_quantity.toLocaleString(),
+            icon: IconTag
+        },
+    ]
+})
 
 setParams()
 
 watchSearch(route('dashboard.inventory.index'), ["inventory"])
+
+watchUser(route('dashboard.inventory.index'), ["inventory", "total", "total_quantity"])
 
 </script>

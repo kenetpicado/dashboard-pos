@@ -42,7 +42,7 @@
                         <DateColumn :date="transaction.created_at" />
                     </td>
                     <td>
-                        #{{ transaction.id.toString().padStart(5, '0') }}
+                        #{{ transaction.id }}
                     </td>
                     <td>
                         <span :class="transactionClass[transaction.type]">
@@ -82,16 +82,15 @@
 
 <script setup>
 import DateColumn from "@/Components/DateColumn.vue";
+import InputForm from "@/Components/Form/InputForm.vue";
+import SelectForm from "@/Components/Form/SelectForm.vue";
 import StatCard from '@/Components/StatCard.vue';
 import TableSection from '@/Components/TableSection.vue';
 import ThePaginator from "@/Components/ThePaginator.vue";
 import AppLayout from '@/Layouts/AppLayout.vue';
 import { Link, router } from '@inertiajs/vue3';
 import { IconCurrencyDollar, IconCurrencyDollarOff, IconEye } from '@tabler/icons-vue';
-import SelectForm from "@/Components/Form/SelectForm.vue";
-import InputForm from "@/Components/Form/InputForm.vue";
-import { watch, reactive, computed } from "vue";
-import { IconBrandCarbon } from "@tabler/icons-vue";
+import { computed, reactive, watch } from "vue";
 
 const props = defineProps({
     transactions: {

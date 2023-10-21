@@ -117,7 +117,7 @@ const breads = [
 const stats = [
     {
         title: 'Factura',
-        value: props.transaction.id.toString().padStart(5, '0'),
+        value: props.transaction.id,
     },
     {
         title: 'Tipo',

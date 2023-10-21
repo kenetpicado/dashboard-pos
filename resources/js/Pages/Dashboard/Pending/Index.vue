@@ -29,7 +29,7 @@
                         <DateColumn :date="transaction.created_at" />
                     </td>
                     <td>
-                        #{{ transaction.id.toString().padStart(5, '0') }}
+                        #{{ transaction.id}}
                     </td>
                     <td>
                         <span :class="transactionClass[transaction.type]">
