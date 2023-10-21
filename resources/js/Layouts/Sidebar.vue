@@ -40,7 +40,7 @@ import { IconUserCheck } from '@tabler/icons-vue';
 import { IconTag } from '@tabler/icons-vue';
 import { IconShoppingBag } from '@tabler/icons-vue';
 import { IconUserCog } from '@tabler/icons-vue';
-import { IconHome, IconLogout, IconUser, IconCategory, IconBuildingFactory, IconClipboardList, IconEyeCheck, IconShirt } from '@tabler/icons-vue';
+import { IconHome, IconLogout, IconUser, IconCategory, IconBuildingFactory, IconClipboardList, IconEyeCheck, IconShirt, IconRuler } from '@tabler/icons-vue';
 
 const DEFAULT_ICON = IconUser;
 
@@ -114,7 +114,7 @@ const items = [
      {
         name: 'Medidas',
         route: route('dashboard.measures.index'),
-        icon: IconCategory
+        icon: IconRuler
     },
     {
         name: 'Perfil',

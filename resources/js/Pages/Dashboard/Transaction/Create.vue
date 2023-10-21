@@ -17,7 +17,10 @@
 		<FormModal :show="openModal" :title="currentProduct.name" @onCancel="resetValues()" @onSubmit="addProduct()">
 			<div class="grid grid-cols-2 gap-4">
 				<template v-if="type == 'buy'">
-					<InputForm text="Medida" v-model="currentProduct.measure" required />
+					<SelectForm text="Medida" v-model="currentProduct.measure" required>
+						<option selected disabled value="">Seleccionar medida</option>
+						<option v-for="item in measures" :value="item">{{ item }}</option>
+					</SelectForm>
 					<InputForm text="Cantidad" v-model="currentProduct.quantity" type="number" required :min="1" />
 					<InputForm text="Costo (Unidad)" v-model="currentProduct.cost" type="number" required :min="1" />
 					<InputForm text="Precio (Unidad)" v-model="currentProduct.price" type="number" required :min="1" />
@@ -70,7 +73,11 @@ const props = defineProps({
 	type: {
 		type: String,
 		required: true
-	}
+	},
+	measures: {
+		type: Object,
+		required: false,
+	},
 });
 
 const transactionTypes = {

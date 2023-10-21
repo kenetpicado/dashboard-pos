@@ -20,4 +20,9 @@ class MeasureRepository
     {
         return Measure::select('id', 'name')->paginate();
     }
+
+    public function getNames()
+    {
+        return Measure::pluck('name')->toArray();
+    }
 }
