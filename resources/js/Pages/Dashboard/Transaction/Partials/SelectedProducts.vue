@@ -58,6 +58,10 @@
 				La transaccion se guardara como PENDIENTE.
 			</div>
 
+			<div>
+				<span class="text-indigo-600">Descargar proforma</span>
+			</div>
+
 			<div class="flex justify-end my-8">
 				<div class="text-xl font-bold">
 					Total: C${{ total.toLocaleString('en-US') }}
@@ -112,10 +116,10 @@ const total = computed(() => {
 
 function confirmStoreTransaction() {
 	confirmAlert({
-        onConfirm: () => {
+		onConfirm: () => {
 			storeTransaction();
 		},
-    })
+	})
 }
 
 function storeTransaction() {
