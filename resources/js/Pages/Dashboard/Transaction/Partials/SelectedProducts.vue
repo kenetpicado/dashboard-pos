@@ -58,8 +58,8 @@
 				La transaccion se guardara como PENDIENTE.
 			</div>
 
-			<div>
-				<span class="text-indigo-600">Descargar proforma</span>
+			<div v-if="type = 'sell'">
+				<span class="text-indigo-600" @click="downloadProforma" role="button">Descargar proforma</span>
 			</div>
 
 			<div class="flex justify-end my-8">
@@ -84,6 +84,8 @@ import { IconTrash } from '@tabler/icons-vue';
 import { useForm } from '@inertiajs/vue3';
 import { toast } from '@/Use/toast';
 import { confirmAlert } from '@/Use/helpers';
+import axios from 'axios';
+import { Carbon } from '@/Use/Carbon';
 
 const props = defineProps({
 	products: {
@@ -144,6 +146,21 @@ function storeTransaction() {
 			toast.success("Transaccion relizada correctamente");
 		},
 	});
+}
+
+function downloadProforma() {
+	axios.post(route('dashboard.download.proforma'), {}, { responseType: 'blob' })
+		.then(response => {
+			const url = window.URL.createObjectURL(new Blob([response.data]));
+			const link = document.createElement('a');
+			link.href = url;
+			link.setAttribute('download', `Proforma_${Carbon.create().format('m_d_Y_H_i')}.xlsx`);
+			document.body.appendChild(link);
+			link.click();
+		})
+		.catch(() => {
+			toast.error("Ocurrio un error al descargar la proforma");
+		});
 }
 
 </script>

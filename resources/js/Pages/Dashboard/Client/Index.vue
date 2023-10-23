@@ -41,7 +41,7 @@
                     </td>
                 </tr>
                 <tr v-if="clients.data.length == 0">
-                    <td colspan="3" class="text-center">No hay datos que mostrar</td>
+                    <td colspan="4" class="text-center">No hay datos que mostrar</td>
                 </tr>
             </template>
             <template #paginator>

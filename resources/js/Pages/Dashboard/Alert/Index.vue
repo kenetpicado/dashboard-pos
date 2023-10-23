@@ -13,13 +13,13 @@
         <div class="grid grid-cols-2 gap-4">
             <div v-for="a in alerts" class="p-4 rounded-xl bg-white flex justify-between flex-col" role="alert">
                 <div class="flex items-center gap-2 justify-between mb-4">
-                    <h3 class="text-lg font-xl font-bold">{{ a.name }}</h3>
+                    <h3 class="text-lg font-xl font-bold text-gray-600">{{ a.name }}</h3>
                     <IconTrash role="button" @click="destroy(a.id)" />
                 </div>
-                <div class="mb-4 text-normal">
+                <div class="mb-4 text-normal text-gray-600">
                     {{ a.description }}
                 </div>
-                <div class="text-sm">
+                <div class="text-sm text-gray-400">
                     {{ Carbon.create(a.created_at).format('m/d/Y H:i') }}
                 </div>
             </div>

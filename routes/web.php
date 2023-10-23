@@ -5,6 +5,7 @@ use App\Http\Controllers\Dashboard\BestSellerController;
 use App\Http\Controllers\Dashboard\CategoryController;
 use App\Http\Controllers\Dashboard\ClientController;
 use App\Http\Controllers\Dashboard\DashboardController;
+use App\Http\Controllers\Dashboard\DownloadProforma;
 use App\Http\Controllers\Dashboard\DownloadTransactionController;
 use App\Http\Controllers\Dashboard\InventoryController;
 use App\Http\Controllers\Dashboard\MarkAlertsAsRead;
@@ -65,4 +66,7 @@ Route::middleware(['auth:sanctum'])
 
         Route::put('alerts-mark-as-read', MarkAlertsAsRead::class)
             ->name('alerts.mark-as-read');
+
+        Route::post('download/proforma', DownloadProforma::class)
+            ->name('download.proforma');
     });
