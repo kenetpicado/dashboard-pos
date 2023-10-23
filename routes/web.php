@@ -1,11 +1,13 @@
 <?php
 
+use App\Http\Controllers\Dashboard\AlertController;
 use App\Http\Controllers\Dashboard\BestSellerController;
 use App\Http\Controllers\Dashboard\CategoryController;
 use App\Http\Controllers\Dashboard\ClientController;
 use App\Http\Controllers\Dashboard\DashboardController;
 use App\Http\Controllers\Dashboard\DownloadTransactionController;
 use App\Http\Controllers\Dashboard\InventoryController;
+use App\Http\Controllers\Dashboard\MarkAlertsAsRead;
 use App\Http\Controllers\Dashboard\MeasureController;
 use App\Http\Controllers\Dashboard\PaymentController;
 use App\Http\Controllers\Dashboard\PendingController;
@@ -49,9 +51,18 @@ Route::middleware(['auth:sanctum'])
         Route::resource('clients', ClientController::class)
             ->only(['index', 'show']);
 
-        Route::get('download/transaction/{transaction}', DownloadTransactionController::class)->name('download.transaction');
+        Route::get('download/transaction/{transaction}', DownloadTransactionController::class)
+            ->name('download.transaction');
 
-        Route::resource('measures', MeasureController::class);
+        Route::resource('measures', MeasureController::class)
+            ->except(['create', 'edit', 'show']);
 
-        Route::get('best-seller', BestSellerController::class)->name('best-seller');
+        Route::get('best-seller', BestSellerController::class)
+            ->name('best-seller');
+
+        Route::resource('alerts', AlertController::class)
+            ->only(['index', 'destroy']);
+
+        Route::put('alerts-mark-as-read', MarkAlertsAsRead::class)
+            ->name('alerts.mark-as-read');
     });

@@ -59,10 +59,9 @@ class InventoryRepository
             ->sum('quantity');
     }
 
-    public function decrement($inventory_id, $quentity)
+    public function decrement($inventory_id, $quantity)
     {
-        $inventory = Inventory::find($inventory_id);
-        $inventory->decrement('quantity', $quentity);
+        DB::table('inventories')->where('id', $inventory_id)->decrement('quantity', $quantity);
     }
 
     public function store(array $request, $user_id)
@@ -77,5 +76,12 @@ class InventoryRepository
             'measure' => $request['measure'],
             'user_id' => $user_id,
         ]);
+    }
+
+    public function getTotalQuantityByProduct($product_id)
+    {
+        return DB::table('inventories')
+            ->where('product_id', $product_id)
+            ->sum('quantity');
     }
 }

@@ -11,7 +11,7 @@
 				</div>
 				<div class="w-full flex flex-col justify-between">
 					<div class="mb-3">
-						<div class="text-lg font-semibold mb-2" @click="$emit('edit', index)" role="button">
+						<div class="text-lg font-semibold mb-2 uppercase" @click="$emit('edit', index)" role="button">
 							{{ product.name }} - {{ product.measure }} ({{ product.quantity }})
 						</div>
 						<div class="text-gray-400">

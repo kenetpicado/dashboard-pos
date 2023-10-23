@@ -15,7 +15,7 @@
                     </div>
                     <div class="w-full flex flex-col justify-between">
                         <div class="mb-3">
-                            <div class="text-lg font-semibold mb-2" role="button">
+                            <div class="text-lg mb-2 uppercase" role="button">
                                 {{ product.name }}
                             </div>
                             <div class="text-sm text-gray-500">

@@ -18,7 +18,10 @@
                 <Link v-else :href="item.route">
                 <span class="flex items-center px-2 py-3 rounded-lg gap-4" :class="getClass(item.route)">
                     <component :is="item.icon ?? DEFAULT_ICON"></component>
-                    <span>{{ item.name }}</span>
+                    <span v-if="item.name == 'Alertas' && $page.props.alerts_count > 0">
+                        {{ item.name }} ({{ $page.props.alerts_count }})
+                    </span>
+                    <span v-else>{{ item.name }}</span>
                 </span>
                 </Link>
             </li>
@@ -36,6 +39,8 @@
 import { Link, router } from '@inertiajs/vue3';
 import { IconShoppingCart } from '@tabler/icons-vue';
 import { IconClock } from '@tabler/icons-vue';
+import { IconStar } from '@tabler/icons-vue';
+import { IconBell } from '@tabler/icons-vue';
 import { IconUserCheck } from '@tabler/icons-vue';
 import { IconTag } from '@tabler/icons-vue';
 import { IconShoppingBag } from '@tabler/icons-vue';
@@ -96,7 +101,12 @@ const items = [
     {
         name: 'Mas vendidos',
         route: route('dashboard.best-seller'),
-        icon: IconTag
+        icon: IconStar
+    },
+    {
+        name: 'Alertas',
+        route: route('dashboard.alerts.index'),
+        icon: IconBell
     },
     {
         name: 'Clientes',

@@ -3,6 +3,7 @@
 namespace App\Services;
 
 use App\Models\Client;
+use App\Repositories\AlertRepository;
 use App\Repositories\InventoryRepository;
 use App\Repositories\ProductTransactionRepository;
 use App\Repositories\TransactionRepository;
@@ -28,6 +29,14 @@ class TransactionService
 
                 if ($transaction->client) {
                     Client::updateOrCreate(['name' => $transaction->client]);
+                }
+
+                $updatedQuantity = $inventoryRepository->getTotalQuantityByProduct($product['product_id']);
+
+                if ($updatedQuantity == 0) {
+                    (new AlertRepository())->storeEmptyStock($product['product_id']);
+                } else if ($updatedQuantity <= 5) {
+                    (new AlertRepository())->storeFewStock($product['product_id'], $updatedQuantity);
                 }
             }
 

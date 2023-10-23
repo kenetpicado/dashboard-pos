@@ -9,7 +9,7 @@
 
         <div class="mb-1">
             <div class="grid grid-cols-5 gap-4">
-                <InputForm text="Buscar" type="search" v-model="queryParams.search" />
+                <InputForm text="Buscar" v-model="queryParams.search" />
                 <SelectForm text="Responsable" v-model="queryParams.user_id">
                     <option selected value="">Todos</option>
                     <option v-for="item in users" :value="item.id">{{ item.name }}</option>

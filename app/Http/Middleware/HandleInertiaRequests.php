@@ -2,11 +2,18 @@
 
 namespace App\Http\Middleware;
 
+use App\Repositories\AlertRepository;
 use Illuminate\Http\Request;
 use Inertia\Middleware;
 
 class HandleInertiaRequests extends Middleware
 {
+    public $alertRepository;
+
+    public function __construct()
+    {
+        $this->alertRepository = new AlertRepository();
+    }
     /**
      * The root template that's loaded on the first page visit.
      *
@@ -36,6 +43,7 @@ class HandleInertiaRequests extends Middleware
         return array_merge(parent::share($request), [
             'app_name' => config('app.name'),
             'auth' => auth()->user(),
+            'alerts_count' => $this->alertRepository->countUnread(),
         ]);
     }
 }
