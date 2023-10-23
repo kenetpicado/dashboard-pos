@@ -18,8 +18,6 @@
 <script setup>
 import { router } from "@inertiajs/vue3";
 import { computed } from "vue";
-//import prev icon
-//import next icon
 import { IconChevronLeft, IconChevronRight } from "@tabler/icons-vue";
 
 const props = defineProps({
@@ -42,7 +40,21 @@ const pageList = computed(() => {
 });
 
 function getThisPage(url) {
-    router.get(url, {}, {
+    const searchParams = new URLSearchParams(window.location.search);
+    const queryParams = {};
+
+    const paramNames = ['search', 'user_id', 'from', 'to'];
+
+    paramNames.forEach(paramName => {
+        const paramValue = searchParams.get(paramName);
+        if (paramValue !== null) {
+            queryParams[paramName] = paramValue;
+        } else {
+            delete queryParams[paramName];
+        }
+    });
+
+    router.get(url, queryParams, {
         preserveState: true,
         preserveScroll: true
     });

@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Dashboard\BestSellerController;
 use App\Http\Controllers\Dashboard\CategoryController;
 use App\Http\Controllers\Dashboard\ClientController;
 use App\Http\Controllers\Dashboard\DashboardController;
@@ -51,4 +52,6 @@ Route::middleware(['auth:sanctum'])
         Route::get('download/transaction/{transaction}', DownloadTransactionController::class)->name('download.transaction');
 
         Route::resource('measures', MeasureController::class);
+
+        Route::get('best-seller', BestSellerController::class)->name('best-seller');
     });

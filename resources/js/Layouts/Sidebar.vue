@@ -94,6 +94,11 @@ const items = [
         icon: IconClipboardList
     },
     {
+        name: 'Mas vendidos',
+        route: route('dashboard.best-seller'),
+        icon: IconTag
+    },
+    {
         name: 'Clientes',
         route: route('dashboard.clients.index'),
         icon: IconUserCheck

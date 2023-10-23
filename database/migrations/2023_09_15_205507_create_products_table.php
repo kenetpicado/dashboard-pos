@@ -18,6 +18,11 @@ return new class extends Migration
             $table->string('image')->nullable();
             $table->string('notes')->nullable();
             $table->double('discount')->default(0);
+            $table->foreignId('category_id')
+                ->nullable()
+                ->constrained()
+                ->onDelete('set null');
+            $table->softDeletes();
             $table->timestamps();
         });
     }

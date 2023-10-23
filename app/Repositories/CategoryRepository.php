@@ -16,6 +16,11 @@ class CategoryRepository
         $this->model = new Category();
     }
 
+    public function getSimpleList()
+    {
+        return Category::all(['name', 'id']);
+    }
+
     public function getWithChildrens()
     {
         return Category::whereNull('parent_id')->with('childrens')->get();

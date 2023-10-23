@@ -16,6 +16,7 @@ class DatabaseSeeder extends Seeder
             CategorySeeder::class,
             UserSeeder::class,
             ProductSeeder::class,
+            MeasureSeeder::class,
         ]);
     }
 }

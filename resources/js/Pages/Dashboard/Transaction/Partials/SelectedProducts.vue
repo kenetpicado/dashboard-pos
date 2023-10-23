@@ -65,7 +65,7 @@
 			</div>
 			<div class="flex items-center justify-end gap-4">
 				<button class="secondary-button">Cancelar</button>
-				<button class="primary-button" type="button" @click="storeTransaction">
+				<button class="primary-button" type="button" @click="confirmStoreTransaction">
 					Guardar
 				</button>
 			</div>
@@ -74,11 +74,12 @@
 </template>
 
 <script setup>
-import { computed, watch } from 'vue';
+import { computed } from 'vue';
 import InputForm from '@/Components/Form/InputForm.vue';
 import { IconTrash } from '@tabler/icons-vue';
 import { useForm } from '@inertiajs/vue3';
 import { toast } from '@/Use/toast';
+import { confirmAlert } from '@/Use/helpers';
 
 const props = defineProps({
 	products: {
@@ -108,6 +109,14 @@ const total = computed(() => {
 
 	return props.products.reduce((acc, product) => acc + (product.quantity * product.price - product.discount), 0) - (form.discount ?? 0);
 });
+
+function confirmStoreTransaction() {
+	confirmAlert({
+        onConfirm: () => {
+			storeTransaction();
+		},
+    })
+}
 
 function storeTransaction() {
 	form.products = props.products.map(function (product) {

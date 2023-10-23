@@ -5,12 +5,15 @@
                 Agregar
             </span>
         </template>
-
         <FormSection @onSubmit="onSubmit">
             <InputForm text="SKU" v-model="form.sku" required />
-            <InputForm text="Name" v-model="form.name" required />
-            <InputForm text="Image" v-model="form.image" type="url" />
+            <InputForm text="Nombre" v-model="form.name" required />
+            <InputForm text="Imagen" v-model="form.image" type="url" />
             <InputForm text="Descuento" v-model="form.discount" type="number" :min="0" />
+            <SelectForm text="Categoria" v-model="form.category_id">
+                <option selected value="">Ninguna</option>
+                <option v-for="item in categories" :value="item.id">{{ item.name }}</option>
+            </SelectForm>
 
             <template v-if="isNew">
                 <div class="col-span-2">
@@ -116,6 +119,10 @@ const props = defineProps({
         type: Object,
         required: false,
     },
+    categories: {
+        type: Object,
+        required: false,
+    },
 });
 
 const form = useForm({
@@ -124,6 +131,7 @@ const form = useForm({
     name: props.product?.name ?? null,
     image: props.product?.image ?? null,
     discount: props.product?.discount ?? 0,
+    category_id: props.product?.category_id ?? null,
     inventory: [],
     total: 0,
 })

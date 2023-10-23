@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('transactions', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('user_id')->constrained();
+            $table->foreignId('user_id')->nullable()->constrained()->onDelete('set null');
             $table->string('type');
             $table->string('client')->nullable();
             $table->double('discount')->default(0);
@@ -21,6 +21,7 @@ return new class extends Migration
             $table->double('goal')->nullable();
             $table->double('total');
             $table->string('note')->nullable();
+            $table->softDeletes();
             $table->timestamps();
         });
     }
