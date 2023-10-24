@@ -61,6 +61,7 @@ class ProductController extends Controller
     {
         return inertia('Dashboard/Product/Show', [
             'product' => $product,
+            'measures' => $this->measureRepository->getNames(),
             'inventory' => $this->productRepository->getInventory($product),
             'inventoryStatus' => $this->productRepository->getInventoryStatus($product),
         ]);

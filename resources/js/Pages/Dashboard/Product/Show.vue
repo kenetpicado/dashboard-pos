@@ -67,7 +67,10 @@
 
         <FormModal :show="openModal" title="Editar" @onCancel="resetValues()" @onSubmit="update()">
             <div class="grid grid-cols-2 gap-4">
-                <InputForm text="Medida" v-model="form.measure" required />
+                <datalist id="measures">
+                    <option v-for="item in measures" :value="item" />
+                </datalist>
+                <InputForm text="Medida" v-model="form.measure" required list="measures"/>
                 <InputForm text="Cantidad" v-model="form.quantity" type="number" required :min="1" />
                 <InputForm text="Costo (Unidad)" v-model="form.unit_cost" type="number" required :min="1" />
                 <InputForm text="Precio (Unidad)" v-model="form.unit_price" type="number" required :min="1" />
@@ -110,6 +113,10 @@ const props = defineProps({
         type: Object,
         required: true,
     },
+    measures: {
+        type: Object,
+        required: true,
+    }
 });
 
 const openModal = ref(false);
