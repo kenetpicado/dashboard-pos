@@ -7,20 +7,16 @@
 		<div class="grid grid-cols-2 gap-4">
 			<SearchProducts :products="products" @setProduct="setCurrentProduct" />
 
-			<SelectedProducts
-				:products="selectedProducts"
-				:type="type"
-				@edit="editProduct"
-				@remove="removeProduct" />
+			<SelectedProducts :products="selectedProducts" :type="type" @edit="editProduct" @remove="removeProduct" />
 		</div>
 
 		<FormModal :show="openModal" :title="currentProduct.name" @onCancel="resetValues()" @onSubmit="addProduct()">
 			<div class="grid grid-cols-2 gap-4">
 				<template v-if="type == 'buy'">
-					<SelectForm text="Medida" v-model="currentProduct.measure" required>
-						<option selected disabled value="">Seleccionar medida</option>
-						<option v-for="item in measures" :value="item">{{ item }}</option>
-					</SelectForm>
+					<datalist id="measures">
+						<option v-for="item in measures" :value="item"/>
+					</datalist>
+					<InputForm text="Medida" v-model="currentProduct.measure" required :min="1" list="measures" />
 					<InputForm text="Cantidad" v-model="currentProduct.quantity" type="number" required :min="1" />
 					<InputForm text="Costo (Unidad)" v-model="currentProduct.cost" type="number" required :min="1" />
 					<InputForm text="Precio (Unidad)" v-model="currentProduct.price" type="number" required :min="1" />
@@ -34,7 +30,8 @@
 				<template v-if="type == 'sell'">
 					<SelectForm text="Medida" v-model="selectedMeasure" required>
 						<option selected disabled value="">Seleccionar medida</option>
-						<option v-for="item in inventory" :value="item.id">{{ item.measure }} - C${{ item.unit_price }}</option>
+						<option v-for="item in inventory" :value="item.id">{{ item.measure }} - C${{ item.unit_price }}
+						</option>
 					</SelectForm>
 
 					<InputForm text="Cantidad" v-model="currentProduct.quantity" type="number" required :min="1"
@@ -45,7 +42,8 @@
 					<div class="flex justify-end col-span-2">
 						<div class="text-xl font-bold text-end">
 							<div class="mb-2">Precio: C${{ currentProduct.price.toLocaleString() }}</div>
-							<div>Total: C${{ (currentProduct.quantity * currentProduct.price - currentProduct.discount).toLocaleString() }}</div>
+							<div>Total: C${{ (currentProduct.quantity * currentProduct.price -
+								currentProduct.discount).toLocaleString() }}</div>
 						</div>
 					</div>
 				</template>

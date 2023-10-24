@@ -23,6 +23,6 @@ class MeasureRepository
 
     public function getNames()
     {
-        return Measure::pluck('name')->toArray();
+        return Measure::orderBy('name')->pluck('name')->toArray();
     }
 }

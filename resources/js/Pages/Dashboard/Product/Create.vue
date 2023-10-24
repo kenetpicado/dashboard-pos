@@ -75,10 +75,10 @@
 
         <FormModal :show="openModal" title="Inventario" @onCancel="resetValues" @onSubmit="addInventory">
             <div class="grid grid-cols-2 gap-4">
-                <SelectForm text="Medida" v-model="currentProduct.measure" required>
-                    <option selected disabled value="">Seleccionar medida</option>
-                    <option v-for="item in measures" :value="item">{{ item }}</option>
-                </SelectForm>
+                <datalist id="measures">
+                    <option v-for="item in measures" :value="item" />
+                </datalist>
+                <InputForm text="Medida" v-model="currentProduct.measure" required :min="1" list="measures" />
                 <InputForm text="Cantidad" v-model="currentProduct.quantity" type="number" required :min="1" />
                 <InputForm text="Costo (Unidad)" v-model="currentProduct.cost" type="number" required :min="1" />
                 <InputForm text="Precio (Unidad)" v-model="currentProduct.price" type="number" required :min="1" />

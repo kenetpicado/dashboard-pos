@@ -44,18 +44,16 @@
 </template>
 
 <script setup>
-import AppLayout from '@/Layouts/AppLayout.vue';
-import TableSection from '@/Components/TableSection.vue';
-import { IconPencil, IconTrash, IconCornerDownRight } from '@tabler/icons-vue';
 import AddButton from '@/Components/Buttons/AddButton.vue';
-import FormModal from '@/Components/Modal/FormModal.vue';
 import InputForm from '@/Components/Form/InputForm.vue';
-import SelectForm from "@/Components/Form/SelectForm.vue"
-import { ref } from 'vue';
-import { useCategory } from '@/Composables/useCategory.js';
+import FormModal from '@/Components/Modal/FormModal.vue';
+import TableSection from '@/Components/TableSection.vue';
+import AppLayout from '@/Layouts/AppLayout.vue';
 import { confirmAlert } from '@/Use/helpers';
-import { router, useForm } from '@inertiajs/vue3';
 import { toast } from '@/Use/toast';
+import { router, useForm } from '@inertiajs/vue3';
+import { IconPencil, IconTrash } from '@tabler/icons-vue';
+import { ref } from 'vue';
 
 defineProps({
     measures: {
@@ -90,7 +88,6 @@ function edit(c) {
 }
 
 function onSubmit() {
-	form.name = form.name.toUpperCase()
     if (isNew.value) {
         form.post(route("dashboard.measures.store"), {
             preserveScroll: true,

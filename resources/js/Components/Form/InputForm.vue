@@ -4,7 +4,7 @@
             {{ text }} <span v-if="description" class="text-indigo-600 text-xs">({{description}})</span>
         </label>
 
-        <input :type="type" :placeholder="placeholder" :disabled="disabled" :autofocus="autofocus" :required="required" :min="min"
+        <input :type="type" :list="list" :placeholder="placeholder" :disabled="disabled" :autofocus="autofocus" :required="required" :min="min"
             :autocomplete="autocomple"
             class="border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-lg shadow-sm mt-1 block w-full transition duration-300 ease-in-out"
             :class="[disabled ? 'bg-gray-100' : '']" :value="modelValue"
@@ -51,6 +51,9 @@ const props = defineProps({
         type: Number, required: false
     },
     description: {
+        type: String, required: false
+    },
+    list: {
         type: String, required: false
     }
 })

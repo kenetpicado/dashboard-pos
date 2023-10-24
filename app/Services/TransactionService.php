@@ -3,6 +3,7 @@
 namespace App\Services;
 
 use App\Models\Client;
+use App\Models\Measure;
 use App\Repositories\AlertRepository;
 use App\Repositories\InventoryRepository;
 use App\Repositories\ProductTransactionRepository;
@@ -24,6 +25,7 @@ class TransactionService
 
             if ($request['type'] == 'buy') {
                 $inventoryRepository->store($product, $transaction->user_id);
+                Measure::updateOrCreate(['name' => $product['measure']]);
             } else {
                 $inventoryRepository->decrement($product['inventory_id'], $product['quantity']);
 
