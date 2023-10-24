@@ -31,6 +31,7 @@
                 <th>Cantidad</th>
                 <th>Costo (ud.)</th>
                 <th>Todal</th>
+                <th>Actions</th>
             </template>
 
             <template #body>
@@ -58,6 +59,16 @@
                     <td>
                         <span class="font-bold">C${{ i.total_cost.toLocaleString() }}</span>
                     </td>
+                    <td>
+                        <div class="flex justify-between gap-4">
+                            <!-- <span tooltip="Editar">
+                                <IconPencil size="22" role="button" @click="edit(i)" />
+                            </span> -->
+                            <span tooltip="Eliminar">
+                                <IconTrash size="22" class="text-red-200" role="button" @click="destroy(i.id)" />
+                            </span>
+                        </div>
+                    </td>
                 </tr>
                 <tr v-if="inventory.data.length == 0">
                     <td colspan="6" class="text-center">No hay datos que mostrar</td>
@@ -79,8 +90,12 @@ import TableSection from '@/Components/TableSection.vue';
 import ThePaginator from "@/Components/ThePaginator.vue";
 import AppLayout from '@/Layouts/AppLayout.vue';
 import { queryParams, setParams, watchSearch, watchUser } from '@/Use/Search';
-import { IconCurrencyDollar, IconTag } from '@tabler/icons-vue';
+import { confirmAlert } from '@/Use/helpers';
+import { IconTrash } from '@tabler/icons-vue';
+import { IconCurrencyDollar, IconPencil, IconTag } from '@tabler/icons-vue';
 import { computed } from 'vue';
+import { router } from '@inertiajs/vue3';
+import { toast } from '@/Use/toast';
 
 const props = defineProps({
     inventory: {
@@ -132,5 +147,19 @@ setParams()
 watchSearch(route('dashboard.inventory.index'), ["inventory"])
 
 watchUser(route('dashboard.inventory.index'), ["inventory", "total", "total_quantity"])
+
+const destroy = (id) => {
+    confirmAlert({
+        onConfirm: () => {
+            router.delete(route('dashboard.inventory.destroy', id), {
+                preserveScroll: true,
+                preserveState: true,
+                onSuccess: () => {
+                    toast.success('Eliminado correctamente');
+                },
+            });
+        },
+    })
+}
 
 </script>

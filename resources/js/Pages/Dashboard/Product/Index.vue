@@ -43,9 +43,9 @@
                             <IconPencil size="22" role="button" />
                             </Link>
 
-                            <label tooltip="Eliminar">
+                            <!-- <label tooltip="Eliminar">
                                 <IconTrash size="22" role="button" @click="destroy(product.id)" />
-                            </label>
+                            </label> -->
                         </div>
                     </td>
                 </tr>

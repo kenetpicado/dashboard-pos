@@ -64,4 +64,11 @@ class TransactionController extends Controller
 
         return redirect()->route('dashboard.transactions.index');
     }
+
+    public function destroy(Transaction $transaction)
+    {
+        $transaction->forceDelete();
+
+        return back();
+    }
 }

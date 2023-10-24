@@ -36,12 +36,12 @@ Route::middleware(['auth:sanctum'])
             ->except(['create', 'edit', 'show']);
 
         Route::resource('transactions', TransactionController::class)
-            ->except(['destroy', 'update', 'edit']);
+            ->except(['update', 'edit']);
 
         Route::resource('products', ProductController::class);
 
         Route::resource('inventory', InventoryController::class)
-            ->only(['index', 'show']);
+            ->only(['index', 'show', 'update', 'destroy']);
 
         Route::resource('pending', PendingController::class)
             ->only(['index', 'show']);

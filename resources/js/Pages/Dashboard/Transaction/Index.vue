@@ -62,10 +62,14 @@
                         <span class="font-bold">C${{ transaction.total.toLocaleString() }}</span>
                     </td>
                     <td>
-                        <div class="flex gap-2">
+                        <div class="flex justify-between gap-4">
                             <Link :href="route('dashboard.transactions.show', transaction.id)" tooltip="Detalles">
                             <IconEye size="22" role="button" />
                             </Link>
+
+                            <span @click="confirmDestroy(transaction.id)" tooltip="Eliminar">
+                                <IconTrash size="22" role="button" class="text-red-200" />
+                            </span>
                         </div>
                     </td>
                 </tr>
@@ -88,7 +92,10 @@ import StatCard from '@/Components/StatCard.vue';
 import TableSection from '@/Components/TableSection.vue';
 import ThePaginator from "@/Components/ThePaginator.vue";
 import AppLayout from '@/Layouts/AppLayout.vue';
+import { confirmAlert } from "@/Use/helpers";
+import { toast } from "@/Use/toast";
 import { Link, router } from '@inertiajs/vue3';
+import { IconTrash } from "@tabler/icons-vue";
 import { IconCurrencyDollar, IconCurrencyDollarOff, IconEye } from '@tabler/icons-vue';
 import { computed, reactive, watch } from "vue";
 
@@ -204,6 +211,20 @@ function getData() {
         preserveState: true,
         preserveScroll: true,
         only: ["transactions", 'buy_month', 'sell_month']
+    })
+}
+
+function confirmDestroy(id) {
+    confirmAlert({
+        onConfirm: () => {
+            router.delete(route('dashboard.transactions.destroy', id), {
+                preserveScroll: true,
+                preserveState: true,
+                onSuccess: () => {
+                    toast.success('Eliminado correctamente');
+                },
+            });
+        },
     })
 }
 

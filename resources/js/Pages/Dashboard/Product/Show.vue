@@ -50,9 +50,13 @@
                         C${{ i.unit_price }}
                     </td>
                     <td>
-                        <div class="flex gap-4">
-                            <IconPencil size="22" role="button" @click="edit(i)" />
-                            <IconTrash size="22" role="button" @click="destroy(i)" />
+                        <div class="flex justify-between gap-4">
+                            <span tooltip="Editar">
+                                <IconPencil size="22" role="button" @click="edit(i)" />
+                            </span>
+                            <span tooltip="Eliminar">
+                                <IconTrash size="22" class="text-red-200" role="button" @click="destroy(i)" />
+                            </span>
                         </div>
                     </td>
                 </tr>
