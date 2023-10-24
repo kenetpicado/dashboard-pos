@@ -57,13 +57,13 @@
                         C${{ i.unit_cost }}
                     </td>
                     <td>
-                        <span class="font-bold">C${{ i.total_cost.toLocaleString() }}</span>
+                        <span class="font-bold">C${{ (i.quantity * i.unit_cost).toLocaleString() }}</span>
                     </td>
                     <td>
                         <div class="flex justify-between gap-4">
-                            <!-- <span tooltip="Editar">
+                            <span tooltip="Editar">
                                 <IconPencil size="22" role="button" @click="edit(i)" />
-                            </span> -->
+                            </span>
                             <span tooltip="Eliminar">
                                 <IconTrash size="22" class="text-red-200" role="button" @click="destroy(i.id)" />
                             </span>
@@ -78,6 +78,12 @@
                 <ThePaginator :links="inventory.links" />
             </template>
         </TableSection>
+
+        <EditInventoryForm @onCancel="resetValues()"
+            :openModal="openModal"
+            :form="form"
+            :measures="measures" />
+
     </AppLayout>
 </template>
 
@@ -92,10 +98,12 @@ import AppLayout from '@/Layouts/AppLayout.vue';
 import { queryParams, setParams, watchSearch, watchUser } from '@/Use/Search';
 import { confirmAlert } from '@/Use/helpers';
 import { IconTrash } from '@tabler/icons-vue';
-import { IconCurrencyDollar, IconPencil, IconTag } from '@tabler/icons-vue';
-import { computed } from 'vue';
+import { IconCurrencyDollar, IconTag } from '@tabler/icons-vue';
+import { computed, ref, reactive } from 'vue';
 import { router } from '@inertiajs/vue3';
 import { toast } from '@/Use/toast';
+import { IconPencil } from '@tabler/icons-vue';
+import EditInventoryForm from '@/Components/EditInventoryForm.vue';
 
 const props = defineProps({
     inventory: {
@@ -114,6 +122,10 @@ const props = defineProps({
         type: Object,
         required: true,
     },
+    measures: {
+        type: Object,
+        required: true,
+    },
 });
 
 const breads = [
@@ -126,6 +138,16 @@ const breads = [
         route: route('dashboard.inventory.index'),
     },
 ];
+
+const openModal = ref(false);
+
+const form = reactive({
+    id: null,
+    measure: null,
+    quantity: null,
+    unit_cost: null,
+    unit_price: null,
+})
 
 const stats = computed(() => {
     return [
@@ -160,6 +182,26 @@ const destroy = (id) => {
             });
         },
     })
+}
+
+function edit(i) {
+    form.id = i.id
+    form.measure = i.measure
+    form.quantity = i.quantity
+    form.unit_cost = i.unit_cost
+    form.unit_price = i.unit_price
+
+    openModal.value = true;
+}
+
+function resetValues() {
+    form.id = null
+    form.measure = null
+    form.quantity = null
+    form.unit_cost = null
+    form.unit_price = null
+
+    openModal.value = false
 }
 
 </script>

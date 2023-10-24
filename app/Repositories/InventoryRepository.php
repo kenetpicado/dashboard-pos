@@ -26,11 +26,11 @@ class InventoryRepository
             ->when(isset($request['search']), function ($query) use ($request) {
                 $query->where(function ($query) use ($request) {
                     $query->whereHas('product', function ($query) use ($request) {
-                        $query->where('name', 'like', '%'.$request['search'].'%')
-                            ->orWhere('sku', 'like', '%'.$request['search'].'%');
+                        $query->where('name', 'like', '%' . $request['search'] . '%')
+                            ->orWhere('sku', 'like', '%' . $request['search'] . '%');
                     });
                 })
-                    ->orWhere('measure', 'like', '%'.$request['search'].'%');
+                    ->orWhere('measure', 'like', '%' . $request['search'] . '%');
             })
             ->when(isset($request['user_id']), function ($query) use ($request) {
                 $query->where('user_id', $request['user_id']);
@@ -46,7 +46,8 @@ class InventoryRepository
             ->when(isset($request['user_id']), function ($query) use ($request) {
                 $query->where('user_id', $request['user_id']);
             })
-            ->sum('total_cost');
+            ->selectRaw('sum(quantity * unit_cost) as total')
+            ->value('total');
     }
 
     public function getTotalQuantity($request = [])
@@ -83,5 +84,17 @@ class InventoryRepository
         return DB::table('inventories')
             ->where('product_id', $product_id)
             ->sum('quantity');
+    }
+
+    public function update($inventory, $request)
+    {
+        Inventory::where('id', $inventory)
+            ->update([
+                'quantity' => $request['quantity'],
+                'unit_cost' => $request['unit_cost'],
+                'total_cost' => $request['unit_cost'] * $request['quantity'],
+                'unit_price' => $request['unit_price'],
+                'measure' => $request['measure'],
+            ]);
     }
 }
