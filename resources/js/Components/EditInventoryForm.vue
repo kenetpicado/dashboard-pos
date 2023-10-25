@@ -45,7 +45,6 @@ const form = useForm({
     id: props.form?.id ?? null,
     measure: props.form?.measure ?? null,
     quantity: props.form?.quantity ?? null,
-    unit_cost: props.form?.unit_cost ?? null,
     unit_price: props.form?.unit_price ?? null,
 })
 
@@ -69,7 +68,6 @@ watch(() => props.form, (value) => {
     form.id = value?.id ?? null
     form.measure = value?.measure ?? null
     form.quantity = value?.quantity ?? null
-    form.unit_cost = value?.unit_cost ?? null
     form.unit_price = value?.unit_price ?? null
 }, { deep: true })
 

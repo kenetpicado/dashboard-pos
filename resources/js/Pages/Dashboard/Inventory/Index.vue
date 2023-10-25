@@ -145,7 +145,6 @@ const form = reactive({
     id: null,
     measure: null,
     quantity: null,
-    unit_cost: null,
     unit_price: null,
 })
 
@@ -188,7 +187,6 @@ function edit(i) {
     form.id = i.id
     form.measure = i.measure
     form.quantity = i.quantity
-    form.unit_cost = i.unit_cost
     form.unit_price = i.unit_price
 
     openModal.value = true;
@@ -198,7 +196,6 @@ function resetValues() {
     form.id = null
     form.measure = null
     form.quantity = null
-    form.unit_cost = null
     form.unit_price = null
 
     openModal.value = false
