@@ -91,8 +91,6 @@ class InventoryRepository
         Inventory::where('id', $inventory)
             ->update([
                 'quantity' => $request['quantity'],
-                'unit_cost' => $request['unit_cost'],
-                'total_cost' => $request['unit_cost'] * $request['quantity'],
                 'unit_price' => $request['unit_price'],
                 'measure' => $request['measure'],
             ]);

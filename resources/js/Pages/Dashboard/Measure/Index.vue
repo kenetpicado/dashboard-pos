@@ -34,6 +34,10 @@
                     <td colspan="3" class="text-center">No hay datos que mostrar</td>
                 </tr>
             </template>
+
+            <template #paginator>
+                <ThePaginator :links="measures.links" />
+            </template>
         </TableSection>
 
         <FormModal :show="openModal" title="Medida" @onCancel="resetValues()" @onSubmit="onSubmit()">
@@ -48,6 +52,7 @@ import AddButton from '@/Components/Buttons/AddButton.vue';
 import InputForm from '@/Components/Form/InputForm.vue';
 import FormModal from '@/Components/Modal/FormModal.vue';
 import TableSection from '@/Components/TableSection.vue';
+import ThePaginator from '@/Components/ThePaginator.vue';
 import AppLayout from '@/Layouts/AppLayout.vue';
 import { confirmAlert } from '@/Use/helpers';
 import { toast } from '@/Use/toast';

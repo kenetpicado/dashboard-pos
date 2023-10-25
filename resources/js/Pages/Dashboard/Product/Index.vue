@@ -9,7 +9,7 @@
 
         <div class="mb-3">
             <div class="grid grid-cols-5 gap-4">
-                <InputForm text="Buscar" v-model="queryParams.search" />
+                <InputForm text="Buscar" type="search" v-model="queryParams.search" />
             </div>
         </div>
 
@@ -71,7 +71,7 @@ import { queryParams, setParams, watchSearch } from '@/Use/Search';
 import { confirmAlert } from '@/Use/helpers';
 import { toast } from '@/Use/toast';
 import { Link, router } from '@inertiajs/vue3';
-import { IconEye, IconPencil, IconTrash } from '@tabler/icons-vue';
+import { IconEye, IconPencil } from '@tabler/icons-vue';
 
 defineProps({
     products: {

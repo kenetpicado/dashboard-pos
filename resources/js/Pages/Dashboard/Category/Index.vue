@@ -29,7 +29,7 @@
                     </tr>
                     <tr class="hover:bg-gray-50" v-for="(children, index) in category.childrens">
                         <td>
-                            <span class="text-xs ml-4">
+                            <span class="ml-4">
                                 {{ children.name }}
                             </span>
                         </td>
