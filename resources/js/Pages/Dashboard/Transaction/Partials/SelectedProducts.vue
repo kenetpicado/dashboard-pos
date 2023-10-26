@@ -59,7 +59,7 @@
 			</div>
 
 			<div v-if="type = 'sell'">
-				<span class="text-indigo-600" @click="downloadProforma" role="button">Descargar proforma</span>
+				<button type="button" @click="downloadProforma">Descargar Proforma</button>
 			</div>
 
 			<div class="flex justify-end my-8">
@@ -125,19 +125,7 @@ function confirmStoreTransaction() {
 }
 
 function storeTransaction() {
-	form.products = props.products.map(function (product) {
-		return {
-			product_id: product.id,
-			quantity: product.quantity,
-			measure: product.measure,
-			cost: product.cost,
-			price: product.price,
-			inventory_id: product.inventory_id,
-			discount: product.discount ?? 0,
-		}
-	})
-
-	form.total = total.value;
+	formatInformation();
 
 	form.post(route("dashboard.transactions.store"), {
 		preserveScroll: true,
@@ -148,8 +136,29 @@ function storeTransaction() {
 	});
 }
 
-function downloadProforma() {
-	axios.post(route('dashboard.download.proforma'), {}, { responseType: 'blob' })
+function formatInformation() {
+	form.products = props.products.map(function (product) {
+		return {
+			product_id: product.id,
+			quantity: product.quantity,
+			measure: product.measure,
+			cost: product.cost,
+			price: product.price,
+			inventory_id: product.inventory_id,
+			discount: product.discount ?? 0,
+			name: product.name,
+		}
+	})
+
+	form.total = total.value;
+}
+
+function downloadProforma(event) {
+	event.preventDefault();
+
+	formatInformation();
+
+	axios.post(route('dashboard.download.proforma'), form, { responseType: 'blob' })
 		.then(response => {
 			const url = window.URL.createObjectURL(new Blob([response.data]));
 			const link = document.createElement('a');

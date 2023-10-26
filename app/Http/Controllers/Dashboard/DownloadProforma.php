@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Dashboard;
 
+use App\Exports\ProformaExport;
 use App\Exports\TransactionExport;
 use App\Http\Controllers\Controller;
 use App\Models\Transaction;
@@ -12,8 +13,6 @@ class DownloadProforma extends Controller
 {
     public function __invoke(Request $request)
     {
-        $transaction = Transaction::with(['user:id,name', 'products:id,name,sku'])->find(1);
-
-        return Excel::download(new TransactionExport($transaction), "Transaccion_{$transaction->id}.xlsx");
+        return Excel::download(new ProformaExport($request->all()), "Proforma.xlsx");
     }
 }
