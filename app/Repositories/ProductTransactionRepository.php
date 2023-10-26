@@ -40,4 +40,15 @@ class ProductTransactionRepository
     {
         DB::table('product_transaction')->insert($data);
     }
+
+    public function getBestSellers()
+    {
+        return DB::table('product_transaction')
+            ->join('products', 'products.id', '=', 'product_transaction.product_id')
+            ->select('product_id', DB::raw('SUM(quantity) as quantity'), 'products.name', 'products.image', 'products.sku')
+            ->groupBy('product_id')
+            ->orderBy('quantity', 'desc')
+            ->limit(20)
+            ->get();
+    }
 }

@@ -5,12 +5,15 @@
                 Agregar
             </span>
         </template>
-
         <FormSection @onSubmit="onSubmit">
             <InputForm text="SKU" v-model="form.sku" required />
-            <InputForm text="Name" v-model="form.name" required />
-            <InputForm text="Image" v-model="form.image" type="url" />
+            <InputForm text="Nombre" v-model="form.name" required />
+            <InputForm text="Imagen" v-model="form.image" type="url" />
             <InputForm text="Descuento" v-model="form.discount" type="number" :min="0" />
+            <SelectForm text="Categoria" v-model="form.category_id">
+                <option selected value="">Ninguna</option>
+                <option v-for="item in categories" :value="item.id">{{ item.name }}</option>
+            </SelectForm>
 
             <template v-if="isNew">
                 <div class="col-span-2">
@@ -72,10 +75,10 @@
 
         <FormModal :show="openModal" title="Inventario" @onCancel="resetValues" @onSubmit="addInventory">
             <div class="grid grid-cols-2 gap-4">
-                <SelectForm text="Medida" v-model="currentProduct.measure" required>
-                    <option selected disabled value="">Seleccionar medida</option>
-                    <option v-for="item in measures" :value="item">{{ item }}</option>
-                </SelectForm>
+                <datalist id="measures">
+                    <option v-for="item in measures" :value="item" />
+                </datalist>
+                <InputForm text="Medida" v-model="currentProduct.measure" required :min="1" list="measures" />
                 <InputForm text="Cantidad" v-model="currentProduct.quantity" type="number" required :min="1" />
                 <InputForm text="Costo (Unidad)" v-model="currentProduct.cost" type="number" required :min="1" />
                 <InputForm text="Precio (Unidad)" v-model="currentProduct.price" type="number" required :min="1" />
@@ -116,6 +119,10 @@ const props = defineProps({
         type: Object,
         required: false,
     },
+    categories: {
+        type: Object,
+        required: false,
+    },
 });
 
 const form = useForm({
@@ -124,6 +131,7 @@ const form = useForm({
     name: props.product?.name ?? null,
     image: props.product?.image ?? null,
     discount: props.product?.discount ?? 0,
+    category_id: props.product?.category_id ?? null,
     inventory: [],
     total: 0,
 })

@@ -50,9 +50,13 @@
                         C${{ i.unit_price }}
                     </td>
                     <td>
-                        <div class="flex gap-4">
-                            <IconPencil size="22" role="button" @click="edit(i)" />
-                            <IconTrash size="22" role="button" @click="destroy(i)" />
+                        <div class="flex justify-between gap-4">
+                            <span tooltip="Editar">
+                                <IconPencil size="22" role="button" @click="edit(i)" />
+                            </span>
+                            <span tooltip="Eliminar">
+                                <IconTrash size="22" class="text-red-200" role="button" @click="destroy(i)" />
+                            </span>
                         </div>
                     </td>
                 </tr>
@@ -65,19 +69,10 @@
             </template>
         </TableSection>
 
-        <FormModal :show="openModal" title="Editar" @onCancel="resetValues()" @onSubmit="update()">
-            <div class="grid grid-cols-2 gap-4">
-                <InputForm text="Medida" v-model="form.measure" required />
-                <InputForm text="Cantidad" v-model="form.quantity" type="number" required :min="1" />
-                <InputForm text="Costo (Unidad)" v-model="form.unit_cost" type="number" required :min="1" />
-                <InputForm text="Precio (Unidad)" v-model="form.unit_price" type="number" required :min="1" />
-                <div class="flex justify-end col-span-2">
-                    <div class="text-xl font-bold">
-                        Total: {{ (form.quantity * form.unit_cost).toLocaleString() }}
-                    </div>
-                </div>
-            </div>
-        </FormModal>
+        <EditInventoryForm @onCancel="resetValues()"
+            :openModal="openModal"
+            :form="form"
+            :measures="measures" />
     </AppLayout>
 </template>
 
@@ -86,16 +81,14 @@ import AppLayout from '@/Layouts/AppLayout.vue';
 import TableSection from '@/Components/TableSection.vue';
 import ThePaginator from "@/Components/ThePaginator.vue"
 import { IconPencil } from '@tabler/icons-vue';
-import { useForm } from '@inertiajs/vue3';
-import { ref, computed } from 'vue';
-import FormModal from '@/Components/Modal/FormModal.vue';
-import InputForm from '@/Components/Form/InputForm.vue';
+import { ref, computed, reactive } from 'vue';
 import { toast } from '@/Use/toast';
 import { IconTrash } from '@tabler/icons-vue';
 import StatCard from '@/Components/StatCard.vue';
 import { IconTag } from '@tabler/icons-vue';
 import { IconCurrencyDollar } from '@tabler/icons-vue';
 import DateColumn from '@/Components/DateColumn.vue';
+import EditInventoryForm from '@/Components/EditInventoryForm.vue';
 
 const props = defineProps({
     product: {
@@ -110,15 +103,18 @@ const props = defineProps({
         type: Object,
         required: true,
     },
+    measures: {
+        type: Object,
+        required: true,
+    }
 });
 
 const openModal = ref(false);
 
-const form = useForm({
+const form = reactive({
     id: null,
     measure: null,
     quantity: null,
-    unit_cost: null,
     unit_price: null,
 })
 
@@ -138,24 +134,20 @@ const breads = [
 ];
 
 const edit = (i) => {
-    Object.assign(form, i)
+    form.id = i.id
+    form.measure = i.measure
+    form.quantity = i.quantity
+    form.unit_price = i.unit_price
+
     openModal.value = true;
 }
 
 const resetValues = () => {
     openModal.value = false
-    form.reset()
-}
-
-const update = () => {
-    form.put(route('dashboard.inventory.update', form.id), {
-        preserveScroll: true,
-        preserveState: true,
-        onSuccess: () => {
-            toast.success('Registro actualizado correctamente')
-            resetValues()
-        }
-    })
+    form.id = null
+    form.measure = null
+    form.quantity = null
+    form.unit_price = null
 }
 
 const destroy = (id) => {

@@ -26,11 +26,11 @@ class InventoryRepository
             ->when(isset($request['search']), function ($query) use ($request) {
                 $query->where(function ($query) use ($request) {
                     $query->whereHas('product', function ($query) use ($request) {
-                        $query->where('name', 'like', '%'.$request['search'].'%')
-                            ->orWhere('sku', 'like', '%'.$request['search'].'%');
+                        $query->where('name', 'like', '%' . $request['search'] . '%')
+                            ->orWhere('sku', 'like', '%' . $request['search'] . '%');
                     });
                 })
-                    ->orWhere('measure', 'like', '%'.$request['search'].'%');
+                    ->orWhere('measure', 'like', '%' . $request['search'] . '%');
             })
             ->when(isset($request['user_id']), function ($query) use ($request) {
                 $query->where('user_id', $request['user_id']);
@@ -46,7 +46,8 @@ class InventoryRepository
             ->when(isset($request['user_id']), function ($query) use ($request) {
                 $query->where('user_id', $request['user_id']);
             })
-            ->sum('total_cost');
+            ->selectRaw('COALESCE(sum(quantity * unit_cost), 0) as total')
+            ->value('total');
     }
 
     public function getTotalQuantity($request = [])
@@ -59,13 +60,12 @@ class InventoryRepository
             ->sum('quantity');
     }
 
-    public function decrement($inventory_id, $quentity)
+    public function decrement($inventory_id, $quantity)
     {
-        $inventory = Inventory::find($inventory_id);
-        $inventory->decrement('quantity', $quentity);
+        DB::table('inventories')->where('id', $inventory_id)->decrement('quantity', $quantity);
     }
 
-    public function store(array $request, $user_id)
+    public function store(array $request, $transaction)
     {
         return Inventory::create([
             'product_id' => $request['product_id'],
@@ -75,7 +75,37 @@ class InventoryRepository
             'total_cost' => $request['cost'] * $request['quantity'],
             'unit_price' => $request['price'],
             'measure' => $request['measure'],
-            'user_id' => $user_id,
+            'user_id' => $transaction->user_id,
+            'transaction_id' => $transaction->id,
+            'expired_at' => $request['expired_at'] ?? null,
         ]);
+    }
+
+    public function getTotalQuantityByProduct($product_id)
+    {
+        return DB::table('inventories')
+            ->where('product_id', $product_id)
+            ->sum('quantity');
+    }
+
+    public function update($inventory, $request)
+    {
+        Inventory::where('id', $inventory)
+            ->update([
+                'quantity' => $request['quantity'],
+                'unit_price' => $request['unit_price'],
+                'measure' => $request['measure'],
+            ]);
+    }
+
+    public function soonToExpire()
+    {
+        return Inventory::query()
+            ->where('quantity', '>', 0)
+            ->whereNotNull('expired_at')
+            ->orderBy('expired_at', 'asc')
+            ->with('product:id,sku,name')
+            ->select('id', 'product_id', 'quantity', 'expired_at', 'measure')
+            ->paginate();
     }
 }

@@ -11,7 +11,7 @@
 				</div>
 				<div class="w-full flex flex-col justify-between">
 					<div class="mb-3">
-						<div class="text-lg font-semibold mb-2" @click="$emit('edit', index)" role="button">
+						<div class="text-lg font-semibold mb-2 uppercase" @click="$emit('edit', index)" role="button">
 							{{ product.name }} - {{ product.measure }} ({{ product.quantity }})
 						</div>
 						<div class="text-gray-400">
@@ -58,6 +58,10 @@
 				La transaccion se guardara como PENDIENTE.
 			</div>
 
+			<div v-if="type = 'sell'">
+				<button type="button" @click="downloadProforma">Descargar Proforma</button>
+			</div>
+
 			<div class="flex justify-end my-8">
 				<div class="text-xl font-bold">
 					Total: C${{ total.toLocaleString('en-US') }}
@@ -65,7 +69,7 @@
 			</div>
 			<div class="flex items-center justify-end gap-4">
 				<button class="secondary-button">Cancelar</button>
-				<button class="primary-button" type="button" @click="storeTransaction">
+				<button class="primary-button" type="button" @click="confirmStoreTransaction">
 					Guardar
 				</button>
 			</div>
@@ -74,11 +78,14 @@
 </template>
 
 <script setup>
-import { computed, watch } from 'vue';
+import { computed } from 'vue';
 import InputForm from '@/Components/Form/InputForm.vue';
 import { IconTrash } from '@tabler/icons-vue';
 import { useForm } from '@inertiajs/vue3';
 import { toast } from '@/Use/toast';
+import { confirmAlert } from '@/Use/helpers';
+import axios from 'axios';
+import { Carbon } from '@/Use/Carbon';
 
 const props = defineProps({
 	products: {
@@ -109,7 +116,27 @@ const total = computed(() => {
 	return props.products.reduce((acc, product) => acc + (product.quantity * product.price - product.discount), 0) - (form.discount ?? 0);
 });
 
+function confirmStoreTransaction() {
+	confirmAlert({
+		onConfirm: () => {
+			storeTransaction();
+		},
+	})
+}
+
 function storeTransaction() {
+	formatInformation();
+
+	form.post(route("dashboard.transactions.store"), {
+		preserveScroll: true,
+		preserveState: true,
+		onSuccess: () => {
+			toast.success("Transaccion relizada correctamente");
+		},
+	});
+}
+
+function formatInformation() {
 	form.products = props.products.map(function (product) {
 		return {
 			product_id: product.id,
@@ -119,18 +146,31 @@ function storeTransaction() {
 			price: product.price,
 			inventory_id: product.inventory_id,
 			discount: product.discount ?? 0,
+			name: product.name,
+			expired_at: product.expired_at,
 		}
 	})
 
 	form.total = total.value;
+}
 
-	form.post(route("dashboard.transactions.store"), {
-		preserveScroll: true,
-		preserveState: true,
-		onSuccess: () => {
-			toast.success("Transaccion relizada correctamente");
-		},
-	});
+function downloadProforma(event) {
+	event.preventDefault();
+
+	formatInformation();
+
+	axios.post(route('dashboard.download.proforma'), form, { responseType: 'blob' })
+		.then(response => {
+			const url = window.URL.createObjectURL(new Blob([response.data]));
+			const link = document.createElement('a');
+			link.href = url;
+			link.setAttribute('download', `Proforma_${Carbon.create().format('m_d_Y_H_i')}.xlsx`);
+			document.body.appendChild(link);
+			link.click();
+		})
+		.catch(() => {
+			toast.error("Ocurrio un error al descargar la proforma");
+		});
 }
 
 </script>

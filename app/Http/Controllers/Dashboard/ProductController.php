@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Dashboard;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Dashboard\ProductRequest;
 use App\Models\Product;
+use App\Repositories\CategoryRepository;
 use App\Repositories\InventoryRepository;
 use App\Repositories\MeasureRepository;
 use App\Repositories\ProductRepository;
@@ -17,6 +18,7 @@ class ProductController extends Controller
         private readonly ProductRepository $productRepository,
         private readonly InventoryRepository $inventoryRepository,
         private readonly MeasureRepository $measureRepository,
+        private readonly CategoryRepository $categoryRepository,
     ) {
     }
 
@@ -31,6 +33,7 @@ class ProductController extends Controller
     {
         return inertia('Dashboard/Product/Create', [
             'measures' => $this->measureRepository->getNames(),
+            'categories' => $this->categoryRepository->getSimpleList(),
         ]);
     }
 
@@ -58,6 +61,7 @@ class ProductController extends Controller
     {
         return inertia('Dashboard/Product/Show', [
             'product' => $product,
+            'measures' => $this->measureRepository->getNames(),
             'inventory' => $this->productRepository->getInventory($product),
             'inventoryStatus' => $this->productRepository->getInventoryStatus($product),
         ]);

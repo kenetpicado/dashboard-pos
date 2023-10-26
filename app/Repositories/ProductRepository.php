@@ -24,6 +24,7 @@ class ProductRepository
                 $query->where('name', 'like', "%{$request['search']}%")
                     ->orWhere('sku', 'like', "%{$request['search']}%");
             })
+            ->orderBy('name')
             ->paginate();
     }
 

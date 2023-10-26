@@ -9,7 +9,7 @@
 
         <div class="mb-1">
             <div class="grid grid-cols-5 gap-4">
-                <InputForm text="Buscar" type="search" v-model="queryParams.search" />
+                <InputForm text="Buscar" v-model="queryParams.search" />
                 <SelectForm text="Responsable" v-model="queryParams.user_id">
                     <option selected value="">Todos</option>
                     <option v-for="item in users" :value="item.id">{{ item.name }}</option>
@@ -31,6 +31,7 @@
                 <th>Cantidad</th>
                 <th>Costo (ud.)</th>
                 <th>Todal</th>
+                <th>Actions</th>
             </template>
 
             <template #body>
@@ -56,7 +57,17 @@
                         C${{ i.unit_cost }}
                     </td>
                     <td>
-                        <span class="font-bold">C${{ i.total_cost.toLocaleString() }}</span>
+                        <span class="font-bold">C${{ (i.quantity * i.unit_cost).toLocaleString() }}</span>
+                    </td>
+                    <td>
+                        <div class="flex justify-between gap-4">
+                            <span tooltip="Editar">
+                                <IconPencil size="22" role="button" @click="edit(i)" />
+                            </span>
+                            <span tooltip="Eliminar">
+                                <IconTrash size="22" class="text-red-200" role="button" @click="destroy(i.id)" />
+                            </span>
+                        </div>
                     </td>
                 </tr>
                 <tr v-if="inventory.data.length == 0">
@@ -67,6 +78,12 @@
                 <ThePaginator :links="inventory.links" />
             </template>
         </TableSection>
+
+        <EditInventoryForm @onCancel="resetValues()"
+            :openModal="openModal"
+            :form="form"
+            :measures="measures" />
+
     </AppLayout>
 </template>
 
@@ -79,8 +96,14 @@ import TableSection from '@/Components/TableSection.vue';
 import ThePaginator from "@/Components/ThePaginator.vue";
 import AppLayout from '@/Layouts/AppLayout.vue';
 import { queryParams, setParams, watchSearch, watchUser } from '@/Use/Search';
+import { confirmAlert } from '@/Use/helpers';
+import { IconTrash } from '@tabler/icons-vue';
 import { IconCurrencyDollar, IconTag } from '@tabler/icons-vue';
-import { computed } from 'vue';
+import { computed, ref, reactive } from 'vue';
+import { router } from '@inertiajs/vue3';
+import { toast } from '@/Use/toast';
+import { IconPencil } from '@tabler/icons-vue';
+import EditInventoryForm from '@/Components/EditInventoryForm.vue';
 
 const props = defineProps({
     inventory: {
@@ -99,6 +122,10 @@ const props = defineProps({
         type: Object,
         required: true,
     },
+    measures: {
+        type: Object,
+        required: true,
+    },
 });
 
 const breads = [
@@ -111,6 +138,15 @@ const breads = [
         route: route('dashboard.inventory.index'),
     },
 ];
+
+const openModal = ref(false);
+
+const form = reactive({
+    id: null,
+    measure: null,
+    quantity: null,
+    unit_price: null,
+})
 
 const stats = computed(() => {
     return [
@@ -132,5 +168,37 @@ setParams()
 watchSearch(route('dashboard.inventory.index'), ["inventory"])
 
 watchUser(route('dashboard.inventory.index'), ["inventory", "total", "total_quantity"])
+
+const destroy = (id) => {
+    confirmAlert({
+        onConfirm: () => {
+            router.delete(route('dashboard.inventory.destroy', id), {
+                preserveScroll: true,
+                preserveState: true,
+                onSuccess: () => {
+                    toast.success('Eliminado correctamente');
+                },
+            });
+        },
+    })
+}
+
+function edit(i) {
+    form.id = i.id
+    form.measure = i.measure
+    form.quantity = i.quantity
+    form.unit_price = i.unit_price
+
+    openModal.value = true;
+}
+
+function resetValues() {
+    form.id = null
+    form.measure = null
+    form.quantity = null
+    form.unit_price = null
+
+    openModal.value = false
+}
 
 </script>

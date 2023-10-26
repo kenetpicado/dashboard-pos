@@ -1,6 +1,6 @@
 <template>
 	<div>
-		<InputForm placeholder="Buscar" v-model="queryParams.search" type="search"></InputForm>
+		<InputForm placeholder="Buscar" v-model="queryParams.search"></InputForm>
 		<table class="w-full border-collapse bg-white text-left text-sm text-gray-600 rounded-lg">
 			<thead class="bg-gray-50">
 				<tr>
@@ -18,7 +18,7 @@
 						</div>
 					</td>
 					<td>
-						<div>
+						<div class="uppercase">
 							{{ product.name }}
 						</div>
 						<div class="text-gray-400 flex items-center gap-1">

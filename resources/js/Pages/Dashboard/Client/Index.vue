@@ -9,7 +9,7 @@
 
         <div class="mb-3">
             <div class="grid grid-cols-5 gap-4">
-                <InputForm text="Buscar" type="search" v-model="queryParams.search" />
+                <InputForm text="Buscar" v-model="queryParams.search" />
             </div>
         </div>
 
@@ -41,7 +41,7 @@
                     </td>
                 </tr>
                 <tr v-if="clients.data.length == 0">
-                    <td colspan="3" class="text-center">No hay datos que mostrar</td>
+                    <td colspan="4" class="text-center">No hay datos que mostrar</td>
                 </tr>
             </template>
             <template #paginator>

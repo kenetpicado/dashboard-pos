@@ -10,4 +10,9 @@ class Measure extends Model
     use HasFactory;
 
     protected $fillable = ['name'];
+
+    public function setNameAttribute($value)
+    {
+        $this->attributes['name'] = mb_strtoupper($value, 'UTF-8');
+    }
 }

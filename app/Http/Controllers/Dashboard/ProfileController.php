@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Dashboard;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Dashboard\ProfileRequest;
+use App\Models\Setting;
 use App\Models\User;
 use Illuminate\Support\Facades\Hash;
 
@@ -13,6 +14,7 @@ class ProfileController extends Controller
     {
         return inertia('Dashboard/Profile/Index', [
             'profile' => auth()->user(),
+            'settings' => Setting::all(['key', 'value']),
         ]);
     }
 
@@ -30,6 +32,15 @@ class ProfileController extends Controller
         }
 
         $user->save();
+
+        if ($request->settings) {
+            foreach ($request->settings as $key => $value) {
+                Setting::updateOrCreate(
+                    ['key' => $key],
+                    ['value' => $value]
+                );
+            }
+        }
 
         return redirect()->route('dashboard.index');
     }

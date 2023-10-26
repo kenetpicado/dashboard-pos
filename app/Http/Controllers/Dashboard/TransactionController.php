@@ -20,7 +20,7 @@ class TransactionController extends Controller
         private readonly ProductRepository $productRepository,
         private readonly TransactionService $transactionService,
         private readonly UserRepository $userRepository,
-        private readonly MeasureRepository $measureRespository
+        private readonly MeasureRepository $measureRespository,
     ) {
     }
 
@@ -63,5 +63,12 @@ class TransactionController extends Controller
         $this->transactionService->store($request->validated());
 
         return redirect()->route('dashboard.transactions.index');
+    }
+
+    public function destroy(Transaction $transaction)
+    {
+        $transaction->forceDelete();
+
+        return back();
     }
 }

@@ -13,8 +13,9 @@ return new class extends Migration
     {
         Schema::create('inventories', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('product_id')->constrained();
-            $table->foreignId('user_id')->constrained();
+            $table->foreignId('product_id')->constrained()->onDelete('cascade');
+            $table->foreignId('transaction_id')->constrained()->onDelete('cascade');
+            $table->foreignId('user_id')->nullable()->constrained()->onDelete('set null');
             $table->integer('initial_quantity');
             $table->integer('quantity');
             $table->double('unit_cost');
@@ -25,6 +26,7 @@ return new class extends Migration
             $table->string('status')->nullable();
             $table->string('note')->nullable();
             $table->double('discount')->default(0);
+            $table->datetime('expired_at')->nullable();
             $table->timestamps();
         });
     }

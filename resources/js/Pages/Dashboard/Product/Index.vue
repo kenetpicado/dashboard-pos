@@ -43,9 +43,9 @@
                             <IconPencil size="22" role="button" />
                             </Link>
 
-                            <label tooltip="Eliminar">
+                            <!-- <label tooltip="Eliminar">
                                 <IconTrash size="22" role="button" @click="destroy(product.id)" />
-                            </label>
+                            </label> -->
                         </div>
                     </td>
                 </tr>
@@ -71,7 +71,7 @@ import { queryParams, setParams, watchSearch } from '@/Use/Search';
 import { confirmAlert } from '@/Use/helpers';
 import { toast } from '@/Use/toast';
 import { Link, router } from '@inertiajs/vue3';
-import { IconEye, IconPencil, IconTrash } from '@tabler/icons-vue';
+import { IconEye, IconPencil } from '@tabler/icons-vue';
 
 defineProps({
     products: {

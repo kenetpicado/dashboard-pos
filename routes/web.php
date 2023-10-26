@@ -1,10 +1,15 @@
 <?php
 
+use App\Http\Controllers\Dashboard\AlertController;
+use App\Http\Controllers\Dashboard\BestSellerController;
 use App\Http\Controllers\Dashboard\CategoryController;
 use App\Http\Controllers\Dashboard\ClientController;
 use App\Http\Controllers\Dashboard\DashboardController;
+use App\Http\Controllers\Dashboard\DownloadProforma;
 use App\Http\Controllers\Dashboard\DownloadTransactionController;
+use App\Http\Controllers\Dashboard\ExpiredController;
 use App\Http\Controllers\Dashboard\InventoryController;
+use App\Http\Controllers\Dashboard\MarkAlertsAsRead;
 use App\Http\Controllers\Dashboard\MeasureController;
 use App\Http\Controllers\Dashboard\PaymentController;
 use App\Http\Controllers\Dashboard\PendingController;
@@ -32,12 +37,12 @@ Route::middleware(['auth:sanctum'])
             ->except(['create', 'edit', 'show']);
 
         Route::resource('transactions', TransactionController::class)
-            ->except(['destroy', 'update', 'edit']);
+            ->except(['update', 'edit']);
 
         Route::resource('products', ProductController::class);
 
         Route::resource('inventory', InventoryController::class)
-            ->only(['index', 'show']);
+            ->only(['index', 'show', 'update', 'destroy']);
 
         Route::resource('pending', PendingController::class)
             ->only(['index', 'show']);
@@ -48,7 +53,24 @@ Route::middleware(['auth:sanctum'])
         Route::resource('clients', ClientController::class)
             ->only(['index', 'show']);
 
-        Route::get('download/transaction/{transaction}', DownloadTransactionController::class)->name('download.transaction');
+        Route::get('download/transaction/{transaction}', DownloadTransactionController::class)
+            ->name('download.transaction');
 
-        Route::resource('measures', MeasureController::class);
+        Route::resource('measures', MeasureController::class)
+            ->except(['create', 'edit', 'show']);
+
+        Route::get('best-seller', BestSellerController::class)
+            ->name('best-seller');
+
+        Route::resource('alerts', AlertController::class)
+            ->only(['index', 'destroy']);
+
+        Route::put('alerts-mark-as-read', MarkAlertsAsRead::class)
+            ->name('alerts.mark-as-read');
+
+        Route::post('download/proforma', DownloadProforma::class)
+            ->name('download.proforma');
+
+        Route::resource('expired', ExpiredController::class)
+            ->only(['index']);
     });

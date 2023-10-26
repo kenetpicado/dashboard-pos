@@ -26,6 +26,9 @@ class ProfileRequest extends FormRequest
             'name' => ['required', 'max:255'],
             'email' => ['required', 'email', 'max:255', Rule::unique('users')->ignore(auth()->id())],
             'password' => ['sometimes', 'min:8', 'confirmed'],
+            'settings' => ['sometimes', 'array'],
+            'settings.product_min' => ['nullable'],
+            'settings.product_type' => ['required'],
         ];
     }
 }
