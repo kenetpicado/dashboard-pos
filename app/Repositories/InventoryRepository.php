@@ -46,7 +46,7 @@ class InventoryRepository
             ->when(isset($request['user_id']), function ($query) use ($request) {
                 $query->where('user_id', $request['user_id']);
             })
-            ->selectRaw('sum(quantity * unit_cost) as total')
+            ->selectRaw('COALESCE(sum(quantity * unit_cost), 0) as total')
             ->value('total');
     }
 
@@ -65,7 +65,7 @@ class InventoryRepository
         DB::table('inventories')->where('id', $inventory_id)->decrement('quantity', $quantity);
     }
 
-    public function store(array $request, $user_id)
+    public function store(array $request, $transaction)
     {
         return Inventory::create([
             'product_id' => $request['product_id'],
@@ -75,7 +75,8 @@ class InventoryRepository
             'total_cost' => $request['cost'] * $request['quantity'],
             'unit_price' => $request['price'],
             'measure' => $request['measure'],
-            'user_id' => $user_id,
+            'user_id' => $transaction->user_id,
+            'transaction_id' => $transaction->id,
         ]);
     }
 
