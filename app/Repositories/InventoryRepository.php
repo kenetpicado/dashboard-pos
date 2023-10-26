@@ -97,4 +97,15 @@ class InventoryRepository
                 'measure' => $request['measure'],
             ]);
     }
+
+    public function soonToExpire()
+    {
+        return Inventory::query()
+            ->where('quantity', '>', 0)
+            ->whereNotNull('expired_at')
+            ->orderBy('expired_at', 'asc')
+            ->with('product:id,sku,name')
+            ->select('id', 'product_id', 'quantity', 'expired_at', 'measure')
+            ->paginate();
+    }
 }

@@ -2,9 +2,7 @@
     <aside class="w-72 p-3 bg-white flex flex-col min-h-screen">
         <div class="flex flex-col items-center my-4">
             <div class="h-14 w-14">
-                <img class="h-full w-full"
-                    src="/shop.png"
-                    alt="" />
+                <img class="h-full w-full" src="/shop.png" alt="" />
             </div>
             <h2 class="text-2xl font-extrabold text-gray-600">
                 {{ $page.props.app_name }}
@@ -12,18 +10,31 @@
         </div>
         <ul class="space-y-2 text-gray-600">
             <li v-for="item in items">
-                <span v-if="item.header" class="block text-xs text-gray-400 uppercase tracking-wider mt-2 px-2">
-                    {{ item.header }}
-                </span>
-                <Link v-else :href="item.route">
-                <span class="flex items-center px-2 py-3 rounded-lg gap-4" :class="getClass(item.route)">
-                    <component :is="item.icon ?? DEFAULT_ICON"></component>
-                    <span v-if="item.name == 'Alertas' && $page.props.alerts_count > 0">
-                        {{ item.name }} ({{ $page.props.alerts_count }})
+                <template v-if="item.permission == undefined">
+                    <span v-if="item.header" class="block text-xs text-gray-400 uppercase tracking-wider mt-2 px-2">
+                        {{ item.header }}
                     </span>
-                    <span v-else>{{ item.name }}</span>
-                </span>
-                </Link>
+                    <Link v-else :href="item.route">
+                    <span class="flex items-center px-2 py-3 rounded-lg gap-4" :class="getClass(item.route)">
+                        <component :is="item.icon ?? DEFAULT_ICON"></component>
+                        <span v-if="item.name == 'Alertas' && $page.props.alerts_count > 0">
+                            {{ item.name }} ({{ $page.props.alerts_count }})
+                        </span>
+                        <span v-else>{{ item.name }}</span>
+                    </span>
+                    </Link>
+                </template>
+                <template v-else>
+                    <Link v-if="item.permission == 'is_caducable' && $page.props.is_caducable == true" :href="item.route">
+                    <span class="flex items-center px-2 py-3 rounded-lg gap-4" :class="getClass(item.route)">
+                        <component :is="item.icon ?? DEFAULT_ICON"></component>
+                        <span v-if="item.name == 'Alertas' && $page.props.alerts_count > 0">
+                            {{ item.name }} ({{ $page.props.alerts_count }})
+                        </span>
+                        <span v-else>{{ item.name }}</span>
+                    </span>
+                    </Link>
+                </template>
             </li>
             <li>
                 <span @click="logout" class="flex items-center px-2 py-3 rounded-lg gap-4 hover:bg-gray-100" role="button">
@@ -40,12 +51,13 @@ import { Link, router } from '@inertiajs/vue3';
 import { IconShoppingCart } from '@tabler/icons-vue';
 import { IconClock } from '@tabler/icons-vue';
 import { IconStar } from '@tabler/icons-vue';
+import { IconMoodSad } from '@tabler/icons-vue';
 import { IconBell } from '@tabler/icons-vue';
 import { IconUserCheck } from '@tabler/icons-vue';
 import { IconTag } from '@tabler/icons-vue';
 import { IconShoppingBag } from '@tabler/icons-vue';
 import { IconUserCog } from '@tabler/icons-vue';
-import { IconHome, IconLogout, IconUser, IconCategory, IconBuildingFactory, IconClipboardList, IconEyeCheck, IconShirt, IconRuler } from '@tabler/icons-vue';
+import { IconHome, IconLogout, IconUser, IconCategory, IconClipboardList, IconEyeCheck, IconRuler } from '@tabler/icons-vue';
 
 const DEFAULT_ICON = IconUser;
 
@@ -104,6 +116,12 @@ const items = [
         icon: IconStar
     },
     {
+        name: 'Proximos a vencer',
+        route: route('dashboard.expired.index'),
+        icon: IconMoodSad,
+        permission: 'is_caducable'
+    },
+    {
         name: 'Alertas',
         route: route('dashboard.alerts.index'),
         icon: IconBell
@@ -126,7 +144,7 @@ const items = [
         route: route('dashboard.categories.index'),
         icon: IconCategory
     },
-     {
+    {
         name: 'Medidas',
         route: route('dashboard.measures.index'),
         icon: IconRuler

@@ -3,16 +3,19 @@
 namespace App\Http\Middleware;
 
 use App\Repositories\AlertRepository;
+use App\Repositories\SettingRepository;
 use Illuminate\Http\Request;
 use Inertia\Middleware;
 
 class HandleInertiaRequests extends Middleware
 {
     public $alertRepository;
+    public $settingRepository;
 
     public function __construct()
     {
         $this->alertRepository = new AlertRepository();
+        $this->settingRepository = new SettingRepository();
     }
     /**
      * The root template that's loaded on the first page visit.
@@ -44,6 +47,7 @@ class HandleInertiaRequests extends Middleware
             'app_name' => config('app.name'),
             'auth' => auth()->user(),
             'alerts_count' => $this->alertRepository->countUnread(),
+            'is_caducable' => $this->settingRepository->isCaducable(),
         ]);
     }
 }

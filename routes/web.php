@@ -7,6 +7,7 @@ use App\Http\Controllers\Dashboard\ClientController;
 use App\Http\Controllers\Dashboard\DashboardController;
 use App\Http\Controllers\Dashboard\DownloadProforma;
 use App\Http\Controllers\Dashboard\DownloadTransactionController;
+use App\Http\Controllers\Dashboard\ExpiredController;
 use App\Http\Controllers\Dashboard\InventoryController;
 use App\Http\Controllers\Dashboard\MarkAlertsAsRead;
 use App\Http\Controllers\Dashboard\MeasureController;
@@ -69,4 +70,7 @@ Route::middleware(['auth:sanctum'])
 
         Route::post('download/proforma', DownloadProforma::class)
             ->name('download.proforma');
+
+        Route::resource('expired', ExpiredController::class)
+            ->only(['index']);
     });
