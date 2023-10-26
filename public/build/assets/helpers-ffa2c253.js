@@ -1,0 +1,1 @@
+import{S as n}from"./sweetalert2.all-1bf5477c.js";function a({message:r,onConfirm:e,title:o="Cuidado"}){n.fire({icon:"info",iconColor:"#4f46e5",title:o,text:"¿Está seguro que desea realizar esta acción?",showCancelButton:!0,confirmButtonText:"Confirmar",confirmButtonColor:"#4f46e5",cancelButtonText:"Cancelar"}).then(t=>{t.isConfirmed&&e()})}export{a as c};

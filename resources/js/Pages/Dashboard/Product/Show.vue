@@ -61,7 +61,7 @@
                     </td>
                 </tr>
                 <tr v-if="inventory.data.length == 0">
-                    <td colspan="6" class="text-center">No hay datos que mostrar</td>
+                    <td colspan="7" class="text-center">No hay datos que mostrar</td>
                 </tr>
             </template>
             <template #paginator>

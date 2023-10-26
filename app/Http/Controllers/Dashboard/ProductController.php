@@ -41,6 +41,7 @@ class ProductController extends Controller
     {
         return inertia('Dashboard/Product/Create', [
             'product' => $product,
+            'categories' => $this->categoryRepository->getSimpleList(),
             'isNew' => false,
         ]);
     }
