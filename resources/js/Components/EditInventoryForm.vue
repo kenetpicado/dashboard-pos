@@ -7,11 +7,6 @@
             <InputForm text="Medida" v-model="form.measure" required list="measures" />
             <InputForm text="Cantidad" v-model="form.quantity" type="number" required :min="1" />
             <InputForm text="Precio (Unidad)" v-model="form.unit_price" type="number" required :min="1" />
-            <div class="flex justify-end col-span-2">
-                <div class="text-xl font-bold">
-                    Total: C${{ (form.quantity * form.unit_cost).toLocaleString() }}
-                </div>
-            </div>
         </div>
 
     </FormModal>

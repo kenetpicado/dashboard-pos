@@ -58,7 +58,7 @@
 				La transaccion se guardara como PENDIENTE.
 			</div>
 
-			<div v-if="type = 'sell'">
+			<div v-if="type == 'sell'">
 				<button type="button" @click="downloadProforma">Descargar Proforma</button>
 			</div>
 

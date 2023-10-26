@@ -20,7 +20,7 @@
 					<InputForm text="Cantidad" v-model="currentProduct.quantity" type="number" required :min="1" />
 					<InputForm text="Costo (Unidad)" v-model="currentProduct.cost" type="number" required :min="1" />
 					<InputForm text="Precio (Unidad)" v-model="currentProduct.price" type="number" required :min="1" />
-					<InputForm text="Vence" v-if="is_caducable" v-model="currentProduct.expired_at" type="date" required />
+					<InputForm text="Vence" v-if="is_caducable" v-model="currentProduct.expired_at" type="date" />
 					<div class="flex justify-end col-span-2">
 						<div class="text-xl font-bold">
 							Total: C${{ (currentProduct.quantity * currentProduct.cost).toLocaleString() }}
