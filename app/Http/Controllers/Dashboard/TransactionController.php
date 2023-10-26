@@ -8,6 +8,7 @@ use App\Http\Requests\Dashboard\TransactionTypeRequest;
 use App\Models\Transaction;
 use App\Repositories\MeasureRepository;
 use App\Repositories\ProductRepository;
+use App\Repositories\SettingRepository;
 use App\Repositories\TransactionRepository;
 use App\Repositories\UserRepository;
 use App\Services\TransactionService;
@@ -20,7 +21,8 @@ class TransactionController extends Controller
         private readonly ProductRepository $productRepository,
         private readonly TransactionService $transactionService,
         private readonly UserRepository $userRepository,
-        private readonly MeasureRepository $measureRespository
+        private readonly MeasureRepository $measureRespository,
+        private readonly SettingRepository $settingRepository
     ) {
     }
 
@@ -46,6 +48,7 @@ class TransactionController extends Controller
             'products' => $this->productRepository->search($request->search, $request->type == 'sell'),
             'type' => $request->type,
             'measures' => $measures,
+            'is_caducable' => $this->settingRepository->isCaducable(),
         ]);
     }
 

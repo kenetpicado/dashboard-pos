@@ -147,6 +147,7 @@ function formatInformation() {
 			inventory_id: product.inventory_id,
 			discount: product.discount ?? 0,
 			name: product.name,
+			expired_at: product.expired_at,
 		}
 	})
 

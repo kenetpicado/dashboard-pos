@@ -77,6 +77,7 @@ class InventoryRepository
             'measure' => $request['measure'],
             'user_id' => $transaction->user_id,
             'transaction_id' => $transaction->id,
+            'expired_at' => $request['expired_at'] ?? null,
         ]);
     }
 

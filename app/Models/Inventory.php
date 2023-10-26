@@ -20,6 +20,7 @@ class Inventory extends Model
         'measure',
         'user_id',
         'discount',
+        'expired_at',
     ];
 
     public function product()

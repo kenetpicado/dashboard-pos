@@ -20,9 +20,10 @@
 					<InputForm text="Cantidad" v-model="currentProduct.quantity" type="number" required :min="1" />
 					<InputForm text="Costo (Unidad)" v-model="currentProduct.cost" type="number" required :min="1" />
 					<InputForm text="Precio (Unidad)" v-model="currentProduct.price" type="number" required :min="1" />
+					<InputForm text="Vence" v-if="is_caducable" v-model="currentProduct.expired_at" type="date" required />
 					<div class="flex justify-end col-span-2">
 						<div class="text-xl font-bold">
-							Total: {{ (currentProduct.quantity * currentProduct.cost).toLocaleString() }}
+							Total: C${{ (currentProduct.quantity * currentProduct.cost).toLocaleString() }}
 						</div>
 					</div>
 				</template>
@@ -76,6 +77,10 @@ const props = defineProps({
 		type: Object,
 		required: false,
 	},
+	is_caducable: {
+		type: Boolean,
+		default: false,
+	},
 });
 
 const transactionTypes = {
@@ -111,6 +116,7 @@ const originalObject = {
 	measure: null,
 	inventory_id: null,
 	discount: 0,
+	expired_at: null,
 };
 
 const currentProduct = reactive({ ...originalObject });
@@ -126,7 +132,9 @@ function setCurrentProduct(product) {
 		selectedMeasure.value = inventory.value[0].id;
 		currentProduct.inventory_id = inventory.value[0].id;
 		currentProduct.discount = product.discount;
-	}
+	} else [
+		currentProduct.expired_at = product.expired_at
+	]
 
 	openModal.value = true;
 }
@@ -190,6 +198,7 @@ function editProduct(index) {
 	} else {
 		currentProduct.cost = selectedProducts.value[index].cost;
 		currentProduct.measure = selectedProducts.value[index].measure;
+		currentProduct.expired_at = selectedProducts.value[index].expired_at;
 	}
 
 	isEditing.value = true
