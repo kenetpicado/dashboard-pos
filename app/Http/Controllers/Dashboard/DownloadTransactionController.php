@@ -9,9 +9,9 @@ use Maatwebsite\Excel\Facades\Excel;
 
 class DownloadTransactionController extends Controller
 {
-    public function __invoke($id)
+    public function __invoke(Transaction $transaction)
     {
-        $transaction = Transaction::with(['user:id,name', 'products:id,name,sku'])->find($id);
+        $transaction->load('user:id,name', 'products:id,name,sku');
 
         return Excel::download(new TransactionExport($transaction), "Transaccion_{$transaction->id}.xlsx");
     }
