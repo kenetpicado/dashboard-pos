@@ -87,5 +87,4 @@ class TransactionRepository
             ->latest('id')
             ->paginate();
     }
-
 }

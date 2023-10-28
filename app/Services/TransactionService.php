@@ -41,7 +41,7 @@ class TransactionService
                 if (isset($productMinQuantity)) {
                     if ($updatedQuantity == 0) {
                         (new AlertRepository())->storeEmptyStock($product['product_id']);
-                    } else if ($updatedQuantity <= $productMinQuantity) {
+                    } elseif ($updatedQuantity <= $productMinQuantity) {
                         (new AlertRepository())->storeFewStock($product['product_id'], $updatedQuantity);
                     }
                 }

@@ -4,7 +4,6 @@ namespace App\Http\Controllers\Dashboard;
 
 use App\Http\Controllers\Controller;
 use App\Repositories\ProductTransactionRepository;
-use Illuminate\Http\Request;
 
 class BestSellerController extends Controller
 {
