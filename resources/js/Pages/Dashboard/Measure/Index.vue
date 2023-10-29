@@ -93,6 +93,7 @@ function edit(c) {
 }
 
 function onSubmit() {
+    form.name = form.name.toUpperCase()
     if (isNew.value) {
         form.post(route("dashboard.measures.store"), {
             preserveScroll: true,
