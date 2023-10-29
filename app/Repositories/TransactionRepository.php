@@ -3,6 +3,7 @@
 namespace App\Repositories;
 
 use App\Models\Transaction;
+use Illuminate\Support\Facades\DB;
 
 class TransactionRepository
 {
@@ -49,11 +50,13 @@ class TransactionRepository
         ]);
     }
 
-    public function getPending($request = [])
+    public function getPending()
     {
         return Transaction::query()
             ->withCount('products')
-            ->whenStatus('PENDIENTE')
+            ->where('status', 'PENDIENTE')
+            ->select('id', 'type', 'client', 'total', 'created_at')
+            ->latest('id')
             ->paginate();
     }
 
@@ -73,16 +76,14 @@ class TransactionRepository
         return $transaction->status == 'COMPLETADO';
     }
 
-    public function decrementPayment($payment)
+    public function decrementTotal($payment): void
     {
-        $transaction = Transaction::find($payment->transaction_id);
-
-        $transaction->decrement('total', $payment->value);
+        DB::table('transactions')->where('id', $payment->transaction_id)->decrement('total', $payment->value);
     }
 
     public function byClient($client_name)
     {
-        return Transaction::query()
+        return DB::table('transactions')
             ->where('client', 'like', '%'.$client_name.'%')
             ->latest('id')
             ->paginate();

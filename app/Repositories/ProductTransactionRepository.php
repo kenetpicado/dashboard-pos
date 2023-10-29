@@ -48,7 +48,7 @@ class ProductTransactionRepository
             ->select('product_id', DB::raw('SUM(quantity) as quantity'), 'products.name', 'products.image', 'products.sku')
             ->groupBy('product_id')
             ->orderBy('quantity', 'desc')
-            ->limit(20)
+            ->limit(15)
             ->get();
     }
 }

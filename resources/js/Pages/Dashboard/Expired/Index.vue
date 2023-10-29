@@ -22,10 +22,10 @@
                     </td>
                     <td>
                         <div class="uppercase">
-                            {{ i.product.name }}
+                            {{ i.name }}
                         </div>
                         <div class="text-gray-400 mt-2">
-                            {{ i.product.sku }}
+                            {{ i.sku }}
                         </div>
                     </td>
                     <td>

@@ -7,7 +7,7 @@ use App\Http\Controllers\Dashboard\ClientController;
 use App\Http\Controllers\Dashboard\DashboardController;
 use App\Http\Controllers\Dashboard\DownloadProforma;
 use App\Http\Controllers\Dashboard\DownloadTransactionController;
-use App\Http\Controllers\Dashboard\ExpiredController;
+use App\Http\Controllers\Dashboard\InventoryExpiredController;
 use App\Http\Controllers\Dashboard\InventoryController;
 use App\Http\Controllers\Dashboard\MarkAlertsAsRead;
 use App\Http\Controllers\Dashboard\MeasureController;
@@ -48,7 +48,7 @@ Route::middleware(['auth:sanctum'])
             ->only(['index', 'show']);
 
         Route::resource('payments', PaymentController::class)
-            ->only(['store', 'update', 'destroy']);
+            ->only(['store', 'destroy']);
 
         Route::resource('clients', ClientController::class)
             ->only(['index', 'show']);
@@ -71,6 +71,6 @@ Route::middleware(['auth:sanctum'])
         Route::post('download/proforma', DownloadProforma::class)
             ->name('download.proforma');
 
-        Route::resource('expired', ExpiredController::class)
+        Route::resource('expired', InventoryExpiredController::class)
             ->only(['index']);
     });

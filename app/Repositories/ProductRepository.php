@@ -4,6 +4,7 @@ namespace App\Repositories;
 
 use App\Models\Product;
 use App\Traits\BasicRepositoryTrait;
+use Illuminate\Support\Facades\DB;
 
 class ProductRepository
 {
@@ -55,9 +56,10 @@ class ProductRepository
         return $product->inventory()->where('quantity', '>', 0)->orderByDesc('quantity')->paginate();
     }
 
-    public function getInventoryStatus($product)
+    public function getInventoryStatus($product_id)
     {
-        return $product->inventory()
+        return DB::table('inventories')
+            ->where('product_id', $product_id)
             ->where('quantity', '>', 0)
             ->selectRaw('COALESCE(sum(quantity * unit_cost), 0) as total, COALESCE(sum(quantity), 0) as quantity')
             ->first();

@@ -26,11 +26,11 @@ class InventoryRepository
             ->when(isset($request['search']), function ($query) use ($request) {
                 $query->where(function ($query) use ($request) {
                     $query->whereHas('product', function ($query) use ($request) {
-                        $query->where('name', 'like', '%'.$request['search'].'%')
-                            ->orWhere('sku', 'like', '%'.$request['search'].'%');
+                        $query->where('name', 'like', '%' . $request['search'] . '%')
+                            ->orWhere('sku', 'like', '%' . $request['search'] . '%');
                     });
                 })
-                    ->orWhere('measure', 'like', '%'.$request['search'].'%');
+                    ->orWhere('measure', 'like', '%' . $request['search'] . '%');
             })
             ->when(isset($request['user_id']), function ($query) use ($request) {
                 $query->where('user_id', $request['user_id']);
@@ -90,7 +90,8 @@ class InventoryRepository
 
     public function update($inventory, $request)
     {
-        Inventory::where('id', $inventory)
+        DB::table('inventories')
+            ->where('id', $inventory)
             ->update([
                 'quantity' => $request['quantity'],
                 'unit_price' => $request['unit_price'],
@@ -100,12 +101,12 @@ class InventoryRepository
 
     public function soonToExpire()
     {
-        return Inventory::query()
+        return DB::table('inventories')
             ->where('quantity', '>', 0)
             ->whereNotNull('expired_at')
             ->orderBy('expired_at', 'asc')
-            ->with('product:id,sku,name')
-            ->select('id', 'product_id', 'quantity', 'expired_at', 'measure')
+            ->join('products', 'products.id', '=', 'inventories.product_id')
+            ->select('inventories.id', 'quantity', 'expired_at', 'measure', 'products.name', 'products.sku')
             ->paginate();
     }
 }

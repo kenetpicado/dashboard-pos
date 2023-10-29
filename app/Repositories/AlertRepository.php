@@ -48,7 +48,7 @@ class AlertRepository
         return DB::table('alerts')->whereNull('read_at')->count();
     }
 
-    public function markAsRead()
+    public function markAllAsRead()
     {
         DB::table('alerts')->update(['read_at' => Carbon::now()]);
     }

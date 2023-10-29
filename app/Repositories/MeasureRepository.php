@@ -4,6 +4,7 @@ namespace App\Repositories;
 
 use App\Models\Measure;
 use App\Traits\BasicRepositoryTrait;
+use Illuminate\Support\Facades\DB;
 
 class MeasureRepository
 {
@@ -18,11 +19,17 @@ class MeasureRepository
 
     public function getAll()
     {
-        return Measure::select('id', 'name')->paginate();
+        return DB::table('measures')
+            ->select('id', 'name')
+            ->orderBy('name')
+            ->paginate();
     }
 
     public function getNames()
     {
-        return Measure::orderBy('name')->pluck('name')->toArray();
+        return DB::table('measures')
+            ->orderBy('name')
+            ->pluck('name')
+            ->toArray();
     }
 }

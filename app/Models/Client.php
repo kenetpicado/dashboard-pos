@@ -13,4 +13,9 @@ class Client extends Model
         'name',
         'contact',
     ];
+
+    public function setNameAttribute($value)
+    {
+        $this->attributes['name'] = mb_strtoupper($value, 'UTF-8');
+    }
 }

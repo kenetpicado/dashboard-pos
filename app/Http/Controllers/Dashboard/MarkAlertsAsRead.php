@@ -9,7 +9,7 @@ class MarkAlertsAsRead extends Controller
 {
     public function __invoke()
     {
-        (new AlertRepository)->markAsRead();
+        (new AlertRepository)->markAllAsRead();
 
         return back();
     }

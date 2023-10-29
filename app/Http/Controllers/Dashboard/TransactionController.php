@@ -36,16 +36,10 @@ class TransactionController extends Controller
 
     public function create(TransactionTypeRequest $request)
     {
-        $measures = [];
-
-        if ($request->type == 'buy') {
-            $measures = $this->measureRespository->getNames();
-        }
-
         return inertia('Dashboard/Transaction/Create', [
             'products' => $this->productRepository->search($request->search, $request->type == 'sell'),
             'type' => $request->type,
-            'measures' => $measures,
+            'measures' => $request->type == 'buy' ? $this->measureRespository->getNames() : [],
         ]);
     }
 

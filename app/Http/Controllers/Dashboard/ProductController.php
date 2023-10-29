@@ -63,7 +63,7 @@ class ProductController extends Controller
             'product' => $product,
             'measures' => $this->measureRepository->getNames(),
             'inventory' => $this->productRepository->getInventory($product),
-            'inventoryStatus' => $this->productRepository->getInventoryStatus($product),
+            'inventoryStatus' => $this->productRepository->getInventoryStatus($product->id),
         ]);
     }
 
