@@ -38,17 +38,15 @@ class TransactionController extends Controller
     {
         return inertia('Dashboard/Transaction/Create', [
             'products' => $this->productRepository->search($request->search, $request->type == 'sell'),
-            'type' => $request->type,
             'measures' => $request->type == 'buy' ? $this->measureRespository->getNames() : [],
+            'type' => $request->type,
         ]);
     }
 
     public function show(Transaction $transaction)
     {
-        $transaction->load('user:id,name', 'products:id,name,sku');
-
         return inertia('Dashboard/Transaction/Show', [
-            'transaction' => $transaction,
+            'transaction' => $transaction->load('user:id,name', 'products:id,name,sku'),
         ]);
     }
 

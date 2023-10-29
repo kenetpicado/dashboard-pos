@@ -4,6 +4,7 @@ namespace App\Repositories;
 
 use App\Models\Inventory;
 use App\Traits\BasicRepositoryTrait;
+use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
 
 class InventoryRepository
@@ -28,9 +29,9 @@ class InventoryRepository
                     $query->whereHas('product', function ($query) use ($request) {
                         $query->where('name', 'like', '%' . $request['search'] . '%')
                             ->orWhere('sku', 'like', '%' . $request['search'] . '%');
-                    });
-                })
+                    })
                     ->orWhere('measure', 'like', '%' . $request['search'] . '%');
+                });
             })
             ->when(isset($request['user_id']), function ($query) use ($request) {
                 $query->where('user_id', $request['user_id']);
@@ -104,6 +105,7 @@ class InventoryRepository
         return DB::table('inventories')
             ->where('quantity', '>', 0)
             ->whereNotNull('expired_at')
+            ->where('expired_at', '>=', Carbon::now()->format('Y-m-d 00:00:00'))
             ->orderBy('expired_at', 'asc')
             ->join('products', 'products.id', '=', 'inventories.product_id')
             ->select('inventories.id', 'quantity', 'expired_at', 'measure', 'products.name', 'products.sku')

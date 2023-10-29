@@ -89,21 +89,19 @@
 
 <script setup>
 import DateColumn from '@/Components/DateColumn.vue';
+import EditInventoryForm from '@/Components/EditInventoryForm.vue';
 import InputForm from '@/Components/Form/InputForm.vue';
 import SelectForm from "@/Components/Form/SelectForm.vue";
 import StatCard from '@/Components/StatCard.vue';
 import TableSection from '@/Components/TableSection.vue';
 import ThePaginator from "@/Components/ThePaginator.vue";
 import AppLayout from '@/Layouts/AppLayout.vue';
-import { queryParams, setParams, watchSearch, watchUser } from '@/Use/Search';
 import { confirmAlert } from '@/Use/helpers';
-import { IconTrash } from '@tabler/icons-vue';
-import { IconCurrencyDollar, IconTag } from '@tabler/icons-vue';
-import { computed, ref, reactive } from 'vue';
-import { router } from '@inertiajs/vue3';
 import { toast } from '@/Use/toast';
-import { IconPencil } from '@tabler/icons-vue';
-import EditInventoryForm from '@/Components/EditInventoryForm.vue';
+import { router } from '@inertiajs/vue3';
+import { IconCurrencyDollar, IconPencil, IconTag, IconTrash } from '@tabler/icons-vue';
+import { debounce } from "lodash";
+import { computed, reactive, ref, watch } from 'vue';
 
 const props = defineProps({
     inventory: {
@@ -163,12 +161,6 @@ const stats = computed(() => {
     ]
 })
 
-setParams()
-
-watchSearch(route('dashboard.inventory.index'), ["inventory"])
-
-watchUser(route('dashboard.inventory.index'), ["inventory", "total", "total_quantity"])
-
 const destroy = (id) => {
     confirmAlert({
         onConfirm: () => {
@@ -200,5 +192,40 @@ function resetValues() {
 
     openModal.value = false
 }
+
+//SEARCH SECTION
+const queryParams = reactive({
+    search: null,
+    user_id: null,
+});
+
+const searchParams = new URLSearchParams(window.location.search);
+
+if (searchParams.get("search")) {
+    queryParams.search = searchParams.get("search");
+}
+
+if (searchParams.get("user_id")) {
+    queryParams.user_id = searchParams.get("user_id");
+}
+
+const debouncedSearch = debounce(([search, user_id]) => {
+    if (!search) {
+        delete queryParams.search;
+    }
+
+    if (!user_id) {
+        delete queryParams.user_id;
+    }
+
+    router.get(route('dashboard.inventory.index'), queryParams, {
+        preserveState: true,
+        preserveScroll: true,
+        only: ["inventory"]
+    })
+}, 500);
+
+watch(() => [queryParams.search, queryParams.user_id], debouncedSearch);
+//END SEARCH SECTION
 
 </script>
