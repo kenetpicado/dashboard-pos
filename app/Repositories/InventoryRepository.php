@@ -27,10 +27,10 @@ class InventoryRepository
             ->when(isset($request['search']), function ($query) use ($request) {
                 $query->where(function ($query) use ($request) {
                     $query->whereHas('product', function ($query) use ($request) {
-                        $query->where('name', 'like', '%' . $request['search'] . '%')
-                            ->orWhere('sku', 'like', '%' . $request['search'] . '%');
+                        $query->where('name', 'like', '%'.$request['search'].'%')
+                            ->orWhere('sku', 'like', '%'.$request['search'].'%');
                     })
-                    ->orWhere('measure', 'like', '%' . $request['search'] . '%');
+                        ->orWhere('measure', 'like', '%'.$request['search'].'%');
                 });
             })
             ->when(isset($request['user_id']), function ($query) use ($request) {
