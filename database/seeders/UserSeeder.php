@@ -17,6 +17,7 @@ class UserSeeder extends Seeder
             'name' => 'John Doe',
             'email' => 'johndoe@gmail.com',
             'password' => Hash::make('password'),
+            'job_title' => 'ADMINISTRADOR',
         ]);
     }
 }

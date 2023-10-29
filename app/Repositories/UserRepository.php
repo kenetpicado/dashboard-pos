@@ -29,6 +29,7 @@ class UserRepository
             'name' => $request['name'],
             'email' => $request['email'],
             'password' => Hash::make($request['password']),
+            'job_title' => 'ADMINISTRADOR',
         ]);
     }
 
