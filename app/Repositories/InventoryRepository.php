@@ -68,6 +68,12 @@ class InventoryRepository
 
     public function store(array $request, $transaction)
     {
+        $colors = null;
+
+        if (count($request['colors']) > 0) {
+            $colors = $request['colors'];
+        }
+
         return Inventory::create([
             'product_id' => $request['product_id'],
             'initial_quantity' => $request['quantity'],
@@ -79,6 +85,7 @@ class InventoryRepository
             'user_id' => $transaction->user_id,
             'transaction_id' => $transaction->id,
             'expired_at' => $request['expired_at'] ?? null,
+            'colors' => $colors
         ]);
     }
 
@@ -91,12 +98,19 @@ class InventoryRepository
 
     public function update($inventory, $request)
     {
+        $colors = null;
+
+        if (count($request['colors']) > 0) {
+            $colors = $request['colors'];
+        }
+
         DB::table('inventories')
             ->where('id', $inventory)
             ->update([
                 'quantity' => $request['quantity'],
                 'unit_price' => $request['unit_price'],
                 'measure' => $request['measure'],
+                'colors' => $colors
             ]);
     }
 

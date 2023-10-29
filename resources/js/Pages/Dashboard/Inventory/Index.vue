@@ -27,6 +27,7 @@
             <template #header>
                 <th>Fecha</th>
                 <th>Producto</th>
+                <th>Colors</th>
                 <th>Medida</th>
                 <th>Cantidad</th>
                 <th>Costo (ud.)</th>
@@ -46,6 +47,9 @@
                         <div class="text-gray-400 mt-2">
                             {{ i.product.sku }}
                         </div>
+                    </td>
+                    <td>
+                        <ColorList :colors="i.colors"/>
                     </td>
                     <td>
                         {{ i.measure }}
@@ -88,6 +92,7 @@
 </template>
 
 <script setup>
+import ColorList from '@/Components/ColorList.vue';
 import DateColumn from '@/Components/DateColumn.vue';
 import EditInventoryForm from '@/Components/EditInventoryForm.vue';
 import InputForm from '@/Components/Form/InputForm.vue';
@@ -144,6 +149,7 @@ const form = reactive({
     measure: null,
     quantity: null,
     unit_price: null,
+    colors: [],
 })
 
 const stats = computed(() => {
@@ -180,6 +186,7 @@ function edit(i) {
     form.measure = i.measure
     form.quantity = i.quantity
     form.unit_price = i.unit_price
+    form.colors = i.colors
 
     openModal.value = true;
 }
@@ -189,6 +196,7 @@ function resetValues() {
     form.measure = null
     form.quantity = null
     form.unit_price = null
+    form.colors = []
 
     openModal.value = false
 }

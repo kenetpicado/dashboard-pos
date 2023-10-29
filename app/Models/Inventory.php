@@ -21,10 +21,15 @@ class Inventory extends Model
         'user_id',
         'discount',
         'expired_at',
+        'colors',
     ];
 
     public function product()
     {
         return $this->belongsTo(Product::class);
     }
+
+    protected $casts = [
+        'colors' => 'array',
+    ];
 }

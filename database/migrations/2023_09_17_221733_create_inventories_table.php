@@ -22,7 +22,7 @@ return new class extends Migration
             $table->double('total_cost');
             $table->double('unit_price');
             $table->string('measure')->nullable();
-            $table->json('attributes')->nullable();
+            $table->json('colors')->nullable();
             $table->string('status')->nullable();
             $table->string('note')->nullable();
             $table->double('discount')->default(0);

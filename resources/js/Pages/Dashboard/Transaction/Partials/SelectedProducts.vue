@@ -24,6 +24,8 @@
 						</div>
 					</div>
 
+					<ColorList :colors="product.colors" class="mb-2" />
+
 					<div class="flex items-center justify-between">
 						<div>
 							<IconTrash role="button" @click="$emit('remove', index)" class="text-red-300" />
@@ -86,6 +88,7 @@ import { toast } from '@/Use/toast';
 import { confirmAlert } from '@/Use/helpers';
 import axios from 'axios';
 import { Carbon } from '@/Use/Carbon';
+import ColorList from '@/Components/ColorList.vue';
 
 const props = defineProps({
 	products: {
@@ -148,6 +151,7 @@ function formatInformation() {
 			discount: product.discount ?? 0,
 			name: product.name,
 			expired_at: product.expired_at,
+			colors: product.colors,
 		}
 	})
 
