@@ -6,7 +6,7 @@
             </span>
         </template>
 
-        <div class="grid grid-cols-3 gap-4">
+        <div class="grid grid-cols-3 gap-4" v-if="products.length > 0">
             <div v-for="(product, index) in products" class="w-full rounded-lg p-4 bg-white mb-2 border-2">
                 <div class="flex gap-2">
                     <div v-if="product.image" class="h-36 w-36 flex items-center justify-center">
@@ -31,6 +31,9 @@
                     </div>
                 </div>
             </div>
+        </div>
+        <div v-else>
+            No hay productos
         </div>
     </AppLayout>
 </template>

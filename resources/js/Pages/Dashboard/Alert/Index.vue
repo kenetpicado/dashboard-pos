@@ -10,7 +10,7 @@
             <span class="text-sm" role="button" @click="markAsRead">Marcar todas como leidas</span>
         </div>
 
-        <div class="grid grid-cols-2 gap-4">
+        <div class="grid grid-cols-2 gap-4" v-if="alerts.length > 0">
             <div v-for="a in alerts" class="p-4 rounded-xl bg-white flex justify-between flex-col" role="alert">
                 <div class="flex items-center gap-2 justify-between mb-4">
                     <h3 class="text-lg font-xl font-bold text-gray-600">{{ a.name }}</h3>
@@ -23,6 +23,9 @@
                     {{ Carbon.create(a.created_at).format('m/d/Y H:i') }}
                 </div>
             </div>
+        </div>
+        <div v-else>
+            No hay alertas
         </div>
     </AppLayout>
 </template>
