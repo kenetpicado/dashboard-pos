@@ -33,7 +33,7 @@ const submit = () => {
         <div class="w-full sm:max-w-md mt-6 px-6 py-4 bg-white shadow-md overflow-hidden rounded-xl">
             <div>
                 <img class="mx-auto h-20 w-auto"
-                    src="https://img.freepik.com/free-vector/mobile-login-concept-illustration_114360-83.jpg?w=2000"
+                    src="/shop.png"
                     alt="Workflow" />
                 <h2 class="mt-4 text-center text-2xl font-extrabold text-gray-900">
                     {{ app_name }}

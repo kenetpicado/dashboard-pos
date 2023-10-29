@@ -13,6 +13,10 @@
             <th>{{ auth()->user()->name }}</th>
         </tr>
         <tr>
+            <th>Cliente</th>
+            <th>{{ $request['client'] }}</th>
+        </tr>
+        <tr>
             <th></th>
             <th></th>
         </tr>

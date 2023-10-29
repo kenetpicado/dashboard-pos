@@ -21,6 +21,10 @@
             <th>{{ $transaction->user?->name }}</th>
         </tr>
         <tr>
+            <th>Cliente</th>
+            <th>{{ $transaction->client }}</th>
+        </tr>
+        <tr>
             <th></th>
             <th></th>
         </tr>

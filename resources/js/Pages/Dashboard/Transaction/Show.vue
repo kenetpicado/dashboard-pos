@@ -26,6 +26,9 @@
                         Responsable: {{ transaction.user?.name }}
                     </div>
                     <div>
+                        Cliente: {{ transaction.client}}
+                    </div>
+                    <div>
                         <a :href="route('dashboard.download.transaction', transaction.id)" class="text-indigo-600">Descargar Excel</a>
                     </div>
                 </div>

@@ -59,7 +59,7 @@
 			</div>
 
 			<div v-if="type == 'sell'">
-				<button type="button" @click="downloadProforma">Descargar Proforma</button>
+				<button type="button" @click.prevent="downloadProforma">Descargar Proforma</button>
 			</div>
 
 			<div class="flex justify-end my-8">
@@ -152,6 +152,8 @@ function formatInformation() {
 	})
 
 	form.total = total.value;
+
+	form.client = form.client ? form.client.toUpperCase() : null;
 }
 
 function downloadProforma(event) {

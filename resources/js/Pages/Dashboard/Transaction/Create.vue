@@ -11,6 +11,10 @@
 		</div>
 
 		<FormModal :show="openModal" :title="currentProduct.name" @onCancel="resetValues()" @onSubmit="addProduct()">
+			<div v-if="currentProduct.image" class="h-36 w-36 mb-4">
+				<img :src="currentProduct.image" onerror="this.src='/not-found.jpg'" alt="Imagen"
+					class="max-h-full max-w-full rounded-lg">
+			</div>
 			<div class="grid grid-cols-2 gap-4">
 				<template v-if="type == 'buy'">
 					<datalist id="measures">
