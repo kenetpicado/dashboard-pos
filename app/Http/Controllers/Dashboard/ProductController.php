@@ -9,6 +9,7 @@ use App\Repositories\CategoryRepository;
 use App\Repositories\InventoryRepository;
 use App\Repositories\MeasureRepository;
 use App\Repositories\ProductRepository;
+use App\Repositories\SettingRepository;
 use App\Services\ProductService;
 use Illuminate\Http\Request;
 
@@ -19,6 +20,7 @@ class ProductController extends Controller
         private readonly InventoryRepository $inventoryRepository,
         private readonly MeasureRepository $measureRepository,
         private readonly CategoryRepository $categoryRepository,
+        private readonly SettingRepository $settingRepository,
     ) {
     }
 
@@ -64,6 +66,7 @@ class ProductController extends Controller
             'measures' => $this->measureRepository->getNames(),
             'inventory' => $this->productRepository->getInventory($product),
             'inventoryStatus' => $this->productRepository->getInventoryStatus($product->id),
+            'manage_colors' => $this->settingRepository->manageColors(),
         ]);
     }
 

@@ -10,6 +10,10 @@
             <InputForm text="Name" v-model="form.name" required />
             <InputForm text="Email" v-model="form.email" type="email" required />
             <InputForm text="Alerta minimo de productos" v-model="form.settings.product_min" type="number" :min="1" />
+            <SelectForm v-model="form.settings.colors" text="Colores">
+                <option value="not_manage">No administrar</option>
+                <option value="manage">Administrar</option>
+            </SelectForm>
             <SelectForm v-model="form.settings.product_type" text="Tipo de productos">
                 <option value="no_caducable">No perecederos</option>
                 <option value="caducable">Perecederos</option>
@@ -62,6 +66,7 @@ const form = useForm({
     settings: {
         product_min: props.settings.find((setting) => setting.key === 'product_min')?.value ?? null,
         product_type: props.settings.find((setting) => setting.key === 'product_type')?.value ?? 'no_caducable',
+        colors: props.settings.find((setting) => setting.key === 'colors')?.value ?? 'not_manage',
     },
 });
 

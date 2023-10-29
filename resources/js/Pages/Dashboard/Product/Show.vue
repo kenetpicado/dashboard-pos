@@ -21,6 +21,7 @@
         <TableSection>
             <template #header>
                 <th>Fecha</th>
+                <th>Colors</th>
                 <th>Medida</th>
                 <th>Cantidad</th>
                 <th>Costo (ud.)</th>
@@ -33,6 +34,9 @@
                 <tr v-for="(i, index) in inventory.data" class="hover:bg-gray-50">
                     <td>
                         <DateColumn :date="i.created_at" />
+                    </td>
+                    <td>
+                        <ColorList :colors="i.colors"/>
                     </td>
                     <td>
                         {{ i.measure }}
@@ -89,6 +93,7 @@ import { IconTag } from '@tabler/icons-vue';
 import { IconCurrencyDollar } from '@tabler/icons-vue';
 import DateColumn from '@/Components/DateColumn.vue';
 import EditInventoryForm from '@/Components/EditInventoryForm.vue';
+import ColorList from '@/Components/ColorList.vue';
 
 const props = defineProps({
     product: {
@@ -116,6 +121,7 @@ const form = reactive({
     measure: null,
     quantity: null,
     unit_price: null,
+    colors: [],
 })
 
 const breads = [
@@ -138,6 +144,7 @@ const edit = (i) => {
     form.measure = i.measure
     form.quantity = i.quantity
     form.unit_price = i.unit_price
+    form.colors = i.colors
 
     openModal.value = true;
 }
@@ -148,6 +155,7 @@ const resetValues = () => {
     form.measure = null
     form.quantity = null
     form.unit_price = null
+    form.colors = []
 }
 
 const destroy = (id) => {

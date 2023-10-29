@@ -9,6 +9,7 @@ use App\Models\Transaction;
 use App\Repositories\CategoryRepository;
 use App\Repositories\MeasureRepository;
 use App\Repositories\ProductRepository;
+use App\Repositories\SettingRepository;
 use App\Repositories\TransactionRepository;
 use App\Repositories\UserRepository;
 use App\Services\TransactionService;
@@ -23,6 +24,7 @@ class TransactionController extends Controller
         private readonly UserRepository $userRepository,
         private readonly MeasureRepository $measureRespository,
         private readonly CategoryRepository $categoryRepository,
+        private readonly SettingRepository $settingRepository,
     ) {
     }
 
@@ -43,6 +45,7 @@ class TransactionController extends Controller
             'measures' => $request->type == 'buy' ? $this->measureRespository->getNames() : [],
             'type' => $request->type,
             'categories' => $this->categoryRepository->getWithChildrens(),
+            'manage_colors' => $this->settingRepository->manageColors(),
         ]);
     }
 

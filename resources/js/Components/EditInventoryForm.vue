@@ -8,19 +8,20 @@
             <InputForm text="Cantidad" v-model="form.quantity" type="number" required :min="1" />
             <InputForm text="Precio (Unidad)" v-model="form.unit_price" type="number" required :min="1" />
         </div>
-        <div class="flex items-center mb-4">
-            <button type="button" class="primary-button mr-4" @click="addColor">
-                Agregar color
-            </button>
-            <input type="color" v-model="colorInput" class="h-8">
-        </div>
-        <template v-if="form.colors.length > 0">
-            <div class="mb-2">
-                Colores disponibles
+        <template v-if="$page.props.manage_colors">
+            <div class="flex items-center mb-4">
+                <button type="button" class="primary-button mr-4" @click="addColor">
+                    Agregar color
+                </button>
+                <input type="color" v-model="colorInput" class="h-8">
             </div>
-            <ColorList :colors="form.colors" @removeColor="removeColor" />
+            <template v-if="form.colors.length > 0">
+                <div class="mb-2">
+                    Colores disponibles
+                </div>
+                <ColorList :colors="form.colors" @removeColor="removeColor" />
+            </template>
         </template>
-
     </FormModal>
 </template>
 

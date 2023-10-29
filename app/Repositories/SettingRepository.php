@@ -10,4 +10,9 @@ class SettingRepository
     {
         return DB::table('settings')->where('key', 'product_type')->value('value') === 'caducable';
     }
+
+    public function manageColors()
+    {
+        return DB::table('settings')->where('key', 'colors')->value('value') === 'manage';
+    }
 }

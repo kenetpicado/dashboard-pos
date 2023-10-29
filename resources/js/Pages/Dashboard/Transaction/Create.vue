@@ -26,14 +26,16 @@
 					<InputForm text="Precio (Unidad)" v-model="currentProduct.price" type="number" required :min="1" />
 					<InputForm text="Vence" v-if="is_caducable" v-model="currentProduct.expired_at" type="date" />
 
-					<div class="flex items-center mb-4">
-						<button type="button" class="primary-button mr-4" @click="addColor">
-							Agregar color
-						</button>
-						<input type="color" v-model="colorInput" class="h-full">
-					</div>
+					<template v-if="$page.props.manage_colors">
+						<div class="flex items-center mb-4">
+							<button type="button" class="primary-button mr-4" @click="addColor">
+								Agregar color
+							</button>
+							<input type="color" v-model="colorInput" class="h-full">
+						</div>
 
-					<ColorList :colors="selectedColors" @removeColor="removeColor"/>
+						<ColorList v-if="selectedColors.length > 0" :colors="selectedColors" @removeColor="removeColor" />
+					</template>
 
 					<div class="flex justify-end col-span-2">
 						<div class="text-xl font-bold">
