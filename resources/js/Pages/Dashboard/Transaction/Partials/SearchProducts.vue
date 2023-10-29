@@ -51,6 +51,7 @@ import { IconShoppingCartFilled } from '@tabler/icons-vue';
 import { reactive, watch } from 'vue';
 import InputForm from '@/Components/Form/InputForm.vue';
 import { router } from '@inertiajs/vue3'
+import { debounce } from 'lodash'
 
 const props = defineProps({
 	products: {
@@ -74,16 +75,18 @@ if (searchParams.get("type")) {
 	queryParams.type = searchParams.get("type")
 }
 
-watch(() => queryParams.search, (value) => {
-	if (!value) {
-		delete queryParams.search
-	}
+const debouncedSearch = debounce((value) => {
+    if (!value) {
+        delete queryParams.search;
+    }
 
-	router.get(route('dashboard.transactions.create'), queryParams, {
+    router.get(route('dashboard.transactions.create'), queryParams, {
 		preserveState: true,
 		preserveScroll: true,
 		only: ["products"]
 	})
-})
+}, 500);
+
+watch(() => queryParams.search, debouncedSearch);
 
 </script>
