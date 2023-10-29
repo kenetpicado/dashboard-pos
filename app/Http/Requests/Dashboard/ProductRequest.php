@@ -28,9 +28,15 @@ class ProductRequest extends FormRequest
             'description' => 'nullable',
             'image' => ['nullable', 'url'],
             'discount' => 'nullable',
-            'inventory' => 'nullable|array',
             'category_id' => 'nullable|exists:categories,id',
+        ] + ($this->isMethod('post') ? $this->store() : []);
+    }
+
+    public function store()
+    {
+        return [
             'total' => 'nullable',
+            'inventory' => 'nullable|array',
         ];
     }
 }

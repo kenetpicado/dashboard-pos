@@ -69,7 +69,7 @@ class ProductController extends Controller
 
     public function update(ProductRequest $request, $product)
     {
-        $this->productRepository->update($product, $request->validated());
+        Product::where('id', $product)->update($request->validated());
 
         return redirect()->route('dashboard.products.index');
     }

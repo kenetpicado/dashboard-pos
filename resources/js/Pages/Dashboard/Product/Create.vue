@@ -5,7 +5,7 @@
                 Agregar
             </span>
         </template>
-        <FormSection @onSubmit="onSubmit">
+        <FormSection @onSubmit="onSubmit" @onCancel="$inertia.visit(route('dashboard.products.index'))">
             <InputForm text="SKU" v-model="form.sku" required />
             <InputForm text="Nombre" v-model="form.name" required />
             <InputForm text="Imagen" v-model="form.image" type="url" />

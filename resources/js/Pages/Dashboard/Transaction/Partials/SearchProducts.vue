@@ -1,6 +1,19 @@
 <template>
 	<div>
-		<InputForm placeholder="Buscar" v-model="queryParams.search"></InputForm>
+		<div class="flex gap-4">
+			<InputForm text="Buscar" placeholder="Buscar" v-model="queryParams.search"></InputForm>
+			<SelectForm text="Categoria" v-model="queryParams.category_id" required>
+				<option selected value="">Todas</option>
+				<template v-for="item in $page.props.categories">
+					<option :value="item.id">
+						{{ item.name }}
+					</option>
+					<option v-for="children in item.childrens" :value="children.id">
+						{{ children.name }}
+					</option>
+				</template>
+			</SelectForm>
+		</div>
 		<table class="w-full border-collapse bg-white text-left text-sm text-gray-600 rounded-lg">
 			<thead class="bg-gray-50">
 				<tr>
@@ -52,6 +65,7 @@ import { reactive, watch } from 'vue';
 import InputForm from '@/Components/Form/InputForm.vue';
 import { router } from '@inertiajs/vue3'
 import { debounce } from 'lodash'
+import SelectForm from '@/Components/Form/SelectForm.vue';
 
 const props = defineProps({
 	products: {
@@ -62,7 +76,8 @@ const props = defineProps({
 
 const queryParams = reactive({
 	search: '',
-	type: null
+	type: null,
+	category_id: null,
 })
 
 const searchParams = new URLSearchParams(window.location.search);
@@ -75,18 +90,26 @@ if (searchParams.get("type")) {
 	queryParams.type = searchParams.get("type")
 }
 
-const debouncedSearch = debounce((value) => {
-    if (!value) {
-        delete queryParams.search;
-    }
+if (searchParams.get("category_id")) {
+	queryParams.category_id = searchParams.get("category_id")
+}
 
-    router.get(route('dashboard.transactions.create'), queryParams, {
+const debouncedSearch = debounce(([search, category_id]) => {
+	if (!search) {
+		delete queryParams.search;
+	}
+
+	if (!category_id) {
+		delete queryParams.category_id;
+	}
+
+	router.get(route('dashboard.transactions.create'), queryParams, {
 		preserveState: true,
 		preserveScroll: true,
 		only: ["products"]
 	})
 }, 500);
 
-watch(() => queryParams.search, debouncedSearch);
+watch(() => [queryParams.search, queryParams.category_id], debouncedSearch);
 
 </script>

@@ -15,6 +15,7 @@
 
         <TableSection>
             <template #header>
+                <th>Imagen</th>
                 <th>SKU</th>
                 <th>Nombre</th>
                 <th>Acciones</th>
@@ -22,6 +23,12 @@
 
             <template #body>
                 <tr v-for="(product, index) in products.data" class="hover:bg-gray-50">
+                    <td>
+						<div v-if="product.image" class="h-36 w-36 flex items-center justify-center">
+							<img :src="product.image" onerror="this.src='/not-found.jpg'" alt="Imagen"
+								class="max-h-full max-w-full rounded-lg">
+						</div>
+					</td>
                     <td>
                         {{ product.sku }}
                     </td>
@@ -34,7 +41,7 @@
                         </span>
                     </td>
                     <td>
-                        <div class="flex gap-2">
+                        <div class="flex gap-4">
                             <Link :href="route('dashboard.products.show', product.id)" tooltip="Detalles">
                             <IconEye size="22" role="button" />
                             </Link>
