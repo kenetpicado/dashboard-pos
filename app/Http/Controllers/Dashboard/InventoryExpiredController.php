@@ -4,14 +4,18 @@ namespace App\Http\Controllers\Dashboard;
 
 use App\Http\Controllers\Controller;
 use App\Repositories\InventoryRepository;
-use Illuminate\Http\Request;
 
-class ExpiredController extends Controller
+class InventoryExpiredController extends Controller
 {
+    public function __construct(
+        private readonly InventoryRepository $inventoryRepository
+    ) {
+    }
+
     public function index()
     {
         return inertia('Dashboard/Expired/Index', [
-            'inventory' => (new InventoryRepository)->soonToExpire(),
+            'inventory' => $this->inventoryRepository->soonToExpire(),
         ]);
     }
 }

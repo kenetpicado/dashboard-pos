@@ -30,9 +30,6 @@
                     </td>
                     <td>
                         <div class="flex gap-2">
-                            <label tooltip="Editar">
-                                <IconPencil size="22" role="button" @click="edit(p)" />
-                            </label>
                             <label tooltip="Eliminar">
                                 <IconTrash size="22" role="button" @click="destroy(p.id)" />
                             </label>
@@ -62,10 +59,9 @@ import TableSection from '@/Components/TableSection.vue';
 import AppLayout from '@/Layouts/AppLayout.vue';
 import { confirmAlert } from '@/Use/helpers';
 import { toast } from '@/Use/toast';
-import { router, useForm } from '@inertiajs/vue3';
-import { IconCurrencyDollar } from '@tabler/icons-vue';
-import { IconPencil, IconTrash } from '@tabler/icons-vue';
-import { ref, computed } from 'vue';
+import { useForm } from '@inertiajs/vue3';
+import { IconCurrencyDollar, IconTrash } from '@tabler/icons-vue';
+import { computed, ref } from 'vue';
 
 const props = defineProps({
     transaction: {
@@ -94,7 +90,6 @@ const breads = [
 ];
 
 const openModal = ref(false);
-const isNew = ref(true);
 
 const form = useForm({
     id: null,
@@ -104,36 +99,18 @@ const form = useForm({
 
 function resetValues() {
     form.reset();
-    isNew.value = true;
     openModal.value = false;
 }
 
 function onSubmit() {
-    if (isNew.value) {
-        form.post(route('dashboard.payments.store'), {
-            preserveScroll: true,
-            preserveState: true,
-            onSuccess: () => {
-                toast.success('Pago creado con éxito');
-                resetValues();
-            },
-        });
-    } else {
-        form.put(route('dashboard.payments.update', form.id), {
-            preserveScroll: true,
-            preserveState: true,
-            onSuccess: () => {
-                toast.success('Pago actualizado con éxito');
-                resetValues();
-            },
-        });
-    }
-}
-
-function edit(payment) {
-    Object.assign(form, payment);
-    isNew.value = false;
-    openModal.value = true;
+    form.post(route('dashboard.payments.store'), {
+        preserveScroll: true,
+        preserveState: true,
+        onSuccess: () => {
+            toast.success('Pago creado con éxito');
+            resetValues();
+        },
+    });
 }
 
 function destroy(id) {

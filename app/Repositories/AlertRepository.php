@@ -20,7 +20,7 @@ class AlertRepository
 
         DB::table('alerts')->insert([
             'name' => 'POCAS EXISTENCIAS!',
-            'description' => "Quedan $quantity existencias del producto: " . mb_strtoupper($name, 'UTF-8'),
+            'description' => "Quedan $quantity existencias del producto: ".mb_strtoupper($name, 'UTF-8'),
             'created_at' => Carbon::now(),
             'updated_at' => Carbon::now(),
         ]);
@@ -32,7 +32,7 @@ class AlertRepository
 
         DB::table('alerts')->insert([
             'name' => 'EXISTENCIAS AGOTADAS!',
-            'description' => 'Se agotaron las existencias del producto: ' . mb_strtoupper($name, 'UTF-8'),
+            'description' => 'Se agotaron las existencias del producto: '.mb_strtoupper($name, 'UTF-8'),
             'created_at' => Carbon::now(),
             'updated_at' => Carbon::now(),
         ]);
@@ -48,7 +48,7 @@ class AlertRepository
         return DB::table('alerts')->whereNull('read_at')->count();
     }
 
-    public function markAsRead()
+    public function markAllAsRead()
     {
         DB::table('alerts')->update(['read_at' => Carbon::now()]);
     }

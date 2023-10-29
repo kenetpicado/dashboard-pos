@@ -48,11 +48,10 @@ class ProductController extends Controller
 
     public function store(ProductRequest $request)
     {
-        $productService = new ProductService();
         $product = $this->productRepository->store($request->validated());
 
         if (count($request->inventory) > 0) {
-            $productService->storeItems($product, $request->inventory, $request->total);
+            (new ProductService)->storeItems($product, $request->inventory, $request->total);
         }
 
         return redirect()->route('dashboard.products.index');
@@ -64,13 +63,13 @@ class ProductController extends Controller
             'product' => $product,
             'measures' => $this->measureRepository->getNames(),
             'inventory' => $this->productRepository->getInventory($product),
-            'inventoryStatus' => $this->productRepository->getInventoryStatus($product),
+            'inventoryStatus' => $this->productRepository->getInventoryStatus($product->id),
         ]);
     }
 
     public function update(ProductRequest $request, $product)
     {
-        $this->productRepository->update($product, $request->validated());
+        Product::where('id', $product)->update($request->validated());
 
         return redirect()->route('dashboard.products.index');
     }

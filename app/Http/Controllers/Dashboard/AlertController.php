@@ -4,7 +4,6 @@ namespace App\Http\Controllers\Dashboard;
 
 use App\Http\Controllers\Controller;
 use App\Repositories\AlertRepository;
-use Illuminate\Http\Request;
 
 class AlertController extends Controller
 {
@@ -16,7 +15,7 @@ class AlertController extends Controller
     public function index()
     {
         return inertia('Dashboard/Alert/Index', [
-            'alerts' => $this->alertRepository->getAll()
+            'alerts' => $this->alertRepository->getAll(),
         ]);
     }
 

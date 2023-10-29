@@ -59,15 +59,15 @@
 </template>
 
 <script setup>
-import AppLayout from '@/Layouts/AppLayout.vue';
-import TableSection from '@/Components/TableSection.vue';
-import { IconPencil, IconTrash, IconCornerDownRight } from '@tabler/icons-vue';
 import AddButton from '@/Components/Buttons/AddButton.vue';
-import FormModal from '@/Components/Modal/FormModal.vue';
 import InputForm from '@/Components/Form/InputForm.vue';
-import SelectForm from "@/Components/Form/SelectForm.vue"
-import { ref } from 'vue';
+import SelectForm from "@/Components/Form/SelectForm.vue";
+import FormModal from '@/Components/Modal/FormModal.vue';
+import TableSection from '@/Components/TableSection.vue';
 import { useCategory } from '@/Composables/useCategory.js';
+import AppLayout from '@/Layouts/AppLayout.vue';
+import { IconPencil, IconTrash } from '@tabler/icons-vue';
+import { ref } from 'vue';
 
 defineProps({
     categories: {

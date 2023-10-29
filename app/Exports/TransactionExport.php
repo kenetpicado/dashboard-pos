@@ -7,9 +7,9 @@ use Maatwebsite\Excel\Concerns\FromView;
 
 class TransactionExport implements FromView
 {
-    public function __construct(private readonly object $transaction)
-    {
-        //
+    public function __construct(
+        private readonly object $transaction
+    ) {
     }
 
     public function view(): View

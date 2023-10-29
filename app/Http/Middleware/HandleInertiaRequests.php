@@ -10,6 +10,7 @@ use Inertia\Middleware;
 class HandleInertiaRequests extends Middleware
 {
     public $alertRepository;
+
     public $settingRepository;
 
     public function __construct()
@@ -17,6 +18,7 @@ class HandleInertiaRequests extends Middleware
         $this->alertRepository = new AlertRepository();
         $this->settingRepository = new SettingRepository();
     }
+
     /**
      * The root template that's loaded on the first page visit.
      *

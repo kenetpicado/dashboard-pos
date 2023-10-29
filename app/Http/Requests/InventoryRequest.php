@@ -24,7 +24,6 @@ class InventoryRequest extends FormRequest
         return [
             'measure' => ['required', 'string'],
             'quantity' => ['required', 'numeric'],
-            'unit_cost' => ['required', 'numeric'],
             'unit_price' => ['required', 'numeric'],
         ];
     }

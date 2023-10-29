@@ -4,6 +4,7 @@ namespace App\Repositories;
 
 use App\Models\Product;
 use App\Traits\BasicRepositoryTrait;
+use Illuminate\Support\Facades\DB;
 
 class ProductRepository
 {
@@ -28,18 +29,23 @@ class ProductRepository
             ->paginate();
     }
 
-    public function search($term, $hasInventory)
+    public function search($request)
     {
-        if (is_null($term)) {
+        if (is_null($request->search) && is_null($request->category_id)) {
             return [];
         }
 
         return Product::query()
-            ->where(function ($query) use ($term) {
-                $query->where('name', 'like', "%{$term}%")
-                    ->orWhere('sku', 'like', "%{$term}%");
+            ->when(isset($request->category_id), function ($query) use ($request) {
+                $query->where('category_id', $request->category_id);
             })
-            ->when($hasInventory, function ($query) {
+            ->when(isset($request->search), function ($query) use ($request) {
+                $query->where(function ($query) use ($request) {
+                    $query->where('name', 'like', "%{$request->search}%")
+                        ->orWhere('sku', 'like', "%{$request->search}%");
+                });
+            })
+            ->when($request->type == 'sell', function ($query) {
                 $query->whereHas('inventory', function ($query) {
                     $query->where('quantity', '>', 0);
                 })->with(['inventory' => function ($query) {
@@ -55,9 +61,10 @@ class ProductRepository
         return $product->inventory()->where('quantity', '>', 0)->orderByDesc('quantity')->paginate();
     }
 
-    public function getInventoryStatus($product)
+    public function getInventoryStatus($product_id)
     {
-        return $product->inventory()
+        return DB::table('inventories')
+            ->where('product_id', $product_id)
             ->where('quantity', '>', 0)
             ->selectRaw('COALESCE(sum(quantity * unit_cost), 0) as total, COALESCE(sum(quantity), 0) as quantity')
             ->first();

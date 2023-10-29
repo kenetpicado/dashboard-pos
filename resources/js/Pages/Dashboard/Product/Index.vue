@@ -4,7 +4,7 @@
             <span class="title">
                 Productos
             </span>
-            <AddButton :href="route('dashboard.products.create')"/>
+            <AddButton :href="route('dashboard.products.create')" />
         </template>
 
         <div class="mb-3">
@@ -15,6 +15,7 @@
 
         <TableSection>
             <template #header>
+                <th>Imagen</th>
                 <th>SKU</th>
                 <th>Nombre</th>
                 <th>Acciones</th>
@@ -22,6 +23,12 @@
 
             <template #body>
                 <tr v-for="(product, index) in products.data" class="hover:bg-gray-50">
+                    <td>
+						<div v-if="product.image" class="h-36 w-36 flex items-center justify-center">
+							<img :src="product.image" onerror="this.src='/not-found.jpg'" alt="Imagen"
+								class="max-h-full max-w-full rounded-lg">
+						</div>
+					</td>
                     <td>
                         {{ product.sku }}
                     </td>
@@ -34,7 +41,7 @@
                         </span>
                     </td>
                     <td>
-                        <div class="flex gap-2">
+                        <div class="flex gap-4">
                             <Link :href="route('dashboard.products.show', product.id)" tooltip="Detalles">
                             <IconEye size="22" role="button" />
                             </Link>
@@ -42,10 +49,6 @@
                             <Link :href="route('dashboard.products.edit', product.id)" tooltip="Editar">
                             <IconPencil size="22" role="button" />
                             </Link>
-
-                            <!-- <label tooltip="Eliminar">
-                                <IconTrash size="22" role="button" @click="destroy(product.id)" />
-                            </label> -->
                         </div>
                     </td>
                 </tr>
@@ -67,11 +70,10 @@ import InputForm from '@/Components/Form/InputForm.vue';
 import TableSection from '@/Components/TableSection.vue';
 import ThePaginator from '@/Components/ThePaginator.vue';
 import AppLayout from '@/Layouts/AppLayout.vue';
-import { queryParams, setParams, watchSearch } from '@/Use/Search';
-import { confirmAlert } from '@/Use/helpers';
-import { toast } from '@/Use/toast';
 import { Link, router } from '@inertiajs/vue3';
 import { IconEye, IconPencil } from '@tabler/icons-vue';
+import { reactive, watch } from 'vue';
+import { debounce } from "lodash";
 
 defineProps({
     products: {
@@ -91,22 +93,30 @@ const breads = [
     },
 ];
 
-function destroy(id) {
-    confirmAlert({
-        onConfirm: () => {
-            router.delete(route('dashboard.products.destroy', id), {
-                preserveScroll: true,
-                preserveState: true,
-                onSuccess: () => {
-                    toast.success('Producto eliminado');
-                },
-            });
-        },
-    })
+//SEARCH SECTION
+const queryParams = reactive({
+    search: null,
+});
+
+const searchParams = new URLSearchParams(window.location.search);
+
+if (searchParams.get("search")) {
+    queryParams.search = searchParams.get("search");
 }
 
-setParams()
+const debouncedSearch = debounce((value) => {
+    if (!value) {
+        delete queryParams.search;
+    }
 
-watchSearch(route('dashboard.products.index'), ["products"])
+    router.get(route('dashboard.products.index'), queryParams, {
+        preserveState: true,
+        preserveScroll: true,
+        only: ["products"]
+    })
+}, 500);
+
+watch(() => queryParams.search, debouncedSearch);
+//END SEARCH SECTION
 
 </script>
