@@ -45,6 +45,8 @@ class ProductTransactionRepository
     {
         return DB::table('product_transaction')
             ->join('products', 'products.id', '=', 'product_transaction.product_id')
+            ->join('transactions', 'transactions.id', '=', 'product_transaction.transaction_id')
+            ->where('transactions.type', 'sell')
             ->select('product_id', DB::raw('SUM(quantity) as quantity'), 'products.name', 'products.image', 'products.sku')
             ->groupBy('product_id')
             ->orderBy('quantity', 'desc')
