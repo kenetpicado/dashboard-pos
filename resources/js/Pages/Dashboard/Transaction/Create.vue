@@ -27,7 +27,7 @@
 					<InputForm text="Vence" v-if="is_caducable" v-model="currentProduct.expired_at" type="date" />
 
 					<template v-if="$page.props.manage_colors">
-						<div class="flex items-center mb-4">
+						<div class="flex items-center mb-4 col-span-2">
 							<button type="button" class="primary-button mr-4" @click="addColor">
 								Agregar color
 							</button>
@@ -56,11 +56,25 @@
 
 					<InputForm text="Descuento" v-model="currentProduct.discount" type="number" />
 
+					<template v-if="selectedColors">
+						<div class="block col-span-2">
+							Colores a eliminar
+						</div>
+						<div class="col-span-2 flex items-center gap-2" style="flex-wrap: wrap;">
+							<div v-for="color in selectedColors" :key="color">
+								<div class="w-6 h-6 rounded-md" role="button" :style="{ backgroundColor: color }"
+									@click="toggleColor(color)" :class="getColorSelectedClass(color)">
+								</div>
+							</div>
+						</div>
+					</template>
+
 					<div class="flex justify-end col-span-2">
 						<div class="text-xl font-bold text-end">
-							<div class="mb-2">Precio: C${{ currentProduct.price.toLocaleString() }}</div>
-							<div>Total: C${{ (currentProduct.quantity * currentProduct.price -
-								currentProduct.discount).toLocaleString() }}</div>
+							<div>
+								Total: C${{ (currentProduct.quantity * currentProduct.price -
+									currentProduct.discount).toLocaleString() }}
+							</div>
 						</div>
 					</div>
 				</template>
@@ -123,6 +137,7 @@ const inventory = ref([]);
 const selectedMeasure = ref(null);
 const currentIndex = ref(null);
 const selectedColors = ref([]);
+const colorsToRemove = ref([]);
 const colorInput = ref('#000000');
 
 const originalObject = {
@@ -137,6 +152,7 @@ const originalObject = {
 	discount: 0,
 	expired_at: null,
 	colors: [],
+	colorsToRemove: [],
 };
 
 const currentProduct = reactive({ ...originalObject });
@@ -180,6 +196,7 @@ function addProduct() {
 	}
 
 	currentProduct.colors = selectedColors.value;
+	currentProduct.colorsToRemove = colorsToRemove.value;
 
 	if (isEditing.value) {
 		selectedProducts.value[currentIndex.value] = { ...currentProduct };
@@ -204,6 +221,7 @@ function resetValues() {
 	currentIndex.value = null;
 	openModal.value = false;
 	selectedColors.value = [];
+	colorsToRemove.value = [];
 }
 
 function editProduct(index) {
@@ -245,6 +263,13 @@ watch(() => selectedMeasure.value, (value) => {
 	currentProduct.measure = item.measure;
 	currentProduct.price = item.unit_price;
 	currentProduct.inventory_id = item.id;
+	selectedColors.value = item.colors;
+
+	if (currentIndex.value != null) {
+		colorsToRemove.value = selectedProducts.value[currentIndex.value].colorsToRemove;
+	} else {
+		colorsToRemove.value = [];
+	}
 });
 
 const availableQuantity = computed(() => {
@@ -269,6 +294,22 @@ function addColor() {
 
 function removeColor(color) {
 	selectedColors.value = selectedColors.value.filter((item) => item != color);
+}
+
+function toggleColor(color) {
+	if (colorsToRemove.value.find((item) => item == color)) {
+		colorsToRemove.value = colorsToRemove.value.filter((item) => item != color);
+	} else {
+		colorsToRemove.value.push(color);
+	}
+}
+
+function getColorSelectedClass(color) {
+	if (colorsToRemove.value.find((item) => item == color)) {
+		return 'ring-2 ring-indigo-500 ring-offset-1';
+	}
+
+	return '';
 }
 
 </script>

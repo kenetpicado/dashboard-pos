@@ -32,6 +32,9 @@ class TransactionService
 
                 $inventoryRepository->decrement($product['inventory_id'], $product['quantity']);
 
+                if (!is_null($product['colors']))
+                    $inventoryRepository->updateColors($product['inventory_id'], $product['colors']);
+
                 if ($transaction->client) {
                     Client::updateOrCreate(['name' => $transaction->client]);
                 }

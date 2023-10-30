@@ -24,7 +24,7 @@
 						</div>
 					</div>
 
-					<ColorList :colors="product.colors" class="mb-2" />
+					<ColorList  v-if="type == 'buy'" :colors="product.colors" class="mb-2" />
 
 					<div class="flex items-center justify-between">
 						<div>
@@ -151,7 +151,7 @@ function formatInformation() {
 			discount: product.discount ?? 0,
 			name: product.name,
 			expired_at: product.expired_at,
-			colors: product.colors,
+			colors: product.colorsToRemove.length > 0 ? product.colors.filter(color => !product.colorsToRemove.includes(color)) : product.colors,
 		}
 	})
 

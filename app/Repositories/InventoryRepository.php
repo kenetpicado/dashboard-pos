@@ -66,6 +66,12 @@ class InventoryRepository
         DB::table('inventories')->where('id', $inventory_id)->decrement('quantity', $quantity);
     }
 
+    public function updateColors($inventory_id, $colors)
+    {
+        $data = count($colors) > 0 ? $colors : null;
+        DB::table('inventories')->where('id', $inventory_id)->update(['colors' => $data]);
+    }
+
     public function store(array $request, $transaction)
     {
         $colors = null;
