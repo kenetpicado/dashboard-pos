@@ -17,9 +17,12 @@ use App\Http\Controllers\Dashboard\ProductController;
 use App\Http\Controllers\Dashboard\ProfileController;
 use App\Http\Controllers\Dashboard\TransactionController;
 use App\Http\Controllers\Dashboard\UserController;
+use App\Http\Controllers\Home\CatalogueController;
 use Illuminate\Support\Facades\Route;
 
-Route::redirect('/', '/dashboard');
+Route::redirect('/', '/catalogue');
+
+Route::resource('catalogue', CatalogueController::class);
 
 Route::middleware(['auth:sanctum'])
     ->prefix('dashboard')

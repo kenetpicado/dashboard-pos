@@ -69,4 +69,18 @@ class ProductRepository
             ->selectRaw('COALESCE(sum(quantity * unit_cost), 0) as total, COALESCE(sum(quantity), 0) as quantity')
             ->first();
     }
+
+    public function getCatalogue()
+    {
+        return Product::query()
+            ->select('id', 'name', 'sku', 'image', 'discount')
+            ->whereHas('inventory', function ($query) {
+                $query->where('quantity', '>', 0);
+            })
+            ->with(['inventory' => function ($query) {
+                $query->where('quantity', '>', 0)->orderBy('unit_price');
+            }])
+            ->orderBy('name')
+            ->paginate();
+    }
 }
