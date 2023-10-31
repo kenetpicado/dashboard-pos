@@ -35,6 +35,7 @@ class ProductController extends Controller
     {
         return inertia('Dashboard/Product/Create', [
             'measures' => $this->measureRepository->getNames(),
+            'manage_colors' => $this->settingRepository->manageColors(),
             'categories' => $this->categoryRepository->getSimpleList(),
         ]);
     }

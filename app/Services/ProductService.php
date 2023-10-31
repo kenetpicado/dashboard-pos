@@ -31,7 +31,7 @@ class ProductService
 
         foreach ($request as $inventory) {
             $inventory['product_id'] = $product->id;
-            $this->inventoryRepository->store($inventory, $transaction->user_id);
+            $this->inventoryRepository->store($inventory, $transaction);
 
             $pivotData[] = $this->productTransactionRepository->buildBuyType($inventory, $transaction->id);
         }
