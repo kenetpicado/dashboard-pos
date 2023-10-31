@@ -44,7 +44,7 @@
         @apply inline-flex items-center gap-1 rounded-full px-2 py-1 text-xs font-semibold bg-red-50 text-red-600
     }
 
-    .badge-cyan {
-        @apply inline-flex items-center gap-1 rounded-full px-2 py-1 text-xs font-semibold bg-cyan-50 text-cyan-600
+    .badge-pink {
+        @apply inline-flex items-center gap-1 rounded-full px-2 py-1 text-xs font-semibold bg-pink-50 text-roseh-pink
     }
 }

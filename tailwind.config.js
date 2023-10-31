@@ -17,6 +17,11 @@ export default {
             fontFamily: {
                 sans: ['Figtree', ...defaultTheme.fontFamily.sans],
             },
+            colors: {
+                'roseh-cyan': '#5fe3e8',
+                'roseh-blue': '#024baa',
+                'roseh-pink': '#eb97c9'
+            },
         },
     },
 
