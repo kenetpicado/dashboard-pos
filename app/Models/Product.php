@@ -29,4 +29,12 @@ class Product extends Model
     {
         return $this->hasMany(Inventory::class);
     }
+
+    public function cheap_inventory()
+    {
+        return $this->hasOne(Inventory::class)
+            ->where('quantity', '>', 0)
+            ->orderByDesc('unit_price')
+            ->latestOfMany();
+    }
 }

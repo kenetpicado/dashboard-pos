@@ -74,13 +74,34 @@ class ProductRepository
     {
         return Product::query()
             ->select('id', 'name', 'sku', 'image', 'discount', 'created_at')
-            // ->whereHas('inventory', function ($query) {
-            //     $query->where('quantity', '>', 0);
-            // })
-            ->with(['inventory' => function ($query) {
-                $query->where('quantity', '>', 0)->orderBy('unit_price');
+            ->whereHas('inventory', function ($query) {
+                $query->where('quantity', '>', 0);
+            })
+            ->with(['cheap_inventory' => function ($query) {
+                $query->select('id', 'inventories.product_id', 'unit_price');
             }])
             ->orderBy('name')
             ->paginate();
+    }
+
+    public function getRelated($category_id, $product_id)
+    {
+        return Product::query()
+            ->select('id', 'name', 'sku', 'image', 'discount')
+            ->whereHas('inventory', function ($query) {
+                $query->where('quantity', '>', 0);
+            })
+            ->when(isset($category_id), function ($query) use ($category_id) {
+                $query->where('category_id', $category_id);
+            }, function ($query) {
+                $query->orderByDesc('created_at');
+            })
+            ->with(['cheap_inventory' => function ($query) {
+                $query->select('id', 'inventories.product_id', 'unit_price');
+            }])
+            ->where('id', '!=', $product_id)
+            ->orderBy('name')
+            ->limit(5)
+            ->get();
     }
 }

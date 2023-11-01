@@ -31,7 +31,8 @@ class CatalogueController extends Controller
     {
         return inertia('Home/Catalogue/Show', [
             'product' => $product,
-            'inventory' => $product->inventory()->get(),
+            'inventory' => $product->inventory()->get(['id', 'unit_price', 'measure', 'colors']),
+            'related' => $this->productRepository->getRelated($product->category_id, $product->id),
         ]);
     }
 }
