@@ -32,10 +32,12 @@
                         <h1 class="text-roseh-blue font-bold mb-2">Colores disponibles</h1>
                         <ColorList :colors="selectedInventoy.colors" />
                     </div>
-                    <div>
-                        <button type="button" class="mt-6 w-full inline-flex items-center justify-center px-4 py-2 border border-transparent rounded-lg font-medium text-sm text-white hover:bg-gray-700 focus:bg-gray-700 active:bg-gray-900 transition ease-in-out duration-150" style="background-color: #075E54;">
-                            <IconBrandWhatsapp class="mr-1"/> Comprar
-                        </button>
+                    <div v-if="mobile" class="mt-6">
+                        <a :href="`https://wa.me/505${mobile}?text=${textMessage}`"
+                            class="w-full inline-flex items-center justify-center px-4 py-2 border border-transparent rounded-lg font-medium text-sm text-white hover:bg-gray-700 focus:bg-gray-700 active:bg-gray-900 transition ease-in-out duration-150"
+                            style="background-color: #075E54;">
+                            <IconBrandWhatsapp class="mr-1" /> Comprar
+                        </a>
                     </div>
                 </div>
             </div>
@@ -68,6 +70,10 @@ const props = defineProps({
     related: {
         type: Object,
         required: true
+    },
+    mobile: {
+        type: String,
+        required: false
     }
 })
 
@@ -76,5 +82,9 @@ const selectedInventoryId = ref(props.inventory[0].id);
 const selectedInventoy = computed(() => {
     return props.inventory.find(i => i.id == selectedInventoryId.value);
 })
+
+const textMessage = computed(() => {
+	return `Hola, quiero comprar:%20${props.product.name}%20(Medida: ${selectedInventoy.value.measure})`;
+});
 
 </script>

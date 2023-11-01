@@ -7,6 +7,7 @@ use App\Models\Product;
 use App\Repositories\CategoryRepository;
 use App\Repositories\MeasureRepository;
 use App\Repositories\ProductRepository;
+use App\Repositories\SettingRepository;
 use Illuminate\Http\Request;
 
 class CatalogueController extends Controller
@@ -15,6 +16,7 @@ class CatalogueController extends Controller
         private readonly ProductRepository $productRepository,
         private readonly CategoryRepository $categoryRepository,
         private readonly MeasureRepository $measureRepository,
+        private readonly SettingRepository $settingRepository,
     ) {
     }
 
@@ -41,6 +43,7 @@ class CatalogueController extends Controller
             'product' => $product,
             'inventory' => $product->inventory()->get(['id', 'unit_price', 'measure', 'colors']),
             'related' => $this->productRepository->getRelated($product->category_id, $product->id),
+            'mobile' => $this->settingRepository->getMobile(),
         ]);
     }
 }

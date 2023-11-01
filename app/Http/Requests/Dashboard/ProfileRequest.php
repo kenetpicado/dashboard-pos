@@ -29,6 +29,7 @@ class ProfileRequest extends FormRequest
             'settings' => ['sometimes', 'array'],
             'settings.product_min' => ['nullable'],
             'settings.product_type' => ['required'],
+            'settings.mobile' => ['nullable'],
         ];
     }
 }

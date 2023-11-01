@@ -35,6 +35,9 @@ class ProfileController extends Controller
 
         if ($request->settings) {
             foreach ($request->settings as $key => $value) {
+                if (!isset($value))
+                    continue;
+
                 Setting::updateOrCreate(
                     ['key' => $key],
                     ['value' => $value]
