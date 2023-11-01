@@ -25,7 +25,7 @@ class InventoryRequest extends FormRequest
             'measure' => ['required', 'string'],
             'quantity' => ['required', 'numeric'],
             'unit_price' => ['required', 'numeric'],
-            'colors' => 'nullable'
+            'colors' => 'nullable',
         ];
     }
 }

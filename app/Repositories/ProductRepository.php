@@ -83,7 +83,7 @@ class ProductRepository
                 },
                 'recent_inventory' => function ($query) {
                     $query->select('id', 'inventories.product_id', 'created_at');
-                }
+                },
             ])
             ->when(isset($request['category_id']), function ($query) use ($request) {
                 $query->where('category_id', $request['category_id']);
@@ -115,7 +115,7 @@ class ProductRepository
                 },
                 'recent_inventory' => function ($query) {
                     $query->select('id', 'inventories.product_id', 'created_at');
-                }
+                },
             ])
             ->where('id', '!=', $product_id)
             ->orderBy('name')

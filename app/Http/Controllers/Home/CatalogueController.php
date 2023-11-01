@@ -27,6 +27,7 @@ class CatalogueController extends Controller
         $products->transform(function ($product) {
             $product->is_new = $product->created_at->diffInDays() <= 7;
             $product->has_new_inventory = $product->recent_inventory->created_at->diffInDays() <= 7;
+
             return $product;
         });
 

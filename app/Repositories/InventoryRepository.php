@@ -91,7 +91,7 @@ class InventoryRepository
             'user_id' => $transaction->user_id,
             'transaction_id' => $transaction->id,
             'expired_at' => $request['expired_at'] ?? null,
-            'colors' => $colors
+            'colors' => $colors,
         ]);
     }
 
@@ -116,7 +116,7 @@ class InventoryRepository
                 'quantity' => $request['quantity'],
                 'unit_price' => $request['unit_price'],
                 'measure' => $request['measure'],
-                'colors' => $colors
+                'colors' => $colors,
             ]);
     }
 

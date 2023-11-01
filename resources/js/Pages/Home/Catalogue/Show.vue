@@ -84,7 +84,7 @@ const selectedInventoy = computed(() => {
 })
 
 const textMessage = computed(() => {
-	return `Hola, quiero comprar:%20${props.product.name}%20(Medida: ${selectedInventoy.value.measure})`;
+	return `Hola, quiero comprar:%20${props.product.name},%20Medida: ${selectedInventoy.value.measure}`;
 });
 
 </script>
