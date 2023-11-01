@@ -22,7 +22,8 @@ use Illuminate\Support\Facades\Route;
 
 Route::redirect('/', '/catalogue');
 
-Route::resource('catalogue', CatalogueController::class);
+Route::resource('catalogue', CatalogueController::class)
+    ->parameters(['catalogue' => 'product']);
 
 Route::middleware(['auth:sanctum'])
     ->prefix('dashboard')

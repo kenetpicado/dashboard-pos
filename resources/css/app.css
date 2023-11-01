@@ -13,6 +13,12 @@
     th{
         @apply px-6 py-4 text-xs text-gray-500;
     }
+    *:focus {
+        -webkit-tap-highlight-color: transparent;
+        outline: none;
+        -ms-touch-action: manipulation;
+        touch-action: manipulation;
+      }
 }
 
 @layer components {
@@ -46,5 +52,13 @@
 
     .badge-pink {
         @apply inline-flex items-center gap-1 rounded-full px-2 py-1 text-xs font-semibold bg-pink-50 text-roseh-pink
+    }
+
+    .active-tab {
+        @apply bg-roseh-blue font-bold text-gray-100 rounded-xl px-4 py-2 transition select-none duration-300 transform active:scale-110
+    }
+
+    .inactive-tab {
+        @apply bg-gray-50 text-gray-400 rounded-xl px-5 py-2 transition select-none duration-300 transform active:scale-110
     }
 }

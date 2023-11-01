@@ -25,6 +25,14 @@ class MeasureRepository
             ->paginate();
     }
 
+    public function getSimpleList()
+    {
+        return DB::table('measures')
+            ->select('id', 'name')
+            ->orderBy('name')
+            ->get();
+    }
+
     public function getNames()
     {
         return DB::table('measures')

@@ -73,10 +73,10 @@ class ProductRepository
     public function getCatalogue()
     {
         return Product::query()
-            ->select('id', 'name', 'sku', 'image', 'discount')
-            ->whereHas('inventory', function ($query) {
-                $query->where('quantity', '>', 0);
-            })
+            ->select('id', 'name', 'sku', 'image', 'discount', 'created_at')
+            // ->whereHas('inventory', function ($query) {
+            //     $query->where('quantity', '>', 0);
+            // })
             ->with(['inventory' => function ($query) {
                 $query->where('quantity', '>', 0)->orderBy('unit_price');
             }])
