@@ -70,17 +70,30 @@ class ProductRepository
             ->first();
     }
 
-    public function getCatalogue()
+    public function getCatalogue($request = [])
     {
         return Product::query()
             ->select('id', 'name', 'sku', 'image', 'discount', 'created_at')
             ->whereHas('inventory', function ($query) {
                 $query->where('quantity', '>', 0);
             })
-            ->with(['cheap_inventory' => function ($query) {
-                $query->select('id', 'inventories.product_id', 'unit_price');
-            }])
-            ->orderBy('name')
+            ->with([
+                'cheap_inventory' => function ($query) {
+                    $query->select('id', 'inventories.product_id', 'unit_price');
+                },
+                'recent_inventory' => function ($query) {
+                    $query->select('id', 'inventories.product_id', 'created_at');
+                }
+            ])
+            ->when(isset($request['category_id']), function ($query) use ($request) {
+                $query->where('category_id', $request['category_id']);
+            })
+            ->when(isset($request['measure']), function ($query) use ($request) {
+                $query->whereHas('inventory', function ($query) use ($request) {
+                    $query->where('quantity', '>', 0)->where('measure', $request['measure']);
+                });
+            })
+            ->orderBy('created_at', 'desc')
             ->paginate();
     }
 
@@ -96,9 +109,14 @@ class ProductRepository
             }, function ($query) {
                 $query->orderByDesc('created_at');
             })
-            ->with(['cheap_inventory' => function ($query) {
-                $query->select('id', 'inventories.product_id', 'unit_price');
-            }])
+            ->with([
+                'cheap_inventory' => function ($query) {
+                    $query->select('id', 'inventories.product_id', 'unit_price');
+                },
+                'recent_inventory' => function ($query) {
+                    $query->select('id', 'inventories.product_id', 'created_at');
+                }
+            ])
             ->where('id', '!=', $product_id)
             ->orderBy('name')
             ->limit(5)

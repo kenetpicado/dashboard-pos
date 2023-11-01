@@ -18,10 +18,18 @@ class CatalogueController extends Controller
     ) {
     }
 
-    public function index()
+    public function index(Request $request)
     {
+        $products = $this->productRepository->getCatalogue($request->all());
+
+        $products->transform(function ($product) {
+            $product->is_new = $product->created_at->diffInDays() <= 7;
+            $product->has_new_inventory = $product->recent_inventory->created_at->diffInDays() <= 7;
+            return $product;
+        });
+
         return inertia('Home/Catalogue/Index', [
-            'products' => $this->productRepository->getCatalogue(),
+            'products' => $products,
             'categories' => $this->categoryRepository->getSimpleList(),
             'measures' => $this->measureRepository->getSimpleList(),
         ]);

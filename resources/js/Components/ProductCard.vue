@@ -5,6 +5,12 @@
         <div class="w-4/3 p-3">
             <div class="flex flex-col justify-between h-full">
                 <span>
+                    <div v-if="product.is_new" class="text-xs font-semibold text-roseh-pink mb-2">
+                        Nuevo!
+                    </div>
+                    <div v-else-if="product.has_new_inventory" class="text-xs font-semibold text-roseh-pink mb-2">
+                        Nuevas existencias!
+                    </div>
                     <div class="text-roseh-blue font-semibold text-normal uppercase">
                         {{ cutString(product.name) }}
                     </div>

@@ -37,4 +37,12 @@ class Product extends Model
             ->orderByDesc('unit_price')
             ->latestOfMany();
     }
+
+    public function recent_inventory()
+    {
+        return $this->hasOne(Inventory::class)
+            ->where('quantity', '>', 0)
+            ->orderByDesc('created_at')
+            ->latestOfMany();
+    }
 }

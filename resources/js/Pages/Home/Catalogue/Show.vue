@@ -21,7 +21,7 @@
                             C${{ product.discount }} off
                         </span>
                     </div>
-                    <div class="flex gap-3 overflow-x-auto hide-scrollbar mt-6 mb-4">
+                    <div class="flex gap-3 overflow-x-auto hide-scrollbar mt-6 mb-4 text-xs">
                         <button type="button" v-for="i in inventory"
                             :class="selectedInventoryId == i.id ? 'active-tab' : 'inactive-tab'"
                             @click="selectedInventoryId = i.id">
@@ -32,9 +32,14 @@
                         <h1 class="text-roseh-blue font-bold mb-2">Colores disponibles</h1>
                         <ColorList :colors="selectedInventoy.colors" />
                     </div>
+                    <div>
+                        <button type="button" class="mt-6 w-full inline-flex items-center justify-center px-4 py-2 border border-transparent rounded-lg font-medium text-sm text-white hover:bg-gray-700 focus:bg-gray-700 active:bg-gray-900 transition ease-in-out duration-150" style="background-color: #075E54;">
+                            <IconBrandWhatsapp class="mr-1"/> Comprar
+                        </button>
+                    </div>
                 </div>
             </div>
-            <h1 class="my-4 text-roseh-blue font-bold">Tambien te puede interesar</h1>
+            <h1 class="my-4 text-roseh-blue font-bold">Te puede interesar</h1>
 
             <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 mb-4">
                 <ProductCard v-for="product in related" :key="product.id" :product="product" />
@@ -49,6 +54,7 @@ import ColorList from '@/Components/ColorList.vue';
 import ProductCard from '@/Components/ProductCard.vue';
 import CatalogueLayout from '@/Layouts/CatalogueLayout.vue';
 import { computed, ref } from 'vue';
+import { IconBrandWhatsapp } from '@tabler/icons-vue';
 
 const props = defineProps({
     product: {
