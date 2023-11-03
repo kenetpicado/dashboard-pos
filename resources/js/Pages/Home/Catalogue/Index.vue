@@ -22,6 +22,7 @@
         </HorizontalItems>
 
         <div class="p-4 container mx-auto">
+            <Loading :active="isLoading" :is-full-page="true" />
             <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 mb-4" v-if="products.data.length > 0">
                 <ProductCard v-for="product in products.data" :key="product.id" :product="product" />
             </div>
@@ -35,13 +36,15 @@
 </template>
 
 <script setup>
-import { watch, reactive } from 'vue';
+import { watch, reactive, ref } from 'vue';
 import CatalogPaginator from '@/Components/CatalogPaginator.vue';
 import CatalogueLayout from '@/Layouts/CatalogueLayout.vue';
 import ProductCard from '@/Components/ProductCard.vue';
 import HorizontalItems from '@/Components/HorizontalItems.vue';
 import { debounce } from "lodash";
 import { router } from '@inertiajs/vue3';
+import Loading from 'vue-loading-overlay';
+import 'vue-loading-overlay/dist/css/index.css';
 
 const props = defineProps({
     products: {
@@ -62,6 +65,8 @@ const queryParams = reactive({
     category_id: null,
     measure: null
 })
+
+const isLoading = ref(false);
 
 const searchParams = new URLSearchParams(window.location.search);
 
@@ -85,10 +90,16 @@ const debouncedSearch = debounce(([category_id, measure]) => {
     router.get(route('catalogue.index'), queryParams, {
         preserveState: true,
         preserveScroll: true,
-        only: ["products"]
+        only: ["products"],
+        onSuccess: () => {
+            isLoading.value = false;
+        }
     })
 }, 500);
 
-watch(() => ([queryParams.category_id, queryParams.measure]), debouncedSearch);
+watch(() => ([queryParams.category_id, queryParams.measure]), ([category_id, measure]) => {
+    isLoading.value = true;
+    debouncedSearch([category_id, measure]);
+});
 
 </script>

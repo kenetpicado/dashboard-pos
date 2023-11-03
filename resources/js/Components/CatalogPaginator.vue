@@ -28,7 +28,7 @@ function getThisPage(url) {
     const searchParams = new URLSearchParams(window.location.search);
     const queryParams = {};
 
-    const paramNames = ['search', 'user_id', 'from', 'to'];
+    const paramNames = ['category_id', 'measure'];
 
     paramNames.forEach(paramName => {
         const paramValue = searchParams.get(paramName);
