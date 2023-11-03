@@ -34,15 +34,13 @@ class Product extends Model
     {
         return $this->hasOne(Inventory::class)
             ->where('quantity', '>', 0)
-            ->orderByDesc('unit_price')
-            ->latestOfMany();
+            ->orderByDesc('unit_price');
     }
 
     public function recent_inventory()
     {
         return $this->hasOne(Inventory::class)
             ->where('quantity', '>', 0)
-            ->orderByDesc('created_at')
-            ->latestOfMany();
+            ->orderByDesc('created_at');
     }
 }

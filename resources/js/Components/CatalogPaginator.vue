@@ -1,10 +1,10 @@
 <template>
     <div class="mb-4" v-if="links && pageList.length > 1">
         <div class="flex justify-between items-center gap-1">
-            <span v-for="item in pageList" @click="getThisPage(item.url)" class="rounded-md"
-                :class="{ 'bg-roseh-pink text-white px-3 py-1': item.active }" role="button">
+            <button type="button" v-for="item in pageList" @click="getThisPage(item.url)" class="rounded-md select-none"
+                :class="{ 'bg-roseh-pink text-white px-3 py-1': item.active }">
                 {{ item.label }}
-            </span>
+            </button>
         </div>
     </div>
 </template>
