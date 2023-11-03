@@ -25,7 +25,7 @@ class InventoryController extends Controller
         $array = $request->all();
 
         return inertia('Dashboard/Inventory/Index', [
-            'inventory' => $this->inventoryRepository->getAllAvailable($array),
+            'inventory' => $this->inventoryRepository->getAllAvailable($request->all()),
             'total' => $this->inventoryRepository->getTotalAmount($array),
             'total_quantity' => $this->inventoryRepository->getTotalQuantity($array),
             'users' => $this->userRepository->getSimpleList(),

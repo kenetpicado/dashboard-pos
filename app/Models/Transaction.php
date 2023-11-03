@@ -41,11 +41,11 @@ class Transaction extends Model
     public function scopeWhenFromTo($query, $request)
     {
         return $query->when(isset($request['from']), function ($query) use ($request) {
-            $query->where('created_at', '>=', $request['from'].' 00:00:00');
+            $query->where('created_at', '>=', Carbon::parse($request['from'])->format('Y-m-d 00:00:00'));
         }, function ($query) {
-            $query->whereDate('created_at', '>=', Carbon::now()->startOfMonth()->format('Y-m-d H:i:s'));
+            $query->whereDate('created_at', '>=', Carbon::now()->startOfMonth()->format('Y-m-d 00:00:00'));
         })->when(isset($request['to']), function ($query) use ($request) {
-            $query->where('created_at', '<=', $request['to'].' 23:59:59');
+            $query->where('created_at', '<=', Carbon::parse($request['to'])->format('Y-m-d 23:59:59'));
         });
     }
 

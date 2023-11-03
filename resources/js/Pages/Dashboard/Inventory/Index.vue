@@ -229,7 +229,7 @@ const debouncedSearch = debounce(([search, user_id]) => {
     router.get(route('dashboard.inventory.index'), queryParams, {
         preserveState: true,
         preserveScroll: true,
-        only: ["inventory"]
+        only: ["inventory", "total", "total_quantity"]
     })
 }, 500);
 
