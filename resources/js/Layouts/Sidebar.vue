@@ -2,7 +2,7 @@
     <aside class="w-72 p-3 bg-white flex flex-col min-h-screen">
         <div class="flex flex-col items-center my-4">
             <div class="h-14 w-14">
-                <img class="h-full w-full" src="/shop.png" alt="" />
+                <img class="h-full w-full object-contain" src="/shop.png" alt="" />
             </div>
             <h2 class="text-2xl font-extrabold text-gray-600">
                 {{ $page.props.app_name }}
