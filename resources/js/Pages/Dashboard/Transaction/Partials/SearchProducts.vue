@@ -34,7 +34,7 @@
 						<div class="uppercase">
 							{{ product.name }}
 						</div>
-						<div class="text-gray-400 flex items-center gap-1">
+						<div class="text-indigo-600 flex items-center gap-1 mt-2">
 							{{ product.sku }}
 						</div>
 					</td>

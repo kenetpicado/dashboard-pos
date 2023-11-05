@@ -61,7 +61,7 @@
                         C${{ i.unit_cost }}
                     </td>
                     <td>
-                        <span class="font-bold">C${{ (i.quantity * i.unit_cost).toLocaleString() }}</span>
+                        <span class="font-bold text-indigo-600">C${{ (i.quantity * i.unit_cost).toLocaleString() }}</span>
                     </td>
                     <td>
                         <div class="flex justify-between gap-4">

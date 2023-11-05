@@ -17,6 +17,14 @@
     <meta name="description"
         content="Explora una amplia selección de productos de alta calidad en nuestro catálogo en línea. Descubre las últimas tendencias, ofertas exclusivas y opciones para satisfacer tus necesidades. ¡Compra con comodidad y confianza en nuestra tienda en línea hoy mismo!" />
 
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="{{ config('app.url') }}" />
+    <meta property="og:title" content="Inicio - {{ config('app.name', 'Tienda') }}" />
+    <meta property="og:description"
+        content="Explora una amplia selección de productos de alta calidad en nuestro catálogo en línea. Descubre las últimas tendencias, ofertas exclusivas y opciones para satisfacer tus necesidades. ¡Compra con comodidad y confianza en nuestra tienda en línea hoy mismo!" />
+    <meta property="og:image" content="{{ asset('/shop.png') }}" />
+
     <!-- Scripts -->
     @routes
     @vite(['resources/js/app.js', "resources/js/Pages/{$page['component']}.vue"])

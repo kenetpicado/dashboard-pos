@@ -16,7 +16,6 @@
         <TableSection>
             <template #header>
                 <th>Imagen</th>
-                <th>SKU</th>
                 <th>Nombre</th>
                 <th>Acciones</th>
             </template>
@@ -30,15 +29,15 @@
 						</div>
 					</td>
                     <td>
-                        {{ product.sku }}
-                    </td>
-                    <td>
                         <span class="uppercase me-3">
                             {{ product.name }}
                         </span>
                         <span v-if="product.discount" class="badge-red">
                             C${{ product.discount }} Off
                         </span>
+                        <div class="mt-2 text-indigo-600">
+                            {{ product.sku }}
+                        </div>
                     </td>
                     <td>
                         <div class="flex gap-4">

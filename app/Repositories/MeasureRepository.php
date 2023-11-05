@@ -22,7 +22,7 @@ class MeasureRepository
         return DB::table('measures')
             ->select('id', 'name')
             ->orderBy('name')
-            ->paginate();
+            ->paginate(30);
     }
 
     public function getSimpleList()

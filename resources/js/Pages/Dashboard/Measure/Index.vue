@@ -1,44 +1,28 @@
 <template>
-    <AppLayout title="Categorias" :breads="breads">
+    <AppLayout title="Medidas" :breads="breads">
 
         <template #header>
             <span class="title">
-                Categorias
+                Medidas
             </span>
             <AddButton @click="openModal = true" />
         </template>
 
-        <TableSection>
-            <template #header>
-            	<th>#</th>
-                <th>Nombre</th>
-                <th>Acciones</th>
-            </template>
+        <div class="grid grid-cols-5 gap-4 mb-4 text-gray-600">
+            <div v-for="(m, index) in measures.data" class="bg-white px-4 py-6 rounded-xl">
+                <div class="flex justify-between items-center">
+                    <div class="flex gap-2 items-center">
+                        <span class="font-bold">{{ m.name }}</span>
+                        <IconEdit size="20" role="button" @click="edit(m)" />
+                    </div>
+                    <span tooltip="Eliminar" role="button">
+                        <IconTrash @click="destroy(m.id)" class="text-red-200" />
+                    </span>
+                </div>
+            </div>
+        </div>
 
-            <template #body>
-                <template v-for="(m, index) in measures.data">
-                    <tr class="hover:bg-gray-50">
-                    	<td>{{ m.id }}</td>
-                        <td>
-                            <span class="font-semibold">{{ m.name }}</span>
-                        </td>
-                        <td>
-                            <div class="flex gap-4">
-                                <IconPencil role="button" @click="edit(m)" />
-                                <IconTrash role="button" @click="destroy(m.id)" />
-                            </div>
-                        </td>
-                    </tr>
-                </template>
-                <tr v-if="measures.data.length == 0">
-                    <td colspan="3" class="text-center">No hay datos que mostrar</td>
-                </tr>
-            </template>
-
-            <template #paginator>
-                <ThePaginator :links="measures.links" />
-            </template>
-        </TableSection>
+        <ThePaginator :links="measures.links" />
 
         <FormModal :show="openModal" title="Medida" @onCancel="resetValues()" @onSubmit="onSubmit()">
             <InputForm text="Name" v-model="form.name" />
@@ -51,13 +35,12 @@
 import AddButton from '@/Components/Buttons/AddButton.vue';
 import InputForm from '@/Components/Form/InputForm.vue';
 import FormModal from '@/Components/Modal/FormModal.vue';
-import TableSection from '@/Components/TableSection.vue';
 import ThePaginator from '@/Components/ThePaginator.vue';
 import AppLayout from '@/Layouts/AppLayout.vue';
 import { confirmAlert } from '@/Use/helpers';
 import { toast } from '@/Use/toast';
 import { router, useForm } from '@inertiajs/vue3';
-import { IconPencil, IconTrash } from '@tabler/icons-vue';
+import { IconEdit, IconTrash } from '@tabler/icons-vue';
 import { ref } from 'vue';
 
 defineProps({
@@ -93,7 +76,7 @@ function edit(c) {
 }
 
 function onSubmit() {
-    form.name = form.name.toUpperCase()
+    form.name = form.name.toUpperCase().replace(/\s/g, "-")
     if (isNew.value) {
         form.post(route("dashboard.measures.store"), {
             preserveScroll: true,
