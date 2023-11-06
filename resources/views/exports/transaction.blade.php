@@ -75,7 +75,7 @@
                 Total C$
             </td>
             <td>
-                {{ $transaction->total }}
+                {{ $payments_total ?? $transaction->total }}
             </td>
         </tr>
     </tfoot>

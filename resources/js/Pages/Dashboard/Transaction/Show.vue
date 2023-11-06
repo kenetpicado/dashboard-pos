@@ -87,7 +87,10 @@
                             Total
                         </th>
                         <td>
-                            <span class="font-bold">
+                            <span v-if="payments_total" class="font-bold">
+                                C${{ payments_total.toLocaleString() }}
+                            </span>
+                            <span v-else class="font-bold">
                                 C${{ transaction.total.toLocaleString() }}
                             </span>
                         </td>
@@ -108,7 +111,11 @@ const props = defineProps({
     transaction: {
         type: Object,
         required: true,
-    }
+    },
+    payments_total: {
+        type: Number,
+        required: false,
+    },
 });
 
 const transactionTypes = {

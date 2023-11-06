@@ -8,7 +8,8 @@ use Maatwebsite\Excel\Concerns\FromView;
 class TransactionExport implements FromView
 {
     public function __construct(
-        private readonly object $transaction
+        private readonly object $transaction,
+        private readonly float $payments_total
     ) {
     }
 
@@ -16,6 +17,7 @@ class TransactionExport implements FromView
     {
         return view('exports.transaction', [
             'transaction' => $this->transaction,
+            'payments_total' => $this->payments_total,
         ]);
     }
 }

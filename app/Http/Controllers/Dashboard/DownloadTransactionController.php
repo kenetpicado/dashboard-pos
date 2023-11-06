@@ -12,7 +12,8 @@ class DownloadTransactionController extends Controller
     public function __invoke(Transaction $transaction)
     {
         $transaction->load('user:id,name', 'products:id,name,sku');
+        $payments_total = $transaction->payments->sum('value');
 
-        return Excel::download(new TransactionExport($transaction), "Transaccion_{$transaction->id}.xlsx");
+        return Excel::download(new TransactionExport($transaction, $payments_total), "Transaccion_{$transaction->id}.xlsx");
     }
 }

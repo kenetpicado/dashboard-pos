@@ -40,7 +40,12 @@
                         {{ transaction.client }}
                     </td>
                     <td>
-                        <span class="font-bold">C${{ transaction.total.toLocaleString() }}</span>
+                        <span v-if="transaction.payments_total" class="font-bold">
+                            C${{ transaction.payments_total.toLocaleString() }}
+                        </span>
+                        <span v-else class="font-bold">
+                            C${{ transaction.total.toLocaleString() }}
+                        </span>
                     </td>
                     <td>
                         <div class="flex gap-2">

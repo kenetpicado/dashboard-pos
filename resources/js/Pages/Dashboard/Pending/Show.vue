@@ -135,18 +135,13 @@ const stats = computed(() => [
         icon: IconCurrencyDollar
     },
     {
-        title: "Pago inicial",
-        value: "C$" + (props.transaction.total - props.payments.reduce((acc, item) => acc + item.value, 0)).toLocaleString(),
-        icon: IconCurrencyDollar
-    },
-    {
         title: "Total abonado",
-        value: "C$" + props.transaction.total.toLocaleString(),
+        value: "C$" + props.transaction.payments.reduce((a, b) => a + b.value, 0).toLocaleString(),
         icon: IconCurrencyDollar
     },
     {
         title: "Faltante",
-        value: "C$" + (props.transaction.goal - props.transaction.total).toLocaleString(),
+        value: "C$" + (props.transaction.goal - props.transaction.payments.reduce((a, b) => a + b.value, 0).toLocaleString()).toLocaleString(),
         icon: IconCurrencyDollar
     },
 ]);

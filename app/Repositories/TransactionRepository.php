@@ -3,6 +3,7 @@
 namespace App\Repositories;
 
 use App\Models\Transaction;
+use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
 
 class TransactionRepository
@@ -13,17 +14,61 @@ class TransactionRepository
             ->withCount('products')
             ->whenUser($request)
             ->whenFromTo($request)
+            ->addSelect([
+                'payments_total' => DB::table('payments')
+                ->select(DB::raw('SUM(value) as total'))
+                ->whereColumn('transaction_id', 'transactions.id')
+                ->limit(1)
+            ])
             ->latest('id')
             ->paginate();
     }
 
     public function getMonthlyTotal($type = 'sell', $request = [])
     {
-        return Transaction::query()
+        $transactions = Transaction::query()
             ->where('type', $type)
             ->whenUser($request)
-            ->whenFromTo($request)
-            ->sum('total');
+            ->when(isset($request['from']), function ($query) use ($request) {
+                $query->where(function ($query) use ($request) {
+                    $query->where('created_at', '>=', Carbon::parse($request['from'])->format('Y-m-d 00:00:00'))
+                        ->orWhereHas('payments', function ($query) use ($request) {
+                            $query->where('created_at', '>=', Carbon::parse($request['from'])->format('Y-m-d 00:00:00'));
+                        });
+                });
+            }, function ($query) {
+                $query->where(function ($query) {
+                    $query->where('created_at', '>=', Carbon::now()->startOfMonth()->format('Y-m-d 00:00:00'))
+                        ->orWhereHas('payments', function ($query) {
+                            $query->where('created_at', '>=', Carbon::now()->startOfMonth()->format('Y-m-d 00:00:00'));
+                        });
+                });
+            })->when(isset($request['to']), function ($query) use ($request) {
+                $query->where(function ($query) use ($request) {
+                    $query->where('created_at', '<=', Carbon::parse($request['to'])->format('Y-m-d 23:59:59'))
+                        ->orWhereHas('payments', function ($query) use ($request) {
+                            $query->where('created_at', '<=', Carbon::parse($request['to'])->format('Y-m-d 23:59:59'));
+                        });
+                });
+            })
+            ->with(['payments' => function ($query) use ($request) {
+                $query->when(isset($request['from']), function ($query) use ($request) {
+                    $query->where('created_at', '>=', Carbon::parse($request['from'])->format('Y-m-d 00:00:00'));
+                }, function ($query) {
+                    $query->where('created_at', '>=', Carbon::now()->startOfMonth()->format('Y-m-d 00:00:00'));
+                })->when(isset($request['to']), function ($query) use ($request) {
+                    $query->where('created_at', '<=', Carbon::parse($request['to'])->format('Y-m-d 23:59:59'));
+                });
+            }])
+            ->get(['id', 'total', 'created_at']);
+
+        return $transactions->map(function ($transaction) {
+            if ($transaction->payments->count() > 0) {
+                $transaction->total = $transaction->payments->sum('value');
+            }
+
+            return $transaction;
+        })->sum('total');
     }
 
     public function store(array $request)
@@ -34,11 +79,11 @@ class TransactionRepository
 
         if (isset($request['payment']) && $request['payment'] >= 0) {
             $status = 'PENDIENTE';
-            $total = $request['payment'];
+            $total = 0;
             $goal = $request['total'];
         }
 
-        return Transaction::create([
+        $transaction = Transaction::create([
             'user_id' => auth()->id(),
             'type' => $request['type'],
             'total' => $total,
@@ -48,6 +93,14 @@ class TransactionRepository
             'goal' => $goal,
             'status' => $status,
         ]);
+
+        if (isset($request['payment']) && $request['payment'] >= 0) {
+            $transaction->payments()->create([
+                'value' => $request['payment'],
+            ]);
+        }
+
+        return $transaction;
     }
 
     public function getPending()
@@ -56,6 +109,12 @@ class TransactionRepository
             ->withCount('products')
             ->where('status', 'PENDIENTE')
             ->select('id', 'type', 'client', 'total', 'created_at')
+            ->addSelect([
+                'payments_total' => DB::table('payments')
+                ->select(DB::raw('SUM(value) as total'))
+                ->whereColumn('transaction_id', 'transactions.id')
+                ->limit(1)
+            ])
             ->latest('id')
             ->paginate();
     }
@@ -63,15 +122,13 @@ class TransactionRepository
     public function updateStatus($payment)
     {
         $transaction = Transaction::find($payment->transaction_id);
+        $payments_total = $transaction->payments->sum('value');
 
-        $transaction->total = $transaction->total + $payment->value;
-
-        if ($transaction->total >= $transaction->goal) {
-            $transaction->goal = null;
-            $transaction->status = 'COMPLETADO';
+        if ($payments_total >= $transaction->goal) {
+            $transaction->update([
+                'status' => 'COMPLETADO',
+            ]);
         }
-
-        $transaction->save();
 
         return $transaction->status == 'COMPLETADO';
     }
@@ -84,7 +141,7 @@ class TransactionRepository
     public function byClient($client_name)
     {
         return DB::table('transactions')
-            ->where('client', 'like', '%'.$client_name.'%')
+            ->where('client', 'like', '%' . $client_name . '%')
             ->latest('id')
             ->paginate();
     }

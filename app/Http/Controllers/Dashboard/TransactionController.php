@@ -53,6 +53,7 @@ class TransactionController extends Controller
     {
         return inertia('Dashboard/Transaction/Show', [
             'transaction' => $transaction->load('user:id,name', 'products:id,name,sku'),
+            'payments_total' => $transaction->payments->sum('value'),
         ]);
     }
 
