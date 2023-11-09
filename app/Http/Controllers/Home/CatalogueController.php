@@ -34,7 +34,7 @@ class CatalogueController extends Controller
         return inertia('Home/Catalogue/Index', [
             'products' => $products,
             'categories' => $this->categoryRepository->getSimpleList(),
-            'measures' => $this->measureRepository->getSimpleList(),
+            'measures' => $this->measureRepository->getMeasuresOf($request->category_id),
         ]);
     }
 

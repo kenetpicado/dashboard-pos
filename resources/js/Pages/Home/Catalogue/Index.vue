@@ -11,7 +11,7 @@
             </button>
         </HorizontalItems>
 
-        <HorizontalItems title="Medidas">
+        <HorizontalItems title="Medidas" v-if="measures.length > 0">
             <button type="button" :class="queryParams.measure == null ? 'active-tab' : 'inactive-tab'" @click="queryParams.measure = null">
                 Todas
             </button>
@@ -90,7 +90,7 @@ const debouncedSearch = debounce(([category_id, measure]) => {
     router.get(route('catalogue.index'), queryParams, {
         preserveState: true,
         preserveScroll: true,
-        only: ["products"],
+        only: ["products", "measures"],
         onSuccess: () => {
             isLoading.value = false;
         }

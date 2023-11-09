@@ -33,6 +33,21 @@ class MeasureRepository
             ->get();
     }
 
+    public function getMeasuresOf($category_id = null)
+    {
+        if (is_null($category_id)) {
+            return [];
+        }
+
+        return DB::table('products')
+            ->join('inventories', 'products.id', '=', 'inventories.product_id')
+            ->where('products.category_id', $category_id)
+            ->where('inventories.quantity', '>', 0)
+            ->select('inventories.measure as name')
+            ->distinct()
+            ->get();
+    }
+
     public function getNames()
     {
         return DB::table('measures')
