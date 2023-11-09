@@ -13,6 +13,11 @@
                     <option selected value="">Todos</option>
                     <option v-for="item in users" :value="item.id">{{ item.name }}</option>
                 </SelectForm>
+                <SelectForm text="Tipo" v-model="queryParams.type">
+                    <option selected value="">Todos</option>
+                    <option value="buy">Compra</option>
+                    <option value="sell">Venta</option>
+                </SelectForm>
                 <InputForm text="Desde" type="date" v-model="queryParams.from" />
                 <InputForm text="Hasta" type="date" v-model="queryParams.to" />
             </div>
@@ -148,6 +153,7 @@ const queryParams = reactive({
     user_id: null,
     from: null,
     to: null,
+    type: '',
 })
 
 const stats = computed(() => {
@@ -179,6 +185,10 @@ if (searchParams.get("to")) {
     queryParams.to = searchParams.get("to")
 }
 
+if (searchParams.get("type")) {
+    queryParams.type = searchParams.get("type")
+}
+
 watch(() => queryParams.user_id, (value) => {
     if (!value) {
         delete queryParams.user_id
@@ -195,13 +205,17 @@ watch(() => queryParams.user_id, (value) => {
     getData()
 })
 
-watch(() => [queryParams.from, queryParams.to], ([from, to]) => {
+watch(() => [queryParams.from, queryParams.to, queryParams.type], ([from, to, type]) => {
     if (!from) {
         delete queryParams.from
     }
 
     if (!to) {
         delete queryParams.to
+    }
+
+    if (!type) {
+        delete queryParams.type
     }
 
     if (!queryParams.user_id) {

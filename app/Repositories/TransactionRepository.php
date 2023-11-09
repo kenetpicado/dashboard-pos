@@ -12,6 +12,9 @@ class TransactionRepository
     {
         return Transaction::with('user:id,name')
             ->withCount('products')
+            ->when(isset($request['type']), function ($query) use ($request) {
+                $query->where('type', $request['type']);
+            })
             ->whenUser($request)
             ->whenFromTo($request)
             ->addSelect([
