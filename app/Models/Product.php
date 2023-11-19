@@ -43,4 +43,9 @@ class Product extends Model
             ->where('quantity', '>', 0)
             ->orderByDesc('created_at');
     }
+
+    public function category()
+    {
+        return $this->belongsTo(Category::class);
+    }
 }

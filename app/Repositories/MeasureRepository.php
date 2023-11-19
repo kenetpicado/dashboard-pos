@@ -3,6 +3,7 @@
 namespace App\Repositories;
 
 use App\Models\Measure;
+use App\Models\Product;
 use App\Traits\BasicRepositoryTrait;
 use Illuminate\Support\Facades\DB;
 
@@ -39,11 +40,18 @@ class MeasureRepository
             return [];
         }
 
-        return DB::table('products')
+        return Product::query()
             ->join('inventories', 'products.id', '=', 'inventories.product_id')
-            ->where('products.category_id', $category_id)
             ->where('inventories.quantity', '>', 0)
-            ->select('inventories.measure as name')
+            ->where(function ($query) use ($category_id) {
+                $query->where('category_id', $category_id)
+                    ->orWhere(function ($query) use ($category_id) {
+                        $query->whereHas('category', function ($query) use ($category_id) {
+                            $query->where('parent_id', $category_id);
+                        });
+                    });
+            })
+            ->selectRaw('inventories.measure as name')
             ->distinct()
             ->get();
     }

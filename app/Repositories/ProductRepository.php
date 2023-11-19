@@ -74,8 +74,11 @@ class ProductRepository
     {
         return Product::query()
             ->select('id', 'name', 'sku', 'image', 'discount', 'created_at')
-            ->whereHas('inventory', function ($query) {
-                $query->where('quantity', '>', 0);
+            ->whereHas('inventory', function ($query) use ($request) {
+                $query->where('quantity', '>', 0)
+                    ->when(isset($request['measure']), function ($query) use ($request) {
+                        $query->where('measure', $request['measure']);
+                    });
             })
             ->with([
                 'cheap_inventory' => function ($query) {
@@ -86,11 +89,17 @@ class ProductRepository
                 },
             ])
             ->when(isset($request['category_id']), function ($query) use ($request) {
-                $query->where('category_id', $request['category_id']);
+                $query->where(function ($query) use ($request) {
+                    $query->where('category_id', $request['category_id'])
+                        ->orWhereHas('category', function ($query) use ($request) {
+                            $query->where('parent_id', $request['category_id']);
+                        });
+                });
             })
-            ->when(isset($request['measure']), function ($query) use ($request) {
-                $query->whereHas('inventory', function ($query) use ($request) {
-                    $query->where('quantity', '>', 0)->where('measure', $request['measure']);
+            ->when(isset($request['search']), function ($query) use ($request) {
+                $query->where(function ($query) use ($request) {
+                    $query->where('name', 'like', "%{$request['search']}%")
+                        ->orWhere('sku', 'like', "%{$request['search']}%");
                 });
             })
             ->orderBy('created_at', 'desc')

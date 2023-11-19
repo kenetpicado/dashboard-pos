@@ -45,6 +45,7 @@ import { debounce } from "lodash";
 import { router } from '@inertiajs/vue3';
 import Loading from 'vue-loading-overlay';
 import 'vue-loading-overlay/dist/css/index.css';
+import InputForm from '@/Components/Form/InputForm.vue';
 
 const props = defineProps({
     products: {
@@ -63,7 +64,8 @@ const props = defineProps({
 
 const queryParams = reactive({
     category_id: null,
-    measure: null
+    measure: null,
+    search: null,
 })
 
 const isLoading = ref(false);
@@ -78,13 +80,23 @@ if (searchParams.get("measure")) {
     queryParams.measure = searchParams.get("measure");
 }
 
-const debouncedSearch = debounce(([category_id, measure]) => {
+if (searchParams.get("search")) {
+    queryParams.search = searchParams.get("search");
+}
+
+const debouncedSearch = debounce(([category_id, measure, search]) => {
+    isLoading.value = true;
+
     if (!category_id) {
         delete queryParams.category_id;
     }
 
     if (!measure) {
         delete queryParams.measure;
+    }
+
+    if (!search) {
+        delete queryParams.search;
     }
 
     router.get(route('catalogue.index'), queryParams, {
@@ -97,9 +109,8 @@ const debouncedSearch = debounce(([category_id, measure]) => {
     })
 }, 500);
 
-watch(() => ([queryParams.category_id, queryParams.measure]), ([category_id, measure]) => {
-    isLoading.value = true;
-    debouncedSearch([category_id, measure]);
+watch(() => ([queryParams.category_id, queryParams.measure, queryParams.search]), ([category_id, measure, search]) => {
+    debouncedSearch([category_id, measure, search]);
 });
 
 </script>
