@@ -32,7 +32,11 @@ class ProductRepository
     public function search($request)
     {
         if (is_null($request->search) && is_null($request->category_id)) {
-            return [];
+            return [
+                'data' => [],
+                'links' => [],
+                'meta' => [],
+            ];
         }
 
         return Product::query()
@@ -52,8 +56,7 @@ class ProductRepository
                     $query->where('quantity', '>', 0);
                 }]);
             })
-            ->limit(5)
-            ->get();
+            ->paginate(5);
     }
 
     public function getInventory($product)

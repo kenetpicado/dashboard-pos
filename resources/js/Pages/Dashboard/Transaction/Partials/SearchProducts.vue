@@ -23,7 +23,7 @@
 				</tr>
 			</thead>
 			<tbody class="divide-y divide-gray-100 border-t border-gray-100">
-				<tr v-for="(product, index) in products">
+				<tr v-for="(product, index) in products.data">
 					<td>
 						<div v-if="product.image" class="h-36 w-36 flex items-center justify-center">
 							<img :src="product.image" onerror="this.src='/not-found.jpg'" alt="Imagen"
@@ -44,9 +44,10 @@
 						</button>
 					</td>
 				</tr>
-				<tr v-if="products.length == 0" class="text-center">
+
+				<tr v-if="products.data?.length == 0" class="text-center">
 					<td colspan="3">
-						<span v-if="!queryParams.search && products.length == 0">
+						<span v-if="!queryParams.search && products.data?.length == 0">
 							Escriba el nombreo SKU del producto que desea buscar
 						</span>
 						<span v-else>
@@ -56,6 +57,8 @@
 				</tr>
 			</tbody>
 		</table>
+
+		<ThePaginator :links="products.links"/>
 	</div>
 </template>
 
@@ -66,6 +69,7 @@ import InputForm from '@/Components/Form/InputForm.vue';
 import { router } from '@inertiajs/vue3'
 import { debounce } from 'lodash'
 import SelectForm from '@/Components/Form/SelectForm.vue';
+import ThePaginator from '@/Components/ThePaginator.vue';
 
 const props = defineProps({
 	products: {
