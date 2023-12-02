@@ -22,7 +22,7 @@ class InventoryRepository
     {
         return Inventory::query()
             ->where('quantity', '>', 0)
-            ->orderBy('product_id')
+            ->orderByDesc('created_at')
             ->orderByDesc('quantity')
             ->when(isset($request['search']), function ($query) use ($request) {
                 $query->where(function ($query) use ($request) {

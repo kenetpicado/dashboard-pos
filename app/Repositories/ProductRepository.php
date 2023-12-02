@@ -20,11 +20,12 @@ class ProductRepository
     public function getAll($request = [])
     {
         return Product::query()
-            ->select('id', 'name', 'sku', 'image', 'discount')
+            ->select('id', 'name', 'sku', 'image', 'discount', 'category_id')
             ->when(isset($request['search']), function ($query) use ($request) {
                 $query->where('name', 'like', "%{$request['search']}%")
                     ->orWhere('sku', 'like', "%{$request['search']}%");
             })
+            ->with('category:id,name')
             ->orderBy('name')
             ->paginate();
     }
@@ -56,6 +57,7 @@ class ProductRepository
                     $query->where('quantity', '>', 0);
                 }]);
             })
+            ->latest('id')
             ->paginate(5);
     }
 

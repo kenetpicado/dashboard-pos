@@ -17,6 +17,7 @@
             <template #header>
                 <th>Imagen</th>
                 <th>Nombre</th>
+                <th>Categoria</th>
                 <th>Acciones</th>
             </template>
 
@@ -38,6 +39,11 @@
                         <div class="mt-2 text-indigo-600">
                             {{ product.sku }}
                         </div>
+                    </td>
+                    <td>
+                        <span class="uppercase">
+                            {{ product.category?.name ?? 'Ninguna' }}
+                        </span>
                     </td>
                     <td>
                         <div class="flex gap-4">
