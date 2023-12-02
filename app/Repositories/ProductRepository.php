@@ -26,7 +26,7 @@ class ProductRepository
                     ->orWhere('sku', 'like', "%{$request['search']}%");
             })
             ->with('category:id,name')
-            ->orderBy('name')
+            ->orderBy('created_at', 'desc')
             ->paginate();
     }
 
