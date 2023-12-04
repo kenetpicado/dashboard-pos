@@ -1,8 +1,8 @@
 <template>
-    <div class="mb-4" v-if="links && pageList.length > 1">
-        <div class="flex justify-between items-center gap-1">
-            <button type="button" v-for="item in pageList" @click="getThisPage(item.url)" class="rounded-md select-none"
-                :class="{ 'bg-roseh-pink text-white px-3 py-1': item.active }">
+    <div class="mb-4 w-full" v-if="links && pageList.length > 1">
+        <div class="flex lg:justify-center justify-between items-center gap-2">
+            <button type="button" v-for="item in pageList" @click="getThisPage(item.url)" class="rounded-md select-none px-3 font-bold border-2 border-roseh-pink"
+                :class="{ 'bg-roseh-pink text-white': item.active, 'text-roseh-pink': !item.active, }">
                 {{ item.label }}
             </button>
         </div>

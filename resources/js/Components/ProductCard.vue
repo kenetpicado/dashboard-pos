@@ -1,5 +1,5 @@
 <template>
-    <div class="flex max-w-md bg-white rounded-xl overflow-hidden"
+    <div class="flex max-w-md bg-white rounded-xl overflow-hidden" role="button"
         @click="$inertia.visit(route('catalogue.show', product.id))">
         <img :src="product.image ?? '/not-found.jpg'" onerror="this.src='/not-found.jpg'" class="w-1/3 object-cover">
         <div class="w-4/3 p-3">

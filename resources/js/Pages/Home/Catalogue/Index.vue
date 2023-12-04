@@ -5,17 +5,20 @@
                 @click="queryParams.category_id = null">
                 Todas
             </button>
-            <button type="button" v-for="c in categories" :class="queryParams.category_id == c.id ? 'active-tab' : 'inactive-tab'"
+            <button type="button" v-for="c in categories"
+                :class="queryParams.category_id == c.id ? 'active-tab' : 'inactive-tab'"
                 @click="queryParams.category_id = c.id">
                 {{ c.name }}
             </button>
         </HorizontalItems>
 
         <HorizontalItems title="Medidas" v-if="measures.length > 0">
-            <button type="button" :class="queryParams.measure == null ? 'active-tab' : 'inactive-tab'" @click="queryParams.measure = null">
+            <button type="button" :class="queryParams.measure == null ? 'active-tab' : 'inactive-tab'"
+                @click="queryParams.measure = null">
                 Todas
             </button>
-            <button type="button" v-for="m in measures" :class="queryParams.measure == m.name ? 'active-tab' : 'inactive-tab'"
+            <button type="button" v-for="m in measures"
+                :class="queryParams.measure == m.name ? 'active-tab' : 'inactive-tab'"
                 @click="queryParams.measure = m.name">
                 {{ m.name }}
             </button>
@@ -30,7 +33,9 @@
                 No hay productos disponibles
             </div>
 
-            <CatalogPaginator :links="products.links" />
+            <div class="flex overflow-x-auto hide-scrollbar lg:justify-center justify-between">
+                <CatalogPaginator :links="products.links" />
+            </div>
         </div>
     </CatalogueLayout>
 </template>
@@ -85,8 +90,6 @@ if (searchParams.get("search")) {
 }
 
 const debouncedSearch = debounce(([category_id, measure, search]) => {
-    isLoading.value = true;
-
     if (!category_id) {
         delete queryParams.category_id;
     }
@@ -103,9 +106,6 @@ const debouncedSearch = debounce(([category_id, measure, search]) => {
         preserveState: true,
         preserveScroll: true,
         only: ["products", "measures"],
-        onSuccess: () => {
-            isLoading.value = false;
-        }
     })
 }, 500);
 
