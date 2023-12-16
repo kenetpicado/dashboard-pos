@@ -108,8 +108,7 @@ class ProductRepository
                 });
             })
             ->orderBy('created_at', 'desc')
-            ->paginate(20)
-            ->onEachSide(0);
+            ->paginate(25);
     }
 
     public function getRelated($category_id, $product_id)

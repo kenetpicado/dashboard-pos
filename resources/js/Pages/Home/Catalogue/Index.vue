@@ -89,28 +89,28 @@ if (searchParams.get("search")) {
     queryParams.search = searchParams.get("search");
 }
 
-const debouncedSearch = debounce(([category_id, measure, search]) => {
-    if (!category_id) {
-        delete queryParams.category_id;
+const debouncedSearch = debounce(() => {
+    const cleanedParams = { ...queryParams };
+
+    for (const key in cleanedParams) {
+        if (!cleanedParams[key]) {
+            delete cleanedParams[key];
+        }
     }
 
-    if (!measure) {
-        delete queryParams.measure;
-    }
-
-    if (!search) {
-        delete queryParams.search;
-    }
-
-    router.get(route('catalogue.index'), queryParams, {
+    router.get(route('catalogue.index'), cleanedParams, {
         preserveState: true,
         preserveScroll: true,
         only: ["products", "measures"],
+        onSuccess: () => {
+            isLoading.value = false;
+        }
     })
 }, 500);
 
 watch(() => ([queryParams.category_id, queryParams.measure, queryParams.search]), ([category_id, measure, search]) => {
-    debouncedSearch([category_id, measure, search]);
+    isLoading.value = true;
+    debouncedSearch();
 });
 
 </script>
