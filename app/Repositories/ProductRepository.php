@@ -41,8 +41,13 @@ class ProductRepository
         }
 
         return Product::query()
-            ->when(isset($request->category_id), function ($query) use ($request) {
-                $query->where('category_id', $request->category_id);
+            ->when(isset($request['category_id']), function ($query) use ($request) {
+                $query->where(function ($query) use ($request) {
+                    $query->where('category_id', $request['category_id'])
+                        ->orWhereHas('category', function ($query) use ($request) {
+                            $query->where('parent_id', $request['category_id']);
+                        });
+                });
             })
             ->when(isset($request->search), function ($query) use ($request) {
                 $query->where(function ($query) use ($request) {
