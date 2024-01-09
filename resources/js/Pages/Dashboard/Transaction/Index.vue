@@ -108,6 +108,7 @@ import { Link, router } from '@inertiajs/vue3';
 import { IconTrash } from "@tabler/icons-vue";
 import { IconCurrencyDollar, IconCurrencyDollarOff, IconEye } from '@tabler/icons-vue';
 import { computed, reactive, watch } from "vue";
+import { debounce } from "lodash";
 
 const props = defineProps({
     transactions: {
@@ -149,11 +150,13 @@ const transactionClass = {
     sell: "badge-indigo"
 }
 
+const searchParams = new URLSearchParams(window.location.search);
+
 const queryParams = reactive({
-    user_id: null,
-    from: null,
-    to: null,
-    type: '',
+    user_id: searchParams.get("user_id") ?? "",
+    from: searchParams.get("from") ?? "",
+    to: searchParams.get("to") ?? "",
+    type: searchParams.get("type") ?? "",
 })
 
 const stats = computed(() => {
@@ -171,67 +174,21 @@ const stats = computed(() => {
     ]
 })
 
-const searchParams = new URLSearchParams(window.location.search);
-
-if (searchParams.get("user_id")) {
-    queryParams.user_id = searchParams.get("user_id")
-}
-
-if (searchParams.get("from")) {
-    queryParams.from = searchParams.get("from")
-}
-
-if (searchParams.get("to")) {
-    queryParams.to = searchParams.get("to")
-}
-
-if (searchParams.get("type")) {
-    queryParams.type = searchParams.get("type")
-}
-
-watch(() => queryParams.user_id, (value) => {
-    if (!value) {
-        delete queryParams.user_id
+const debouncedSearch = debounce(() => {
+    for (const key in queryParams) {
+        if (!queryParams[key]) {
+            delete queryParams[key];
+        }
     }
 
-    if (!queryParams.from) {
-        delete queryParams.from
-    }
-
-    if (!queryParams.to) {
-        delete queryParams.to
-    }
-
-    getData()
-})
-
-watch(() => [queryParams.from, queryParams.to, queryParams.type], ([from, to, type]) => {
-    if (!from) {
-        delete queryParams.from
-    }
-
-    if (!to) {
-        delete queryParams.to
-    }
-
-    if (!type) {
-        delete queryParams.type
-    }
-
-    if (!queryParams.user_id) {
-        delete queryParams.user_id
-    }
-
-    getData()
-})
-
-function getData() {
     router.get(route('dashboard.transactions.index'), queryParams, {
         preserveState: true,
         preserveScroll: true,
         only: ["transactions", 'buy_month', 'sell_month']
     })
-}
+}, 500);
+
+watch(() => queryParams, debouncedSearch, { deep: true })
 
 function confirmDestroy(id) {
     confirmAlert({

@@ -202,28 +202,18 @@ function resetValues() {
 }
 
 //SEARCH SECTION
-const queryParams = reactive({
-    search: null,
-    user_id: null,
-});
-
 const searchParams = new URLSearchParams(window.location.search);
 
-if (searchParams.get("search")) {
-    queryParams.search = searchParams.get("search");
-}
+const queryParams = reactive({
+    search: searchParams.get("search") ?? "",
+    user_id: searchParams.get("user_id") ?? "",
+});
 
-if (searchParams.get("user_id")) {
-    queryParams.user_id = searchParams.get("user_id");
-}
-
-const debouncedSearch = debounce(([search, user_id]) => {
-    if (!search) {
-        delete queryParams.search;
-    }
-
-    if (!user_id) {
-        delete queryParams.user_id;
+const debouncedSearch = debounce(() => {
+    for (const key in queryParams) {
+        if (!queryParams[key]) {
+            delete queryParams[key];
+        }
     }
 
     router.get(route('dashboard.inventory.index'), queryParams, {
@@ -233,7 +223,7 @@ const debouncedSearch = debounce(([search, user_id]) => {
     })
 }, 500);
 
-watch(() => [queryParams.search, queryParams.user_id], debouncedSearch);
+watch(() => queryParams, debouncedSearch, { deep: true });
 //END SEARCH SECTION
 
 </script>

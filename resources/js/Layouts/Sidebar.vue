@@ -39,7 +39,7 @@
             <li>
                 <span @click="logout" class="flex items-center px-2 py-3 rounded-lg gap-4 hover:bg-gray-100" role="button">
                     <IconLogout></IconLogout>
-                    <span>Logout</span>
+                    <span>Salir</span>
                 </span>
             </li>
         </ul>

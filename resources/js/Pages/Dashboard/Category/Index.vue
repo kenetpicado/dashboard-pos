@@ -48,9 +48,9 @@
         </TableSection>
 
         <FormModal :show="openModal" title="Categoria" @onCancel="resetValues()" @onSubmit="onSubmit()">
-            <InputForm text="Name" v-model="form.name" />
-            <SelectForm v-model="form.parent_id" text="Parent category" name="parent_id">
-                <option selected value="">None</option>
+            <InputForm text="Nombre" name="name" v-model="form.name" />
+            <SelectForm v-model="form.parent_id" text="Categoria padre" name="parent_id">
+                <option selected value="">Ninguna</option>
                 <option v-for="category in categories" :value="category.id">{{ category.name }}</option>
             </SelectForm>
         </FormModal>

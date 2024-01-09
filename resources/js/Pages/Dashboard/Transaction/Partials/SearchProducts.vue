@@ -78,34 +78,20 @@ const props = defineProps({
 	},
 });
 
-const queryParams = reactive({
-	search: '',
-	type: null,
-	category_id: null,
-})
-
 const searchParams = new URLSearchParams(window.location.search);
 
-if (searchParams.get("search")) {
-	queryParams.search = searchParams.get("search")
-}
+const queryParams = reactive({
+	search: searchParams.get("search") ?? "",
+	type: searchParams.get("type") ?? "",
+	category_id: searchParams.get("category_id") ?? "",
+})
 
-if (searchParams.get("type")) {
-	queryParams.type = searchParams.get("type")
-}
-
-if (searchParams.get("category_id")) {
-	queryParams.category_id = searchParams.get("category_id")
-}
-
-const debouncedSearch = debounce(([search, category_id]) => {
-	if (!search) {
-		delete queryParams.search;
-	}
-
-	if (!category_id) {
-		delete queryParams.category_id;
-	}
+const debouncedSearch = debounce(() => {
+	for (const key in queryParams) {
+        if (!queryParams[key]) {
+            delete queryParams[key];
+        }
+    }
 
 	router.get(route('dashboard.transactions.create'), queryParams, {
 		preserveState: true,
@@ -114,6 +100,6 @@ const debouncedSearch = debounce(([search, category_id]) => {
 	})
 }, 500);
 
-watch(() => [queryParams.search, queryParams.category_id], debouncedSearch);
+watch(() => queryParams, debouncedSearch, { deep: true });
 
 </script>

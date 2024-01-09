@@ -1,9 +1,9 @@
 <template>
-    <AppLayout title="Proximos a vencer" :breads="breads">
+    <AppLayout title="Próximos a vencer" :breads="breads">
 
         <template #header>
             <span class="title">
-                Proximos a vencer
+                Próximos a vencer
             </span>
         </template>
 

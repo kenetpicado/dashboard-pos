@@ -104,30 +104,24 @@ const transactionClass = {
     sell: "badge-indigo"
 }
 
-const queryParams = reactive({
-    search: null,
-})
-
 const searchParams = new URLSearchParams(window.location.search);
 
-if (searchParams.get("search")) {
-    queryParams.search = searchParams.get("search")
-}
-
-watch(() => queryParams.search, (value) => {
-    if (!value) {
-        delete queryParams.search
-    }
-
-    getData()
+const queryParams = reactive({
+    search: searchParams.get("search") ?? "",
 })
 
-function getData() {
+watch(() => queryParams, () => {
+    for (const key in queryParams) {
+        if (!queryParams[key]) {
+            delete queryParams[key];
+        }
+    }
+
     router.get(route('dashboard.pending.index'), queryParams, {
         preserveState: true,
         preserveScroll: true,
         only: ["transactions"]
     })
-}
+}, { deep: true })
 
 </script>

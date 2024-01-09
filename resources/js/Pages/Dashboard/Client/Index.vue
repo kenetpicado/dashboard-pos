@@ -81,19 +81,17 @@ const breads = [
 ];
 
 //SEARCH SECTION
-const queryParams = reactive({
-    search: null,
-});
-
 const searchParams = new URLSearchParams(window.location.search);
 
-if (searchParams.get("search")) {
-    queryParams.search = searchParams.get("search");
-}
+const queryParams = reactive({
+    search: searchParams.get("search") ?? "",
+});
 
-const debouncedSearch = debounce((value) => {
-    if (!value) {
-        delete queryParams.search;
+const debouncedSearch = debounce(() => {
+    for (const key in queryParams) {
+        if (!queryParams[key]) {
+            delete queryParams[key];
+        }
     }
 
     router.get(route('dashboard.clients.index'), queryParams, {
@@ -103,7 +101,7 @@ const debouncedSearch = debounce((value) => {
     })
 }, 500);
 
-watch(() => queryParams.search, debouncedSearch);
+watch(() => queryParams, debouncedSearch, { deep: true });
 //END SEARCH SECTION
 
 </script>

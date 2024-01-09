@@ -1,6 +1,6 @@
 <template>
     <div class="w-full py-2 px-4 mb-4" v-if="links && pageList.length > 1">
-        <div class="flex justify-center items-center gap-2">
+        <div class="flex justify-center items-center gap-1">
             <span v-for="item in pageList" @click="getThisPage(item.url)" class="px-3 rounded-md"
                 :class="{ 'bg-indigo-600 text-white border-2 border-indigo-600 font-bold': item.active, 'hover:bg-indigo-50 border-2 border-indigo-300 text-indigo-300': !item.active }" role="button">
                 {{ item.label }}
