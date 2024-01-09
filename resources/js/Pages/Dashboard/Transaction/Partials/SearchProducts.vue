@@ -1,7 +1,7 @@
 <template>
 	<div>
 		<div class="flex gap-4">
-			<InputForm text="Buscar" placeholder="Buscar" v-model="queryParams.search"></InputForm>
+			<InputForm text="Buscar" placeholder="Buscar" v-model="queryParams.search" type="search"/>
 			<SelectForm text="Categoria" v-model="queryParams.category_id" required>
 				<option selected value="">Todas</option>
 				<template v-for="item in $page.props.categories">
