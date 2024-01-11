@@ -32,35 +32,14 @@ class TransactionRepository
         $transactions = Transaction::query()
             ->where('type', $type)
             ->whenUser($request)
-            ->when(isset($request['from']), function ($query) use ($request) {
-                $query->where(function ($query) use ($request) {
-                    $query->where('created_at', '>=', Carbon::parse($request['from'])->format('Y-m-d 00:00:00'))
-                        ->orWhereHas('payments', function ($query) use ($request) {
-                            $query->where('created_at', '>=', Carbon::parse($request['from'])->format('Y-m-d 00:00:00'));
-                        });
-                });
-            }, function ($query) {
-                $query->where(function ($query) {
-                    $query->where('created_at', '>=', Carbon::now()->startOfMonth()->format('Y-m-d 00:00:00'))
-                        ->orWhereHas('payments', function ($query) {
-                            $query->where('created_at', '>=', Carbon::now()->startOfMonth()->format('Y-m-d 00:00:00'));
-                        });
-                });
-            })->when(isset($request['to']), function ($query) use ($request) {
-                $query->where(function ($query) use ($request) {
-                    $query->where('created_at', '<=', Carbon::parse($request['to'])->format('Y-m-d 23:59:59'))
-                        ->orWhereHas('payments', function ($query) use ($request) {
-                            $query->where('created_at', '<=', Carbon::parse($request['to'])->format('Y-m-d 23:59:59'));
-                        });
-                });
-            })
+            ->whenFromTo($request)
             ->with(['payments' => function ($query) use ($request) {
                 $query->when(isset($request['from']), function ($query) use ($request) {
-                    $query->where('created_at', '>=', Carbon::parse($request['from'])->format('Y-m-d 00:00:00'));
+                    $query->whereDate('created_at', '>=', $request['from']);
                 }, function ($query) {
-                    $query->where('created_at', '>=', Carbon::now()->startOfMonth()->format('Y-m-d 00:00:00'));
+                    $query->whereDate('created_at', '>=', Carbon::now()->startOfMonth()->format('Y-m-d'));
                 })->when(isset($request['to']), function ($query) use ($request) {
-                    $query->where('created_at', '<=', Carbon::parse($request['to'])->format('Y-m-d 23:59:59'));
+                    $query->whereDate('created_at', '<=', $request['to']);
                 });
             }])
             ->get(['id', 'total', 'created_at']);
@@ -141,7 +120,7 @@ class TransactionRepository
         DB::table('transactions')->where('id', $payment->transaction_id)->decrement('total', $payment->value);
     }
 
-    public function byClient($client_name)
+    public function getClientTransactions($client_name)
     {
         return DB::table('transactions')
             ->where('client', 'like', '%' . $client_name . '%')

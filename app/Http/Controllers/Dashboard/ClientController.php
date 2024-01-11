@@ -27,7 +27,7 @@ class ClientController extends Controller
     {
         return inertia('Dashboard/Client/Show', [
             'client' => $client,
-            'transactions' => $this->transactionRepository->byClient($client->name),
+            'transactions' => $this->transactionRepository->getClientTransactions($client->name),
         ]);
     }
 }

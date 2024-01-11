@@ -41,11 +41,26 @@ class Transaction extends Model
     public function scopeWhenFromTo($query, $request)
     {
         return $query->when(isset($request['from']), function ($query) use ($request) {
-            $query->where('created_at', '>=', Carbon::parse($request['from'])->format('Y-m-d 00:00:00'));
+            $query->where(function ($query) use ($request) {
+                $query->whereDate('created_at', '>=', $request['from'])
+                    ->orWhereHas('payments', function ($query) use ($request) {
+                        $query->whereDate('created_at', '>=', $request['from']);
+                    });
+            });
         }, function ($query) {
-            $query->whereDate('created_at', '>=', Carbon::now()->startOfMonth()->format('Y-m-d 00:00:00'));
+            $query->where(function ($query) {
+                $query->whereDate('created_at', '>=', Carbon::now()->startOfMonth()->format('Y-m-d'))
+                    ->orWhereHas('payments', function ($query) {
+                        $query->whereDate('created_at', '>=', Carbon::now()->startOfMonth()->format('Y-m-d'));
+                    });
+            });
         })->when(isset($request['to']), function ($query) use ($request) {
-            $query->where('created_at', '<=', Carbon::parse($request['to'])->format('Y-m-d 23:59:59'));
+            $query->where(function ($query) use ($request) {
+                $query->whereDate('created_at', '<=', $request['to'])
+                    ->orWhereHas('payments', function ($query) use ($request) {
+                        $query->whereDate('created_at', '<=', $request['to']);
+                    });
+            });
         });
     }
 
