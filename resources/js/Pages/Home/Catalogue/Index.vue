@@ -37,6 +37,13 @@
                 <CatalogPaginator :links="products.links" />
             </div>
         </div>
+        <div class="flex items-center justify-center mb-7">
+            <span class="text-gray-400">
+                Desarrollado por
+                <a href="https://www.instagram.com/kenetphp"
+                target="_blank" class="text-blue-400 font-bold">@kenetphp</a>
+            </span>
+        </div>
     </CatalogueLayout>
 </template>
 
